@@ -1,0 +1,21 @@
+# Python
+__pycache__/
+*.pyc
+venv/
+env/
+
+# LaTeX temporary files
+*.aux
+*.log
+*.out
+*.toc
+*.bbl
+*.blg
+*.synctex.gz
+
+# macOS
+.DS_Store
+
+# Dashboard data (keep the .gitkeep though)
+dashboard/data/*.csv
+!dashboard/data/.gitkeep
