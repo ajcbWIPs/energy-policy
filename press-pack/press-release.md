@@ -1,7 +1,7 @@
 # FOR IMMEDIATE RELEASE
 
 **Contact:** Andrew Baker  
-**Email:** andrew.baker@email.com  
+**Email:** andrewjcbaker@gmail.com  
 **Date:** March 2026
 
 ---
