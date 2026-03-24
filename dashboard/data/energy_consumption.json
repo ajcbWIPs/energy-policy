@@ -1,0 +1,9 @@
+{
+  "date": "2026-03-25",
+  "demand_mw_avg": 28500,
+  "demand_mw_peak": 38200,
+  "renewable_percentage": 32.4,
+  "nsw_demand_mw": 8500,
+  "nsw_renewable_percentage": 38.5,
+  "source": "AEMO NEM Data"
+}

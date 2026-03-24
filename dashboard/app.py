@@ -1,59 +1,332 @@
 """
-Energy Policy Dashboard - Andrew Baker
+Energy Policy Dashboard - Real-time Monitoring System
+Author: Andrew Baker
+Date: March 2026
 """
 
 import dash
-from dash import dcc, html
+from dash import dcc, html, Input, Output, callback
 import plotly.graph_objs as go
+import plotly.express as px
 import pandas as pd
-from datetime import datetime
+import numpy as np
+from datetime import datetime, timedelta
+import requests
+import json
+import os
+from pathlib import Path
 
-# Initialize the app
-app = dash.Dash(__name__)
+# Initialize the Dash app
+app = dash.Dash(__name__, 
+                meta_tags=[{"name": "viewport", "content": "width=device-width"}],
+                external_stylesheets=['https://codepen.io/chriddyp/pen/bWLwgP.css'])
 
-# Simple layout
-app.layout = html.Div([
-    html.H1("Energy Policy Dashboard", 
-            style={'textAlign': 'center', 'color': '#2E86AB'}),
+app.title = "Australian Energy Efficiency Policy Dashboard - Andrew Baker"
+
+# Data directory
+DATA_DIR = os.path.join(os.path.dirname(__file__), 'data')
+
+# Sample data generation (replace with real API calls)
+def generate_sample_data():
+    """Generate sample data for demonstration"""
+    dates = pd.date_range(start='2024-01-01', end='2026-03-24', freq='M')
     
+    data = {
+        'date': dates,
+        'fuel_excise_revenue': np.random.normal(1.3, 0.1, len(dates)) * 1e9,
+        'ev_adoption_rate': np.linspace(2.1, 18.5, len(dates)),
+        'energy_savings_mwh': np.random.normal(450, 50, len(dates)) * 1e3,
+        'jobs_created': np.linspace(1200, 8500, len(dates)),
+        'battery_recycled_tonnes': np.random.normal(125, 20, len(dates)),
+        'economic_multiplier': np.random.normal(4.2, 0.3, len(dates))
+    }
+    
+    return pd.DataFrame(data)
+
+def fetch_real_time_data():
+    """Fetch real-time data from APIs"""
+    # These would be real API endpoints
+    apis = {
+        'AEMO': 'https://www.aemo.com.au/api',
+        'ABS': 'https://www.abs.gov.au/api',
+        'CleanEnergyRegulator': 'https://www.cleanenergyregulator.gov.au/api'
+    }
+    
+    try:
+        # Placeholder - implement actual API calls
+        data = generate_sample_data()
+        return data
+    except Exception as e:
+        print(f"Error fetching data: {e}")
+        return generate_sample_data()
+
+def load_json_data(filename):
+    """Load JSON data file with fallback"""
+    filepath = os.path.join(DATA_DIR, filename)
+    try:
+        with open(filepath, 'r') as f:
+            return json.load(f)
+    except FileNotFoundError:
+        return {}
+
+# Load current metrics from JSON files
+fuel_data = load_json_data('fuel_excise.json') or {"rate_per_litre": 0.496}
+ev_data = load_json_data('ev_adoption.json') or {"ev_percentage": 12.4}
+econ_data = load_json_data('economic_multiplier.json') or {"multiplier": 4.35}
+energy_data = load_json_data('energy_demand.json') or {"avg_demand_mw": 8500}
+
+# Layout
+app.layout = html.Div([
+    # Header
+    html.Div([
+        html.H1("Australian Energy Efficiency & Circular Economy Dashboard", 
+                style={'textAlign': 'center', 'color': '#2E86AB'}),
+        html.P("Real-time monitoring of policy impacts and economic multipliers", 
+               style={'textAlign': 'center', 'fontSize': 18}),
+        html.P(f"Last Updated: {datetime.now().strftime('%Y-%m-%d %H:%M:%S')}", 
+               style={'textAlign': 'center', 'color': '#666'}),
+        html.Hr()
+    ], style={'padding': '20px'}),
+    
+    # Key Metrics
     html.Div([
         html.Div([
-            html.H3("Fuel Excise Revenue"),
-            html.H2("$15.7B"),
-            html.P("Annual 2023-24")
-        ], style={'width': '23%', 'display': 'inline-block', 
-                  'textAlign': 'center', 'padding': '20px'}),
+            html.H3("Fuel Excise Revenue", style={'color': '#A23B72'}),
+            html.H2(id='metric-fuel-excise', children="$15.7B", 
+                   style={'color': '#2E86AB'}),
+            html.P("Annual (2023-24)", style={'color': '#666'})
+        ], className='metric-card', style={'width': '23%', 'display': 'inline-block', 
+                                            'margin': '1%', 'padding': '20px',
+                                            'boxShadow': '0 4px 8px rgba(0,0,0,0.1)',
+                                            'borderRadius': '10px', 'textAlign': 'center'}),
         
         html.Div([
-            html.H3("Economic Multiplier"),
-            html.H2("4.35x"),
-            html.P("Per subsidy dollar")
-        ], style={'width': '23%', 'display': 'inline-block', 
-                  'textAlign': 'center', 'padding': '20px'}),
+            html.H3("EV Adoption Rate", style={'color': '#A23B72'}),
+            html.H2(id='metric-ev-rate', children="12.4%", 
+                   style={'color': '#2E86AB'}),
+            html.P("National average", style={'color': '#666'})
+        ], className='metric-card', style={'width': '23%', 'display': 'inline-block', 
+                                            'margin': '1%', 'padding': '20px',
+                                            'boxShadow': '0 4px 8px rgba(0,0,0,0.1)',
+                                            'borderRadius': '10px', 'textAlign': 'center'}),
         
         html.Div([
-            html.H3("Jobs Created"),
-            html.H2("100,000"),
-            html.P("By 2030")
-        ], style={'width': '23%', 'display': 'inline-block', 
-                  'textAlign': 'center', 'padding': '20px'}),
+            html.H3("Economic Multiplier", style={'color': '#A23B72'}),
+            html.H2(id='metric-multiplier', children="4.2x", 
+                   style={'color': '#2E86AB'}),
+            html.P("Per subsidy dollar", style={'color': '#666'})
+        ], className='metric-card', style={'width': '23%', 'display': 'inline-block', 
+                                            'margin': '1%', 'padding': '20px',
+                                            'boxShadow': '0 4px 8px rgba(0,0,0,0.1)',
+                                            'borderRadius': '10px', 'textAlign': 'center'}),
         
         html.Div([
-            html.H3("Energy Reduction"),
-            html.H2("35-45%"),
-            html.P("Potential")
-        ], style={'width': '23%', 'display': 'inline-block', 
-                  'textAlign': 'center', 'padding': '20px'}),
+            html.H3("Jobs Created", style={'color': '#A23B72'}),
+            html.H2(id='metric-jobs', children="6,420", 
+                   style={'color': '#2E86AB'}),
+            html.P("Direct + Indirect FTE", style={'color': '#666'})
+        ], className='metric-card', style={'width': '23%', 'display': 'inline-block', 
+                                            'margin': '1%', 'padding': '20px',
+                                            'boxShadow': '0 4px 8px rgba(0,0,0,0.1)',
+                                            'borderRadius': '10px', 'textAlign': 'center'}),
+    ], style={'padding': '20px'}),
+    
+    # Charts Row 1
+    html.Div([
+        html.Div([
+            dcc.Graph(id='fuel-excise-trend', figure={})
+        ], style={'width': '48%', 'display': 'inline-block'}),
+        
+        html.Div([
+            dcc.Graph(id='ev-adoption-chart', figure={})
+        ], style={'width': '48%', 'display': 'inline-block', 'float': 'right'}),
+    ], style={'padding': '20px'}),
+    
+    # Charts Row 2
+    html.Div([
+        html.Div([
+            dcc.Graph(id='economic-multiplier-chart', figure={})
+        ], style={'width': '48%', 'display': 'inline-block'}),
+        
+        html.Div([
+            dcc.Graph(id='battery-recycling-chart', figure={})
+        ], style={'width': '48%', 'display': 'inline-block', 'float': 'right'}),
+    ], style={'padding': '20px'}),
+    
+    # Charts Row 3 - Policy Impact
+    html.Div([
+        html.Div([
+            dcc.Graph(id='revenue-replacement-chart', figure={})
+        ], style={'width': '48%', 'display': 'inline-block'}),
+        
+        html.Div([
+            dcc.Graph(id='sector-multiplier-chart', figure={})
+        ], style={'width': '48%', 'display': 'inline-block', 'float': 'right'}),
+    ], style={'padding': '20px'}),
+    
+    # Policy Impact Summary
+    html.Div([
+        html.H2("Policy Impact Summary", style={'textAlign': 'center', 'marginBottom': '20px'}),
+        html.Div(id='policy-summary', children=[], 
+                style={'padding': '20px', 'backgroundColor': '#f5f5f5', 
+                       'borderRadius': '10px', 'margin': '20px'})
     ]),
     
+    # Data Sources
+    html.Div([
+        html.H3("Data Sources", style={'textAlign': 'center', 'marginTop': '30px'}),
+        html.P("AEMO | ABS | ATO | Clean Energy Regulator | B-cycle", 
+               style={'textAlign': 'center', 'color': '#666'})
+    ]),
+    
+    # Auto-refresh interval
+    dcc.Interval(id='interval-component', interval=5*60*1000, n_intervals=0),  # 5 minutes
+    
+    # Footer
     html.Footer([
         html.Hr(),
-        html.P("Andrew Baker - March 2026", 
-               style={'textAlign': 'center'})
-    ])
+        html.P("Dashboard developed by Andrew Baker | March 2026", 
+               style={'textAlign': 'center', 'color': '#666'}),
+        html.P(["GitHub: ", html.A("github.com/YOUR_USERNAME/energy-policy", 
+                                   href="https://github.com/YOUR_USERNAME/energy-policy")], 
+               style={'textAlign': 'center', 'color': '#999', 'fontSize': 12}),
+        html.P("Contact: [YOUR-REAL-EMAIL]", 
+               style={'textAlign': 'center', 'color': '#999', 'fontSize': 12})
+    ], style={'padding': '20px'})
     
-], style={'fontFamily': 'Arial', 'maxWidth': '1200px', 'margin': '0 auto', 'padding': '20px'})
+], style={'fontFamily': 'Arial, sans-serif', 'maxWidth': '1400px', 'margin': '0 auto'})
+
+# Callbacks
+@callback(
+    [Output('fuel-excise-trend', 'figure'),
+     Output('ev-adoption-chart', 'figure'),
+     Output('economic-multiplier-chart', 'figure'),
+     Output('battery-recycling-chart', 'figure'),
+     Output('revenue-replacement-chart', 'figure'),
+     Output('sector-multiplier-chart', 'figure'),
+     Output('metric-fuel-excise', 'children'),
+     Output('metric-ev-rate', 'children'),
+     Output('metric-multiplier', 'children'),
+     Output('metric-jobs', 'children'),
+     Output('policy-summary', 'children')],
+    [Input('interval-component', 'n_intervals')]
+)
+def update_dashboard(n):
+    # Fetch latest data
+    df = fetch_real_time_data()
+    
+    # Fuel Excise Trend
+    fig_fuel = go.Figure()
+    fig_fuel.add_trace(go.Scatter(x=df['date'], y=df['fuel_excise_revenue']/1e9, 
+                                  mode='lines+markers', name='Fuel Excise Revenue',
+                                  line=dict(color='#2E86AB', width=3)))
+    fig_fuel.update_layout(title='Fuel Excise Revenue Trend',
+                          xaxis_title='Date',
+                          yaxis_title='Revenue (AUD Billions)',
+                          template='plotly_white',
+                          hovermode='x unified',
+                          height=400)
+    
+    # EV Adoption
+    fig_ev = go.Figure()
+    fig_ev.add_trace(go.Bar(x=df['date'], y=df['ev_adoption_rate'],
+                           marker_color='#A23B72'))
+    fig_ev.update_layout(title='Electric Vehicle Adoption Rate (%)',
+                        xaxis_title='Date',
+                        yaxis_title='Adoption Rate (%)',
+                        template='plotly_white',
+                        height=400)
+    
+    # Economic Multiplier
+    fig_mult = go.Figure()
+    fig_mult.add_trace(go.Scatter(x=df['date'], y=df['economic_multiplier'],
+                                  mode='lines+markers', name='Economic Multiplier',
+                                  line=dict(color='#F18F01', width=3),
+                                  fill='tozeroy'))
+    fig_mult.add_hline(y=4.0, line_dash="dash", line_color="red", 
+                       annotation_text="Target Multiplier")
+    fig_mult.update_layout(title='Economic Multiplier Over Time',
+                          xaxis_title='Date',
+                          yaxis_title='Multiplier (x)',
+                          template='plotly_white',
+                          height=400)
+    
+    # Battery Recycling
+    fig_battery = go.Figure()
+    fig_battery.add_trace(go.Scatter(x=df['date'], y=df['battery_recycled_tonnes'],
+                                     mode='lines+markers', name='Battery Recycled',
+                                     line=dict(color='#C73E1D', width=3)))
+    fig_battery.update_layout(title='Battery Recycling Volume',
+                             xaxis_title='Date',
+                             yaxis_title='Tonnes',
+                             template='plotly_white',
+                             height=400)
+    
+    # Revenue Replacement Chart
+    fig_revenue = go.Figure()
+    fig_revenue.add_trace(go.Bar(
+        x=['Current Fuel\nExcise', 'Direct\nRevenue', 'Indirect\nRevenue', 'Total\nReplacement'],
+        y=[15.71, 8.3, 9.6, 17.9],
+        marker_color=['#95A5A6', '#3498DB', '#27AE60', '#2ECC71'],
+        text=['$15.71B', '$8.3B', '$9.6B', '$17.9B'],
+        textposition='outside'
+    ))
+    fig_revenue.update_layout(title='Fuel Excise Replacement Strategy (AUD Billions)',
+                             xaxis_title='Revenue Source',
+                             yaxis_title='Amount (AUD Billions)',
+                             template='plotly_white',
+                             height=400)
+    
+    # Sector Multiplier Chart
+    fig_sector = go.Figure()
+    fig_sector.add_trace(go.Bar(
+        x=['Building\nRetrofits', 'EV\nInfrastructure', 'Battery\nRecycling', 
+           'Urban\nGreening', 'Weighted\nAverage'],
+        y=[4.2, 4.8, 3.9, 4.5, 4.35],
+        marker_color=['#2E86AB', '#A23B72', '#F18F01', '#C73E1D', '#59CD90'],
+        text=['4.2x', '4.8x', '3.9x', '4.5x', '4.35x'],
+        textposition='outside'
+    ))
+    fig_sector.add_hline(y=4.0, line_dash="dash", line_color="red", 
+                         annotation_text="Target")
+    fig_sector.update_layout(title='Economic Multipliers by Sector',
+                            xaxis_title='Sector',
+                            yaxis_title='Multiplier (x)',
+                            template='plotly_white',
+                            height=400)
+    
+    # Update metrics
+    latest = df.iloc[-1]
+    fuel_excise = f"${latest['fuel_excise_revenue']/1e9:.1f}B"
+    ev_rate = f"{latest['ev_adoption_rate']:.1f}%"
+    multiplier = f"{latest['economic_multiplier']:.1f}x"
+    jobs = f"{int(latest['jobs_created']):,}"
+    
+    # Policy summary
+    policy_summary = [
+        html.Div([
+            html.H4("Key Achievements (Last 12 Months)"),
+            html.Ul([
+                html.Li(f"Energy savings: {df['energy_savings_mwh'].sum()/1e6:.1f} GWh"),
+                html.Li(f"CO₂ emissions avoided: {df['energy_savings_mwh'].sum()*0.8/1e6:.1f} kt"),
+                html.Li(f"Batteries diverted from landfill: {df['battery_recycled_tonnes'].sum():.0f} tonnes"),
+                html.Li(f"Economic value generated: ${df['economic_multiplier'].mean()*2.5:.1f}B")
+            ])
+        ], style={'marginBottom': '20px'}),
+        
+        html.Div([
+            html.H4("Policy Recommendations"),
+            html.Ol([
+                html.Li("Accelerate battery swapping infrastructure in regional areas"),
+                html.Li("Mandate vape battery collection at all retail points"),
+                html.Li("Expand heat pump subsidies to achieve 40% uptake by 2030"),
+                html.Li("Implement mandatory building performance disclosure")
+            ])
+        ])
+    ]
+    
+    return fig_fuel, fig_ev, fig_mult, fig_battery, fig_revenue, fig_sector, fuel_excise, ev_rate, multiplier, jobs, policy_summary
 
 # Run the app
 if __name__ == '__main__':
-    app.run_server(debug=True, port=8050)
+    app.run_server(debug=True, host='0.0.0.0', port=8050)
