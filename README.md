@@ -2,7 +2,7 @@
 
 **Author:** Andrew Baker  
 **Date:** March 2026  
-**Contact:** andrew.baker@email.com
+**Contact:** andrewjcbaker@gmail.com
 
 ## Overview
 

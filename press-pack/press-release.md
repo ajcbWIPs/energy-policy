@@ -131,7 +131,7 @@ Andrew Baker is an independent policy researcher focused on energy efficiency, c
 - Full policy framework: [GitHub repository link]
 - Real-time dashboard: [Dashboard link]
 - High-resolution figures: Available on request
-- Interview requests: [YOUR-REAL-EMAIL]
+- Interview requests: [andrewjcbaker@gmail.com]
 
 ---
 
