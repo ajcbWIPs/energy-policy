@@ -21,6 +21,7 @@ principles, and strategic infrastructure development.
 
 ## Contents
 
+- ⛽ **Diesel Import Reduction Framework (Oct 2026):** `diesel-framework/`, with live fuel security data refreshed every 6 hours
 - 📄 **LaTeX Submission:** `latex/main.tex`
 - 📊 **Dashboard:** `dashboard/app.py`
 - 📰 **Press Pack:** `press-pack/`

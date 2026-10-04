@@ -1,0 +1,116 @@
+diff --git a/index.html b/index.html
+index b7849db..0576d0b 100644
+--- a/index.html
++++ b/index.html
+@@ -996,11 +996,11 @@ footer {
+     <div class="ticker-inner">
+         <div class="ticker-set">
+             <span class="ticker-item dot"><span>NSW fuel security index</span><strong id="tk-fsi">58 / 100</strong></span>
+-            <span class="ticker-item alert"><span>Diesel cover (AU)</span><strong>29 days</strong></span>
++            <span class="ticker-item alert"><span>Diesel cover (AU)</span><strong data-live="diesel-days">29 days</strong></span>
+             <span class="ticker-item alert"><span>Petrol cover (AU)</span><strong>39 days</strong></span>
+             <span class="ticker-item dot"><span>NSW grid demand</span><strong>10.2 GW</strong></span>
+             <span class="ticker-item dot"><span>VPP dispatch active</span><strong>412 MW</strong></span>
+-            <span class="ticker-item up"><span>Brent crude</span><strong>US$90.89</strong></span>
++            <span class="ticker-item up"><span>Brent crude</span><strong data-live="brent-usd">US$90.89</strong></span>
+             <span class="ticker-item dot"><span>Sydney ULP avg</span><strong>213.1 c/L</strong></span>
+             <span class="ticker-item alert"><span>Sydney diesel avg</span><strong>318.1 c/L</strong></span>
+             <span class="ticker-item alert"><span>Strait of Hormuz</span><strong>Contested — passage restricted</strong></span>
+@@ -1009,11 +1009,11 @@ footer {
+         </div>
+         <div class="ticker-set" aria-hidden="true">
+             <span class="ticker-item dot"><span>NSW fuel security index</span><strong id="tk-fsi-2">58 / 100</strong></span>
+-            <span class="ticker-item alert"><span>Diesel cover (AU)</span><strong>29 days</strong></span>
++            <span class="ticker-item alert"><span>Diesel cover (AU)</span><strong data-live="diesel-days">29 days</strong></span>
+             <span class="ticker-item alert"><span>Petrol cover (AU)</span><strong>39 days</strong></span>
+             <span class="ticker-item dot"><span>NSW grid demand</span><strong>10.2 GW</strong></span>
+             <span class="ticker-item dot"><span>VPP dispatch active</span><strong>412 MW</strong></span>
+-            <span class="ticker-item up"><span>Brent crude</span><strong>US$90.89</strong></span>
++            <span class="ticker-item up"><span>Brent crude</span><strong data-live="brent-usd">US$90.89</strong></span>
+             <span class="ticker-item dot"><span>Sydney ULP avg</span><strong>213.1 c/L</strong></span>
+             <span class="ticker-item alert"><span>Sydney diesel avg</span><strong>318.1 c/L</strong></span>
+             <span class="ticker-item alert"><span>Strait of Hormuz</span><strong>Contested — passage restricted</strong></span>
+@@ -1035,7 +1035,7 @@ footer {
+             <div class="hero-meta">
+                 <div>
+                     <strong>Why it matters today</strong>
+-                    Australia holds just 29 days of diesel cover and 39 days of petrol. Around 20% of the world's seaborne oil passes through the Strait of Hormuz — a waterway that has been disrupted for weeks and whose status remains <a href="https://www.dcceew.gov.au/about/news/securing-australias-fuel-supply" target="_blank" rel="noopener" style="color:#cbedfd; text-decoration:underline">contested and volatile</a>. Every kilometre you don't drive is a litre that stays in the national reserve for essential services.
++                    Australia holds just <span data-live="diesel-days-num">29</span> days of diesel cover and 39 days of petrol. Around 20% of the world's seaborne oil passes through the Strait of Hormuz — a waterway that has been disrupted for weeks and whose status remains <a href="https://www.dcceew.gov.au/about/news/securing-australias-fuel-supply" target="_blank" rel="noopener" style="color:#cbedfd; text-decoration:underline">contested and volatile</a>. Every kilometre you don't drive is a litre that stays in the national reserve for essential services.
+                 </div>
+             </div>
+         </div>
+@@ -1116,7 +1116,7 @@ footer {
+             </div>
+             <div class="gauge-ticker">
+                 <div>Petrol cover<br><strong>39 days</strong></div>
+-                <div>Diesel cover<br><strong>29 days</strong></div>
++                <div>Diesel cover<br><strong data-live="diesel-days">29 days</strong></div>
+                 <div>VPP firming<br><strong>412 MW</strong></div>
+             </div>
+             <div style="text-align:center; margin-top: 12px; font-size: 11px; color: var(--nsw-grey);">
+@@ -1275,7 +1275,7 @@ footer {
+             <div class="suggest-head">Joule suggestion</div>
+             <div class="suggest-body" id="suggest-body">
+                 <strong>Swap one car commute a week for the T1 train.</strong>
+-                With Sydney ULP at 213.1 c/L and diesel reserves sitting at 29 days, a single weekly swap returns about 3.2 L of petrol to the reserve each week — roughly 166 L over a year, or about 3 tanks of petrol, saving you about $354 at the pump.
++                With Sydney ULP at 213.1 c/L and diesel reserves sitting at <span data-live="diesel-days-num">29</span> days, a single weekly swap returns about 3.2 L of petrol to the reserve each week — roughly 166 L over a year, or about 3 tanks of petrol, saving you about $354 at the pump.
+             </div>
+         </div>
+     </div>
+@@ -1304,7 +1304,7 @@ footer {
+         </div>
+         <div class="status-item">
+             <div class="sl">Diesel cover</div>
+-            <div class="sv">29<span class="su">days</span></div>
++            <div class="sv"><span data-live="diesel-days-num">29</span><span class="su">days</span></div>
+             <div class="st down">Below 90-day IEA target</div>
+         </div>
+         <div class="status-item">
+@@ -1319,7 +1319,7 @@ footer {
+         </div>
+         <div class="status-item">
+             <div class="sl">Brent crude</div>
+-            <div class="sv">90.89<span class="su">USD/bbl</span></div>
++            <div class="sv"><span data-live="brent-num">90.89</span><span class="su">USD/bbl</span></div>
+             <div class="st">Volatile — Hormuz passage disputed</div>
+         </div>
+     </div>
+@@ -1996,6 +1996,38 @@ function tickLiveUpdate() {
+     document.getElementById('tk-ts-2').textContent = `${hh}:${mm}`;
+ }
+ 
++// ==========================================================
++// LIVE FUEL DATA
++// Diesel cover and Brent are refreshed every 6 hours by the diesel import
++// reduction framework (github.com/ajcbWIPs/energy-policy). If the fetch
++// fails, the April 2026 values above stay on screen.
++// ==========================================================
++const LIVE_DATA_URL = 'https://raw.githubusercontent.com/ajcbWIPs/energy-policy/main/diesel-framework/data/live.json';
++
++async function loadLiveFuelData() {
++    try {
++        const res = await fetch(LIVE_DATA_URL, { cache: 'no-store' });
++        if (!res.ok) return;
++        const ind = (await res.json()).indicators || {};
++        const stock = ind.diesel_stock;
++        if (stock && stock.diesel_days) {
++            const days = Math.round(stock.diesel_days);
++            STATE.fuelDaysDiesel = days;
++            document.querySelectorAll('[data-live="diesel-days"]').forEach(el => { el.textContent = days + ' days'; });
++            document.querySelectorAll('[data-live="diesel-days-num"]').forEach(el => { el.textContent = days; });
++        }
++        const brent = ind.brent_usd_bbl;
++        if (brent && brent.value) {
++            STATE.brent = brent.value;
++            document.querySelectorAll('[data-live="brent-usd"]').forEach(el => { el.textContent = 'US$' + brent.value.toFixed(2); });
++            document.querySelectorAll('[data-live="brent-num"]').forEach(el => { el.textContent = brent.value.toFixed(2); });
++        }
++    } catch (e) {
++        // Network or parse failure: keep the built-in April 2026 values.
++    }
++}
++
++loadLiveFuelData();
+ tickLiveUpdate();
+ setInterval(tickLiveUpdate, 12000);
+ 

@@ -1,0 +1,16 @@
+{
+  "updated": "2026-10-04T06:00:00+00:00",
+  "framework_doc": "https://claude.ai/code/artifact/4ef286f2-95fd-42d2-a0f1-b4cce22dff7a",
+  "indicators": {
+    "diesel_stock": {
+      "diesel_ml": 2938,
+      "diesel_days": 32,
+      "as_of": "2026-09-22",
+      "source": "https://fuelplan.gov.au/fuel-statistics",
+      "fetched": "2026-10-04T06:00:00+00:00",
+      "stale": true
+    }
+  },
+  "derived": {},
+  "status": {"seed": "values entered by hand on 2026-10-04; the first scheduled run replaces them"}
+}
