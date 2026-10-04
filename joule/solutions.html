@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Solutions Lab · Joule</title>
+<meta name="description" content="Interactive what-ifs for battery swapping, halophytes, canola fuel and remote solar, plus the solutions working now and the research still needed.">
+<style>
+:root {
+    --navy: #002664; --blue: #146CFD; --red: #D7153A; --orange: #F99D1C; --green: #00a908;
+    --ink: #22272B; --muted: #5c6370; --rule: #dde3ea; --bg: #f4f6f9; --surface: #ffffff; --tint: #eaf2ff;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --ink: #e8ebf0; --muted: #a3acb9; --rule: #2f3a48; --bg: #0f1722; --surface: #172231; --tint: #1b2b44; --blue: #6aa6ff;
+    }
+}
+:root[data-theme="dark"] {
+    --ink: #e8ebf0; --muted: #a3acb9; --rule: #2f3a48; --bg: #0f1722; --surface: #172231; --tint: #1b2b44; --blue: #6aa6ff;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+       font: 16px/1.6 "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+a { color: var(--blue); }
+.masthead { background: var(--navy); color: #fff; }
+.masthead-inner { max-width: 1040px; margin: 0 auto; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.masthead strong { font-size: 16px; }
+.masthead nav { display: flex; gap: 16px; font-size: 14px; }
+.masthead nav a { color: #fff; text-decoration: none; opacity: 0.85; }
+.masthead nav a[aria-current] { opacity: 1; border-bottom: 2px solid rgba(255,255,255,0.5); }
+.hero { background: linear-gradient(135deg, #002664 0%, #0a3a8c 100%); color: #fff; }
+.hero-inner { max-width: 1040px; margin: 0 auto; padding: 48px 16px 40px; }
+.kicker { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.7); font-weight: 600; }
+.hero h1 { font-size: clamp(32px, 6vw, 52px); line-height: 1.05; margin: 10px 0 14px; letter-spacing: -0.01em; }
+.hero p { font-size: 18px; max-width: 680px; color: rgba(255,255,255,0.88); margin: 0; }
+.live { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 28px; }
+.live div { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; padding: 12px 14px; }
+.live span { display: block; font-size: 12.5px; color: rgba(255,255,255,0.7); }
+.live strong { font-size: 24px; font-variant-numeric: tabular-nums; }
+.live small { display: block; font-size: 12px; color: rgba(255,255,255,0.65); }
+main { max-width: 1040px; margin: 0 auto; padding: 8px 16px 64px; }
+section { margin-top: 48px; }
+h2 { font-size: 26px; line-height: 1.2; margin: 6px 0 12px; color: var(--ink); }
+.section-kicker { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); font-weight: 700; }
+.lead { font-size: 18px; max-width: 760px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 20px 0; }
+.fact { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; }
+.fact .n { font-size: 30px; font-weight: 750; color: var(--navy); line-height: 1.1; font-variant-numeric: tabular-nums; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fact .n { color: #9cc3ff; } }
+:root[data-theme="dark"] .fact .n { color: #9cc3ff; }
+.fact p { margin: 6px 0 0; font-size: 14.5px; color: var(--muted); }
+.fact cite { display: block; margin-top: 8px; font-size: 12px; font-style: normal; color: var(--muted); }
+.tool { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 20px; margin-top: 20px; }
+.tool h3 { margin: 0 0 4px; font-size: 19px; }
+.tool .sub { color: var(--muted); font-size: 14px; margin: 0 0 16px; }
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px 20px; }
+label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 6px; }
+select, input[type=range] { width: 100%; }
+select { font: inherit; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); }
+.val { font-weight: 700; font-variant-numeric: tabular-nums; }
+.out { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 18px; }
+.out div { background: var(--tint); border-radius: 10px; padding: 12px 14px; }
+.out span { display: block; font-size: 12.5px; color: var(--muted); }
+.out strong { font-size: 22px; font-variant-numeric: tabular-nums; }
+.note { font-size: 13px; color: var(--muted); margin-top: 12px; }
+.callout { border-left: 4px solid var(--green); background: var(--surface); padding: 14px 18px; border-radius: 0 10px 10px 0; margin-top: 20px; }
+ol.sources { font-size: 13.5px; color: var(--muted); padding-left: 20px; }
+ol.sources li { margin-bottom: 6px; }
+.cta { display: inline-block; margin-top: 16px; background: var(--navy); color: #fff; text-decoration: none; font-weight: 650; padding: 10px 18px; border-radius: 8px; }
+footer { border-top: 1px solid var(--rule); margin-top: 56px; padding-top: 16px; font-size: 13px; color: var(--muted); }
+.tag { display: inline-block; font-size: 11.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; padding: 3px 9px; border-radius: 999px; margin-bottom: 8px; }
+.tag.now { background: #e3f6e4; color: #0b6b10; }
+.tag.soon { background: #fff1dc; color: #8a4b00; }
+.tag.idea { background: #ece7ff; color: #4b2aa8; }
+ol.research { padding-left: 22px; max-width: 820px; }
+ol.research li { margin-bottom: 12px; }
+.tool + .tool { margin-top: 16px; }
+</style>
+</head>
+<body>
+<div class="masthead">
+    <div class="masthead-inner">
+        <strong>Joule Australia</strong>
+        <nav>
+            <a href="./">Joule</a>
+            <a href="impact.html">Why it matters</a>
+            <a href="solutions.html" aria-current="page">Solutions</a>
+            <a href="../diesel-framework/">Diesel framework</a>
+        </nav>
+    </div>
+</div>
+
+<div class="hero">
+    <div class="hero-inner">
+        <div class="kicker">Solutions lab</div>
+        <h1>What could replace the diesel?</h1>
+        <p>Australia burns about 33.5 billion litres of diesel a year and imports about 29 billion of them. Try the what-ifs below to see how much each idea could really replace, then see what is already working and what still needs research.</p>
+        <div class="live">
+            <div><span>Your scenario replaces</span><strong id="sum-gl">–</strong><small id="sum-pct">of national diesel use</small></div>
+            <div><span>Imports left</span><strong id="sum-left">–</strong><small>from about 29 GL a year today</small></div>
+            <div><span>Worth at today's diesel price</span><strong id="sum-dollars">–</strong><small id="sum-price">per year, before GST</small></div>
+        </div>
+    </div>
+</div>
+
+<main>
+    <section>
+        <div class="section-kicker">What-if lab</div>
+        <h2>Five hypotheticals you can test</h2>
+        <p class="lead">These are illustrations, not forecasts. Each one uses the corrected figures from the <a href="../diesel-framework/FRAMEWORK.md">diesel framework</a>, and the totals above add them up.</p>
+
+        <div class="tool" id="lab-swap">
+            <span class="tag now">Working in Australia today</span>
+            <h3>1. Battery-swap trucks on the freight highways</h3>
+            <p class="sub">Electric prime movers swap a flat pack for a full one in about 4 minutes at hubs beside solar and wind farms, instead of stopping to charge.</p>
+            <div class="controls">
+                <div><label for="trucks">Electric trucks on the road: <span class="val" id="trucks-v"></span></label><input type="range" id="trucks" min="0" max="80000" step="1000" value="20000"></div>
+                <div><label for="hubs">Hub spacing: <span class="val" id="hubs-v"></span></label><input type="range" id="hubs" min="100" max="300" step="25" value="200"></div>
+            </div>
+            <div class="out">
+                <div><span>Diesel avoided per year</span><strong id="sw-gl">–</strong></div>
+                <div><span>Share of national use</span><strong id="sw-pct">–</strong></div>
+                <div><span>Hubs for Hume, Newell, Pacific and Bruce</span><strong id="sw-hubs">–</strong></div>
+                <div><span>Running cost saved per truck</span><strong id="sw-save">–</strong></div>
+            </div>
+            <p class="note">Each truck: 78,300 km a year at 53 L/100 km (ABS), about 41,600 L. Running cost A$0.30/km electric against A$1.03/km diesel on the Hume (RenewEconomy, before this year's price rise). Corridor lengths: Hume 880 km, Newell 1,060 km, Pacific 920 km, Bruce 1,680 km. The framework's truck package budgets about A$4 bn for 40,000 trucks. Janus Electric runs 4-minute swaps today, and CATL's standard pack fits 95% of mainstream trucks in China.</p>
+        </div>
+
+        <div class="tool" id="lab-halo">
+            <span class="tag soon">Needs field trials</span>
+            <h3>2. Halophyte fuel on salt-damaged land</h3>
+            <p class="sub">Salt-tolerant plants such as saltbush and samphire grow where crops can't, and their seed oil can be made into biodiesel. The land isn't used for food, but yields are modest.</p>
+            <div class="controls">
+                <div><label for="ha">Area planted: <span class="val" id="ha-v"></span></label><input type="range" id="ha" min="0" max="5700000" step="50000" value="1000000"></div>
+                <div>
+                    <label for="species">Species and setting</label>
+                    <select id="species">
+                        <option value="220|2.20|inland">Old man saltbush on inland scalds (220 L/ha)</option>
+                        <option value="580|3.80|either" selected>Salicornia fruticosa, the cost-yield sweet spot (580 L/ha)</option>
+                        <option value="730|4.40|coastal">Salicornia bigelovii on seawater-irrigated flats (730 L/ha)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="out">
+                <div><span>Oil per year</span><strong id="h-ml">–</strong></div>
+                <div><span>Share of national use</span><strong id="h-pct">–</strong></div>
+                <div><span>Days of diesel</span><strong id="h-days">–</strong></div>
+                <div><span>Growing cost per litre</span><strong id="h-cost">–</strong></div>
+            </div>
+            <p class="note" id="h-note"></p>
+        </div>
+
+        <div class="tool" id="lab-canola">
+            <span class="tag soon">Plants funded, first fuel about 2029</span>
+            <h3>3. Keep canola at home for renewable diesel</h3>
+            <p class="sub">Australia exports about 6 million tonnes of canola a year, mostly to European biofuel makers. Refined here as renewable diesel, it drops straight into existing engines.</p>
+            <div class="controls">
+                <div><label for="canola">Share of canola exports kept at home: <span class="val" id="canola-v"></span></label><input type="range" id="canola" min="0" max="100" step="5" value="50"></div>
+            </div>
+            <div class="out">
+                <div><span>Renewable diesel per year</span><strong id="c-gl">–</strong></div>
+                <div><span>Share of national use</span><strong id="c-pct">–</strong></div>
+                <div><span>Days of diesel</span><strong id="c-days">–</strong></div>
+            </div>
+            <p class="note">Rabobank estimates the full 6 Mt would make more than 2 GL, about 7% of demand. The A$1.1 bn Cleaner Fuels Program is funding the first plants. The catch: farmers lose an export market worth about A$4 bn unless domestic prices match.</p>
+        </div>
+
+        <div class="tool" id="lab-remote">
+            <span class="tag now">Working in Australia today</span>
+            <h3>4. Solar and batteries for remote communities</h3>
+            <p class="sub">Diesel generators power hundreds of towns too far from the grid. Solar alone cuts about 15% of their diesel; solar with enough battery storage cuts 50 to 96%.</p>
+            <div class="controls">
+                <div><label for="towns">Communities converted: <span class="val" id="towns-v"></span></label><input type="range" id="towns" min="0" max="300" step="10" value="250"></div>
+                <div><label for="townl">Average diesel per community: <span class="val" id="townl-v"></span></label><input type="range" id="townl" min="500" max="10000" step="500" value="2000"></div>
+                <div>
+                    <label for="share">System</label>
+                    <select id="share">
+                        <option value="0.15">Solar only (about 15% less diesel)</option>
+                        <option value="0.70" selected>Solar and battery, framework target (70%)</option>
+                        <option value="0.95">Best mine hybrids today (about 95%)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="out">
+                <div><span>Diesel avoided per year</span><strong id="r-ml">–</strong></div>
+                <div><span>Share of national use</span><strong id="r-pct">–</strong></div>
+                <div><span>Generator power cost</span><strong>A$450/MWh → under A$100</strong></div>
+            </div>
+            <p class="note">No national figure for diesel burned for power is published, so the average per community is your guess. Maningrida, one of the largest, uses up to 10,000 L a day. Real results: 25 NT communities cut diesel about 15% with 10 MW of solar; Mount Weld mine ran 95.7% renewable with wind, solar and batteries.</p>
+        </div>
+
+        <div class="tool" id="lab-ag">
+            <span class="tag idea">Concept, pilot proposed</span>
+            <h3>5. Shared battery-swap stations for harvest machinery</h3>
+            <p class="sub">A combine can't stop for hours to charge in the middle of harvest, so a co-op of farms could share a wind-and-solar swap station for tractors and headers (the "AgSwap" idea).</p>
+            <div class="controls">
+                <div><label for="crop">Cropping area served: <span class="val" id="crop-v"></span></label><input type="range" id="crop" min="0" max="5000000" step="20000" value="20000"></div>
+                <div>
+                    <label for="lha">Farming system</label>
+                    <select id="lha">
+                        <option value="23">Sorghum (23 L/ha)</option>
+                        <option value="33">No-till grain (about 33 L/ha)</option>
+                        <option value="64" selected>Conventionally tilled wheat (64 L/ha)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="out">
+                <div><span>Diesel avoided per year</span><strong id="a-ml">–</strong></div>
+                <div><span>Co-op stations (20,000 ha each)</span><strong id="a-st">–</strong></div>
+                <div><span>Share of national use</span><strong id="a-pct">–</strong></div>
+            </div>
+            <p class="note">Farm diesel use per hectare from NSW DPI. A 600 kWh pack for a combine would weigh about 3.5 to 4 tonnes with today's batteries, so this needs lighter packs before it is practical. The earlier report's claim of 900,000 L saved on 100 ha was about 100 times too high; this lab uses the corrected rates.</p>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-kicker">Available now</div>
+        <h2>Solutions already working in Australia</h2>
+        <div class="facts">
+            <div class="fact"><div class="n">20%</div><p><strong>Electric cars and utes.</strong> Battery EVs hit 20% of new sales in May 2026, and electrified utes now start around A$57,000.</p><cite><a href="https://business.carsales.com.au/news-room/news/vfacts-may-2026-bevs-record-tesla-tops-the-charts/">carsales VFACTS</a></cite></div>
+            <div class="fact"><div class="n">4 min</div><p><strong>Battery-swap trucks.</strong> Janus Electric converts diesel prime movers and swaps packs in about 4 minutes, including at a solar-powered station at Moorebank.</p><cite><a href="https://cleantechnica.com/2025/01/03/janus-electric-prime-movers-a-better-option/">CleanTechnica</a></cite></div>
+            <div class="fact"><div class="n">95.7%</div><p><strong>Renewable mine power.</strong> Mount Weld ran on wind, solar and batteries for 95.7% of the March 2026 quarter, using 870,000 L less diesel.</p><cite><a href="http://www.pv-magazine.com/2026/08/04/remote-operations-emerge-as-proving-ground-for-high-renewables-future/">pv magazine</a></cite></div>
+            <div class="fact"><div class="n">1,700</div><p><strong>Electric buses.</strong> Sydney plans about 1,700 zero-emission buses by 2028, and Victoria now buys only zero-emission buses.</p><cite><a href="https://www.transport.nsw.gov.au/projects/current-projects/zero-emission-buses">Transport for NSW</a></cite></div>
+            <div class="fact"><div class="n">A$8,000</div><p><strong>Solar water pumps.</strong> A Darling Downs farm saves about A$8,000 a year by running its bore pump on 25 kW of solar.</p><cite><a href="https://www.commbank.com.au/articles/newsroom/2026/04/is-there-a-case-for-electrification-in-australian-farming.html">CommBank, Apr 2026</a></cite></div>
+            <div class="fact"><div class="n">507,000</div><p><strong>Home batteries.</strong> Households have installed over half a million rebated batteries, letting many charge a car from their own roof.</p><cite><a href="https://www.energy-storage.news/australias-cheaper-home-batteries-program-officially-passes-500000-installations/">Energy Storage News</a></cite></div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-kicker">Emerging</div>
+        <h2>Coming soon, and worth watching</h2>
+        <div class="facts">
+            <div class="fact"><div class="n">2030</div><p><strong>Battery haul trucks.</strong> Fortescue's first Liebherr battery haul truck arrives in late 2026 with 6 MW chargers, aiming for no diesel haul trucks by 2030.</p><cite><a href="http://thedriven.io/2026/09/25/the-simple-tricks-fortescue-is-using-to-convert-its-fleet-of-giant-diesel-haul-trucks-to-full-battery-electric/">The Driven</a></cite></div>
+            <div class="fact"><div class="n">305</div><p><strong>Standard swap packs.</strong> China built 305 heavy-truck swap stations in 2025 using CATL's standard pack, with 900 targeted for 2026. A shared standard is what Australia lacks.</p><cite><a href="https://m.chinabuses.org/news/14216.html">China Buses</a></cite></div>
+            <div class="fact"><div class="n">2.3 MWh</div><p><strong>Battery freight trains.</strong> Aurizon is trialling a battery tender on the Kwinana to Pinjarra line with an ARENA grant.</p><cite><a href="https://www.railwaygazette.com/battery-traction/2026/08/16/australia-betting-on-batteries-to-decarbonise-heavy-freight/">Railway Gazette</a></cite></div>
+            <div class="fact"><div class="n">A$1.1 bn</div><p><strong>Home-grown renewable diesel.</strong> The Cleaner Fuels Program backs canola, tallow, cane and sorghum feedstocks, with first fuel expected around 2029.</p><cite><a href="https://www.spglobal.com/commodity-insights/en/news-research/latest-news/agriculture/100225-australia-narrows-biofuel-focus-excludes-uco-and-hydrogen-from-key-feedstock-plan">S&amp;P Global</a></cite></div>
+            <div class="fact"><div class="n">29</div><p><strong>Bi-mode regional trains.</strong> NSW's new regional fleet runs on electricity where it can and diesel where it must.</p><cite><a href="https://www.railwaygazette.com/battery-traction/2026/08/16/australia-betting-on-batteries-to-decarbonise-heavy-freight/">Railway Gazette</a></cite></div>
+            <div class="fact"><div class="n">1–3%</div><p><strong>Halophyte biofuel.</strong> A food-neutral fuel from salt-damaged land, realistic at 1 to 3% of diesel within a decade if trials succeed.</p><cite><a href="../diesel-framework/FRAMEWORK.md">Diesel framework</a></cite></div>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-kicker">Open questions</div>
+        <h2>Where research time and energy would pay off most</h2>
+        <p class="lead">These are the gaps that hold the hypotheticals back. Each one is a good project for a student team, a lab or a startup.</p>
+        <ol class="research">
+            <li><strong>Halophyte yields in the field.</strong> No Australian site has yet shown commercial seed-oil yields at scale. Replicated trials on inland scalds and coastal flats would settle whether 220 or 730 L/ha is realistic.</li>
+            <li><strong>Fertiliser from fish farms.</strong> Australia imports about 95% of its urea, 65 to 70% of it from the Gulf. Can nitrogen from land-based aquaculture ponds feed halophytes and crops instead?</li>
+            <li><strong>Lighter packs for farm machinery.</strong> A 600 kWh combine pack weighs about 3.5 to 4 tonnes today. Higher energy density, or swapping smaller packs more often, would make AgSwap practical.</li>
+            <li><strong>One swap standard for Australia.</strong> Trucks, buses and farm machines from different makers need packs that fit the same stations, as CATL's standard does in China.</li>
+            <li><strong>Batteries in outback heat and dust.</strong> Cooling, fire safety and lifespan at 45°C on the Stuart or Great Northern highways.</li>
+            <li><strong>Grid connections for hubs.</strong> Sharing a solar or wind farm's connection could skip the slowest step in building a charging hub. The rules and engineering need testing.</li>
+            <li><strong>How much diesel makes electricity?</strong> No national figure is published. A generator audit would size the cheapest diesel to remove.</li>
+            <li><strong>Recycling and refining battery minerals here.</strong> Batteries swap a fuel dependency for a minerals one. Recycling packs and processing lithium onshore keeps that value and security in Australia.</li>
+        </ol>
+        <div class="callout">
+            <strong>Start with your own trips.</strong> The big fixes take years. A swapped trip helps today.
+            <br><a class="cta" href="./">Score your trip in Joule</a>
+        </div>
+    </section>
+
+    <footer>Hypotheticals are illustrations using published figures and stated assumptions, not forecasts. Concept demonstration, not an official government service. Part of the <a href="../diesel-framework/">Diesel Import Reduction Framework</a>.</footer>
+</main>
+
+<script>
+const NATIONAL_GL = 33.5, IMPORTS_GL = 29, ML_PER_DAY = 93;
+const TRUCK_L_YR = 78300 * 53 / 100;                 // ABS
+const CORRIDOR_KM = 880 + 1060 + 920 + 1680;         // Hume, Newell, Pacific, Bruce
+const CANOLA_FULL_GL = 2.0;                          // Rabobank, all 6 Mt exported
+let dieselExGst = 2.87 / 1.1;
+
+const $ = id => document.getElementById(id);
+const fmt = n => Math.round(n).toLocaleString('en-AU');
+const vol = L => L >= 1e9 ? (L / 1e9).toFixed(2) + ' GL' : L >= 1e6 ? (L / 1e6).toFixed(L >= 1e8 ? 0 : 1) + ' ML' : fmt(L) + ' L';
+const pct = L => { const p = L / (NATIONAL_GL * 1e9) * 100; return p > 0 && p < 0.01 ? 'under 0.01%' : (p < 0.1 ? p.toFixed(2) : p.toFixed(1)) + '%'; };
+const days = L => (L / (ML_PER_DAY * 1e6)).toFixed(1);
+
+function update() {
+    const trucks = +$('trucks').value, spacing = +$('hubs').value;
+    const swapL = trucks * TRUCK_L_YR;
+    $('trucks-v').textContent = fmt(trucks);
+    $('hubs-v').textContent = spacing + ' km';
+    $('sw-gl').textContent = vol(swapL);
+    $('sw-pct').textContent = pct(swapL);
+    $('sw-hubs').textContent = fmt(Math.ceil(CORRIDOR_KM / spacing) + 4);
+    $('sw-save').textContent = 'A$' + fmt(78300 * (1.03 - 0.30)) + '/yr';
+
+    const ha = +$('ha').value;
+    const [yieldHa, costL, setting] = $('species').value.split('|');
+    const haloL = ha * (+yieldHa);
+    $('ha-v').textContent = ha >= 1e6 ? (ha / 1e6).toFixed(2) + ' million ha' : fmt(ha) + ' ha';
+    $('h-ml').textContent = vol(haloL);
+    $('h-pct').textContent = pct(haloL);
+    $('h-days').textContent = days(haloL);
+    $('h-cost').textContent = 'A$' + (+costL).toFixed(2) + '/L';
+    const notes = [];
+    if (ha > 2000000) notes.push('About 2 million ha is salt-affected today; the 5.7 million ha ceiling is land at risk of salinity.');
+    if (setting === 'coastal' && ha > 50000) notes.push('S. bigelovii needs seawater irrigation, so it only suits coastal flats; a 50,000 ha coastal cluster is already ambitious.');
+    notes.push(`Growing cost alone, plus about A$0.30 to 0.60/L to convert, against about A$${dieselExGst.toFixed(2)}/L for diesel today before GST. Grazing, carbon credits and food co-products have to pay part of the land cost.`);
+    $('h-note').textContent = notes.join(' ');
+
+    const share = +$('canola').value;
+    const canL = CANOLA_FULL_GL * 1e9 * share / 100;
+    $('canola-v').textContent = share + '%';
+    $('c-gl').textContent = vol(canL);
+    $('c-pct').textContent = pct(canL);
+    $('c-days').textContent = days(canL);
+
+    const towns = +$('towns').value, perDay = +$('townl').value, cut = +$('share').value;
+    const remoteL = towns * perDay * 365 * cut;
+    $('towns-v').textContent = fmt(towns);
+    $('townl-v').textContent = fmt(perDay) + ' L/day';
+    $('r-ml').textContent = vol(remoteL);
+    $('r-pct').textContent = pct(remoteL);
+
+    const crop = +$('crop').value, lha = +$('lha').value;
+    const agL = crop * lha;
+    $('crop-v').textContent = crop >= 1e6 ? (crop / 1e6).toFixed(2) + ' million ha' : fmt(crop) + ' ha';
+    $('a-ml').textContent = vol(agL);
+    $('a-st').textContent = fmt(Math.ceil(crop / 20000));
+    $('a-pct').textContent = pct(agL);
+
+    const total = swapL + haloL + canL + remoteL + agL;
+    $('sum-gl').textContent = vol(total);
+    $('sum-pct').textContent = pct(total) + ' of national diesel use';
+    $('sum-left').textContent = Math.max(0, IMPORTS_GL - total / 1e9).toFixed(1) + ' GL';
+    $('sum-dollars').textContent = 'A$' + (total * dieselExGst / 1e9).toFixed(1) + ' bn';
+}
+
+async function loadLive() {
+    try {
+        const res = await fetch('../diesel-framework/data/live.json', { cache: 'no-store' });
+        if (!res.ok) return;
+        const rf = ((await res.json()).indicators || {}).retail_fuel;
+        if (rf && rf.retail_diesel_aud_l) {
+            dieselExGst = rf.retail_diesel_aud_l / 1.1;
+            $('sum-price').textContent = `per year at A$${rf.retail_diesel_aud_l.toFixed(2)}/L retail (${rf.as_of}), before GST`;
+            update();
+        }
+    } catch (e) { /* keep the built-in price */ }
+}
+
+document.querySelectorAll('input, select').forEach(el => el.addEventListener('input', update));
+update();
+loadLive();
+</script>
+</body>
+</html>
