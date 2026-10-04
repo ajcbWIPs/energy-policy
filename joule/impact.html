@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Why It Matters · Joule</title>
+<meta name="description" content="How saving fuel on your trips helps keep food affordable and power on in regional and remote Australia.">
+<style>
+:root {
+    --navy: #002664; --blue: #146CFD; --red: #D7153A; --orange: #F99D1C; --green: #00a908;
+    --ink: #22272B; --muted: #5c6370; --rule: #dde3ea; --bg: #f4f6f9; --surface: #ffffff; --tint: #eaf2ff;
+}
+@media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+        --ink: #e8ebf0; --muted: #a3acb9; --rule: #2f3a48; --bg: #0f1722; --surface: #172231; --tint: #1b2b44; --blue: #6aa6ff;
+    }
+}
+:root[data-theme="dark"] {
+    --ink: #e8ebf0; --muted: #a3acb9; --rule: #2f3a48; --bg: #0f1722; --surface: #172231; --tint: #1b2b44; --blue: #6aa6ff;
+}
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--bg); color: var(--ink);
+       font: 16px/1.6 "Public Sans", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+a { color: var(--blue); }
+.masthead { background: var(--navy); color: #fff; }
+.masthead-inner { max-width: 1040px; margin: 0 auto; padding: 14px 16px; display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.masthead strong { font-size: 16px; }
+.masthead nav { display: flex; gap: 16px; font-size: 14px; }
+.masthead nav a { color: #fff; text-decoration: none; opacity: 0.85; }
+.masthead nav a[aria-current] { opacity: 1; border-bottom: 2px solid rgba(255,255,255,0.5); }
+.hero { background: linear-gradient(135deg, #002664 0%, #0a3a8c 100%); color: #fff; }
+.hero-inner { max-width: 1040px; margin: 0 auto; padding: 48px 16px 40px; }
+.kicker { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: rgba(255,255,255,0.7); font-weight: 600; }
+.hero h1 { font-size: clamp(32px, 6vw, 52px); line-height: 1.05; margin: 10px 0 14px; letter-spacing: -0.01em; }
+.hero p { font-size: 18px; max-width: 680px; color: rgba(255,255,255,0.88); margin: 0; }
+.live { display: grid; grid-template-columns: repeat(auto-fit, minmax(170px, 1fr)); gap: 12px; margin-top: 28px; }
+.live div { background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.18); border-radius: 10px; padding: 12px 14px; }
+.live span { display: block; font-size: 12.5px; color: rgba(255,255,255,0.7); }
+.live strong { font-size: 24px; font-variant-numeric: tabular-nums; }
+.live small { display: block; font-size: 12px; color: rgba(255,255,255,0.65); }
+main { max-width: 1040px; margin: 0 auto; padding: 8px 16px 64px; }
+section { margin-top: 48px; }
+h2 { font-size: 26px; line-height: 1.2; margin: 6px 0 12px; color: var(--ink); }
+.section-kicker { font-size: 12px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--blue); font-weight: 700; }
+.lead { font-size: 18px; max-width: 760px; }
+.facts { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px; margin: 20px 0; }
+.fact { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; }
+.fact .n { font-size: 30px; font-weight: 750; color: var(--navy); line-height: 1.1; font-variant-numeric: tabular-nums; }
+@media (prefers-color-scheme: dark) { :root:not([data-theme="light"]) .fact .n { color: #9cc3ff; } }
+:root[data-theme="dark"] .fact .n { color: #9cc3ff; }
+.fact p { margin: 6px 0 0; font-size: 14.5px; color: var(--muted); }
+.fact cite { display: block; margin-top: 8px; font-size: 12px; font-style: normal; color: var(--muted); }
+.tool { background: var(--surface); border: 1px solid var(--rule); border-radius: 12px; padding: 20px; margin-top: 20px; }
+.tool h3 { margin: 0 0 4px; font-size: 19px; }
+.tool .sub { color: var(--muted); font-size: 14px; margin: 0 0 16px; }
+.controls { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px 20px; }
+label { display: block; font-size: 13.5px; font-weight: 600; margin-bottom: 6px; }
+select, input[type=range] { width: 100%; }
+select { font: inherit; padding: 8px 10px; border-radius: 8px; border: 1px solid var(--rule); background: var(--surface); color: var(--ink); }
+.val { font-weight: 700; font-variant-numeric: tabular-nums; }
+.out { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; margin-top: 18px; }
+.out div { background: var(--tint); border-radius: 10px; padding: 12px 14px; }
+.out span { display: block; font-size: 12.5px; color: var(--muted); }
+.out strong { font-size: 22px; font-variant-numeric: tabular-nums; }
+.note { font-size: 13px; color: var(--muted); margin-top: 12px; }
+.callout { border-left: 4px solid var(--green); background: var(--surface); padding: 14px 18px; border-radius: 0 10px 10px 0; margin-top: 20px; }
+ol.sources { font-size: 13.5px; color: var(--muted); padding-left: 20px; }
+ol.sources li { margin-bottom: 6px; }
+.cta { display: inline-block; margin-top: 16px; background: var(--navy); color: #fff; text-decoration: none; font-weight: 650; padding: 10px 18px; border-radius: 8px; }
+footer { border-top: 1px solid var(--rule); margin-top: 56px; padding-top: 16px; font-size: 13px; color: var(--muted); }
+</style>
+</head>
+<body>
+<div class="masthead">
+    <div class="masthead-inner">
+        <strong>Joule Australia</strong>
+        <nav>
+            <a href="./">Joule</a>
+            <a href="impact.html" aria-current="page">Why it matters</a>
+            <a href="../diesel-framework/">Diesel framework</a>
+        </nav>
+    </div>
+</div>
+
+<div class="hero">
+    <div class="hero-inner">
+        <div class="kicker">Why it matters</div>
+        <h1>Every litre you save keeps food moving and the lights on.</h1>
+        <p>Australia imports nearly all of its diesel and holds only weeks of it. The same tank of fuel that moves your car competes with the trucks that stock supermarkets and the generators that power remote towns. Here is what your choices are connected to.</p>
+        <div class="live" id="live">
+            <div><span>Diesel cover (Australia)</span><strong id="lv-days">32 days</strong><small id="lv-days-note">IEA expects 90</small></div>
+            <div><span id="lv-price-label">Capital-city diesel</span><strong id="lv-price">$2.87/L</strong><small>Pre-war: $1.77/L (20 Feb)</small></div>
+            <div><span>Brent crude</span><strong id="lv-brent">US$113.96</strong><small id="lv-brent-note">per barrel</small></div>
+        </div>
+    </div>
+</div>
+
+<main>
+    <section>
+        <div class="section-kicker">Food on the shelf</div>
+        <h2>Almost everything you eat rode on diesel</h2>
+        <p class="lead">Food is grown with diesel tractors and pumps, then trucked between farms, processors, distribution centres and stores, often thousands of kilometres. When diesel prices jump, freight costs rise and those costs reach the checkout. The further a town is from a capital, the bigger that share of the price.</p>
+        <div class="facts">
+            <div class="fact"><div class="n">25–35%</div><p>of a heavy truck's operating cost is diesel.</p><cite>BITRE, via <a href="https://newenergy.com.au/australian-road-freight-costs-could-increase-20-30-in-a-prolonged-middle-east-conflict/">New Energy Transport, Mar 2026</a></cite></div>
+            <div class="fact"><div class="n">53 L</div><p>of diesel per 100 km for an average articulated truck, which covers about 78,300 km a year.</p><cite><a href="https://www.abs.gov.au/statistics/industry/tourism-and-transport/survey-motor-vehicle-use-australia/latest-release">ABS Survey of Motor Vehicle Use</a></cite></div>
+            <div class="fact"><div class="n">+62%</div><p>Capital-city retail diesel went from 177 c/L before the war to 287 c/L on 23 September, after peaking at 322 c/L.</p><cite><a href="https://www.accc.gov.au/consumers/petrol-and-fuel">ACCC fuel price monitoring</a></cite></div>
+            <div class="fact"><div class="n">2.3 GL</div><p>of diesel a year runs Australian farms, from 23 L per hectare for sorghum to 64 L for conventionally tilled wheat.</p><cite><a href="https://www.dpi.nsw.gov.au/__data/assets/pdf_file/0011/1321796/mov3ment-diesel-use-in-ag.pdf">NSW DPI</a>; <a href="../diesel-framework/FRAMEWORK.md">framework</a></cite></div>
+            <div class="fact"><div class="n">40%</div><p>more for a healthy food basket in remote NT community stores than in district centre supermarkets.</p><cite><a href="https://digitallibrary.health.nt.gov.au/nthealthserver/api/core/bitstreams/38ccdce2-8347-44e9-b850-010eec1c9af7/content">NT Market Basket Survey 2023</a></cite></div>
+            <div class="fact"><div class="n">20–30%</div><p>rise in road freight costs modelled for a prolonged Middle East conflict.</p><cite><a href="https://newenergy.com.au/australian-road-freight-costs-could-increase-20-30-in-a-prolonged-middle-east-conflict/">New Energy Transport, Mar 2026</a></cite></div>
+        </div>
+
+        <div class="tool">
+            <h3>What today's diesel price adds to a load of food</h3>
+            <p class="sub">Pick a freight run. The extra cost compares today's live diesel price with the pre-war price, for a truck at 53 L/100 km.</p>
+            <div class="controls">
+                <div>
+                    <label for="route">Freight run</label>
+                    <select id="route"></select>
+                </div>
+                <div>
+                    <label for="truck">Truck</label>
+                    <select id="truck">
+                        <option value="22">Semi-trailer (about 22 t of food)</option>
+                        <option value="34" selected>B-double (about 34 t of food)</option>
+                        <option value="50">Road train (about 50 t of food)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="out">
+                <div><span>Diesel for the run</span><strong id="f-litres">–</strong></div>
+                <div><span>Fuel bill today</span><strong id="f-cost">–</strong></div>
+                <div><span>Extra since the war began</span><strong id="f-extra">–</strong></div>
+                <div><span>Extra per kilogram of food</span><strong id="f-perkg">–</strong></div>
+            </div>
+            <p class="note">One-way distance by road. Prices exclude GST, which operators reclaim. Bigger trucks use more than 53 L/100 km, so heavier loads are an underestimate. Fuel tax credits lower the level of the bill but not the increase, which is what flows into food prices. The extra per kilogram is for one leg; most food takes several.</p>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-kicker">Power in the bush</div>
+        <h2>Hundreds of communities make their electricity from diesel</h2>
+        <p class="lead">Between 200 and 300 remote communities, and more than 100 mines, run on diesel generators because they are too far from the grid. That diesel arrives by truck or barge from the same national stock. In a shortage, keeping those generators fed means keeping hospitals, water pumps, cold stores and schools running.</p>
+        <div class="facts">
+            <div class="fact"><div class="n">200–300</div><p>diesel-dependent remote communities, plus more than 100 of Australia's roughly 350 mines off the grid.</p><cite><a href="https://www.mining-technology.com/features/off-grid-on-site-power-australian-mines/">Mining Technology</a>; <a href="../diesel-framework/FRAMEWORK.md">framework</a></cite></div>
+            <div class="fact"><div class="n">10,000 L</div><p>of diesel a day can be burned to power Maningrida in Arnhem Land.</p><cite><a href="http://www.pv-magazine-australia.com/2026/03/18/are-microgrids-answer-to-remote-communities-energy-conumdrum/">pv magazine, Mar 2026</a></cite></div>
+            <div class="fact"><div class="n">$450</div><p>per MWh for diesel power in communities, against under $100 for remote solar. States subsidise the gap.</p><cite><a href="https://www.ecdonline.com.au/content/efficiency-renewables/article/remote-power-generation-338874428">ECD</a> (2013 diesel figures, higher today)</cite></div>
+            <div class="fact"><div class="n">15%</div><p>less diesel in 25 NT communities after 10 MW of solar was added.</p><cite><a href="https://onestepoffthegrid.com.au/nt-completes-10mw-solar-roll-out-to-25-remote-indigenous-communities/">One Step Off the Grid</a></cite></div>
+        </div>
+        <div class="callout">
+            <strong>The long-term fix is solar and batteries in those towns.</strong> Remote hybrids already cost less than diesel power, and the <a href="../diesel-framework/">diesel framework</a> sets a target of at least 70% renewable power in every diesel-dependent community by 2030. Until then, every litre the rest of the country doesn't burn is a litre that can reach them.
+        </div>
+    </section>
+
+    <section>
+        <div class="section-kicker">Your share</div>
+        <h2>What your swaps add up to</h2>
+        <p class="lead">One trip makes no difference on its own. Many people making the same small swap every week does.</p>
+        <div class="tool">
+            <h3>If people like you swapped car trips for public or active transport</h3>
+            <p class="sub">Set how many people, how many trips and how far. The totals are litres of fuel left in the national stock each year.</p>
+            <div class="controls">
+                <div><label for="people">People making the swap: <span class="val" id="people-v"></span></label><input type="range" id="people" min="0" max="6" step="0.25" value="4"></div>
+                <div><label for="trips">Return trips swapped per week: <span class="val" id="trips-v"></span></label><input type="range" id="trips" min="1" max="10" value="1"></div>
+                <div><label for="km">Return trip distance: <span class="val" id="km-v"></span></label><input type="range" id="km" min="2" max="100" step="2" value="30"></div>
+                <div>
+                    <label for="veh">Vehicle left at home</label>
+                    <select id="veh">
+                        <option value="8|petrol">Petrol car (8 L/100 km)</option>
+                        <option value="10|diesel">Diesel ute or 4WD (10 L/100 km)</option>
+                    </select>
+                </div>
+            </div>
+            <div class="out">
+                <div><span>Fuel saved per year</span><strong id="y-litres">–</strong></div>
+                <div><span>Days of power for Maningrida</span><strong id="y-maningrida">–</strong></div>
+                <div><span>Hectares of wheat sown and harvested</span><strong id="y-wheat">–</strong></div>
+                <div><span>B-double runs Melbourne to Sydney</span><strong id="y-trucks">–</strong></div>
+                <div><span>Hours of national diesel use</span><strong id="y-hours">–</strong></div>
+                <div><span>Saved at the pump each year</span><strong id="y-dollars">–</strong></div>
+            </div>
+            <p class="note" id="y-note"></p>
+        </div>
+        <div class="callout">
+            <strong>Joule never tells you not to travel.</strong> The goal is to keep Australia moving, with one fewer barrel of imported fuel behind every journey, so more of the diesel we have goes to food, freight and the communities that can't switch.
+            <br><a class="cta" href="./">Score your trip in Joule</a>
+        </div>
+    </section>
+
+    <section>
+        <div class="section-kicker">Sources</div>
+        <ol class="sources">
+            <li>Live diesel cover, capital-city prices and Brent: <a href="https://fuelplan.gov.au/fuel-statistics">fuelplan.gov.au</a> (ACCC weekly monitoring) and <a href="https://fred.stlouisfed.org/series/DCOILBRENTEU">FRED</a>, refreshed every 6 hours into <a href="../diesel-framework/data/live.json">live.json</a>.</li>
+            <li>Truck fuel use: <a href="https://www.abs.gov.au/statistics/industry/tourism-and-transport/survey-motor-vehicle-use-australia/latest-release">ABS Survey of Motor Vehicle Use</a>. Diesel share of trucking costs: BITRE, quoted by <a href="https://newenergy.com.au/australian-road-freight-costs-could-increase-20-30-in-a-prolonged-middle-east-conflict/">New Energy Transport</a>.</li>
+            <li>Remote food prices: <a href="https://digitallibrary.health.nt.gov.au/nthealthserver/api/core/bitstreams/38ccdce2-8347-44e9-b850-010eec1c9af7/content">NT Market Basket Survey 2023</a>.</li>
+            <li>Farm diesel: <a href="https://www.dpi.nsw.gov.au/__data/assets/pdf_file/0011/1321796/mov3ment-diesel-use-in-ag.pdf">NSW DPI</a>. Remote power: see the <a href="../diesel-framework/FRAMEWORK.md">diesel framework</a> for each source.</li>
+            <li>Load sizes, road distances and the vehicle fuel rates in the calculators are estimates.</li>
+        </ol>
+    </section>
+
+    <footer>Concept demonstration, not an official government service. Part of the <a href="../diesel-framework/">Diesel Import Reduction Framework</a>.</footer>
+</main>
+
+<script>
+// Freight runs: one-way road distance in km (estimates).
+const ROUTES = [
+    ['Melbourne → Sydney', 880], ['Sydney → Brisbane', 920], ['Adelaide → Melbourne', 730],
+    ['Brisbane → Cairns', 1700], ['Brisbane → Mount Isa', 1830], ['Adelaide → Alice Springs', 1530],
+    ['Adelaide → Darwin', 3030], ['Adelaide → Perth', 2700], ['Sydney → Perth', 3930],
+    ['Perth → Broome', 2240], ['Perth → Kalgoorlie', 595], ['Darwin → Katherine', 320],
+    ['Hobart → Launceston', 200]
+];
+const TRUCK_L_100KM = 53;       // ABS average, articulated trucks
+const PREWAR_DIESEL = 1.77;     // AUD/L, capital-city average 20 Feb 2026 (ACCC)
+const MANINGRIDA_L_DAY = 10000; // pv magazine, Mar 2026
+const WHEAT_L_HA = 64;          // NSW DPI, conventional tillage
+const NATIONAL_ML_DAY = 93;     // about 33.5 GL a year
+const MEL_SYD_RUN_L = 880 * TRUCK_L_100KM / 100;
+
+let diesel = 2.87, petrol = 2.37, priceWhere = 'Capital-city';
+const fmt = n => Math.round(n).toLocaleString('en-AU');
+const money = n => '$' + (n >= 100 ? fmt(n) : n.toFixed(2));
+
+function freight() {
+    const km = +document.getElementById('route').value;
+    const tonnes = +document.getElementById('truck').value;
+    const litres = km * TRUCK_L_100KM / 100;
+    const nowExGst = diesel / 1.1, preExGst = PREWAR_DIESEL / 1.1;
+    const extra = litres * (nowExGst - preExGst);
+    document.getElementById('f-litres').textContent = fmt(litres) + ' L';
+    document.getElementById('f-cost').textContent = money(litres * nowExGst);
+    document.getElementById('f-extra').textContent = (extra >= 0 ? '+' : '') + money(Math.abs(extra));
+    document.getElementById('f-perkg').textContent = (extra / (tonnes * 1000) * 100).toFixed(1) + ' c';
+}
+
+function share() {
+    const people = Math.round(Math.pow(10, +document.getElementById('people').value));
+    const trips = +document.getElementById('trips').value;
+    const km = +document.getElementById('km').value;
+    const [rate, fuel] = document.getElementById('veh').value.split('|');
+    const litres = people * trips * 52 * km * (+rate) / 100;
+    document.getElementById('people-v').textContent = fmt(people);
+    document.getElementById('trips-v').textContent = trips;
+    document.getElementById('km-v').textContent = km + ' km';
+    document.getElementById('y-litres').textContent = litres >= 1e6 ? (litres / 1e6).toFixed(1) + ' ML' : fmt(litres) + ' L';
+    document.getElementById('y-maningrida').textContent = fmt(litres / MANINGRIDA_L_DAY);
+    document.getElementById('y-wheat').textContent = fmt(litres / WHEAT_L_HA);
+    document.getElementById('y-trucks').textContent = fmt(litres / MEL_SYD_RUN_L);
+    document.getElementById('y-hours').textContent = (litres / (NATIONAL_ML_DAY * 1e6) * 24).toFixed(1);
+    document.getElementById('y-dollars').textContent = money(litres * (fuel === 'diesel' ? diesel : petrol));
+    document.getElementById('y-note').textContent = fuel === 'diesel'
+        ? 'Every litre a diesel ute or 4WD skips is diesel left in the national stock.'
+        : 'Petrol and diesel are separate products, so petrol savings don\'t become diesel one for one. They do cut the import bill and free space on the same product tankers and terminals. Comparisons are by volume.';
+}
+
+function loadState() {
+    try { return localStorage.getItem('joule-state') || 'NSW'; } catch (e) { return 'NSW'; }
+}
+const CITY = { NSW: ['SYD', 'Sydney'], VIC: ['MEL', 'Melbourne'], QLD: ['BRIS', 'Brisbane'], SA: ['ADEL', 'Adelaide'],
+               WA: ['PER', 'Perth'], TAS: ['HOB', 'Hobart'], ACT: ['CBR', 'Canberra'], NT: ['DAR', 'Darwin'] };
+
+async function loadLive() {
+    try {
+        const res = await fetch('../diesel-framework/data/live.json', { cache: 'no-store' });
+        if (!res.ok) return;
+        const ind = (await res.json()).indicators || {};
+        const stock = ind.diesel_stock;
+        if (stock && stock.diesel_days) {
+            document.getElementById('lv-days').textContent = Math.round(stock.diesel_days) + ' days';
+            document.getElementById('lv-days-note').textContent = `IEA expects 90 · ${stock.stale ? 'last published ' : ''}${stock.as_of || ''}`;
+        }
+        const rf = ind.retail_fuel;
+        if (rf) {
+            const [code, name] = CITY[loadState()] || CITY.NSW;
+            const city = rf.cities && rf.cities[code];
+            diesel = city ? city.diesel_aud_l : rf.retail_diesel_aud_l;
+            petrol = city ? city.petrol_aud_l : rf.retail_petrol_aud_l;
+            priceWhere = city ? name : '5-capital average';
+            document.getElementById('lv-price-label').textContent = `${priceWhere} diesel (${rf.as_of})`;
+            document.getElementById('lv-price').textContent = '$' + diesel.toFixed(2) + '/L';
+        }
+        const b = ind.brent_usd_bbl;
+        if (b && b.value) {
+            document.getElementById('lv-brent').textContent = 'US$' + b.value.toFixed(2);
+            document.getElementById('lv-brent-note').textContent = 'per barrel · ' + b.as_of;
+        }
+    } catch (e) { /* keep the built-in figures */ }
+    freight();
+    share();
+}
+
+document.getElementById('route').innerHTML = ROUTES.map(([n, km]) => `<option value="${km}">${n} (${fmt(km)} km)</option>`).join('');
+['route', 'truck'].forEach(id => document.getElementById(id).addEventListener('change', freight));
+['people', 'trips', 'km'].forEach(id => document.getElementById(id).addEventListener('input', share));
+document.getElementById('veh').addEventListener('change', share);
+freight();
+share();
+loadLive();
+</script>
+</body>
+</html>

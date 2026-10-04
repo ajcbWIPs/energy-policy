@@ -999,6 +999,7 @@ footer {
         </div>
         <div class="masthead-right">
             <a id="mh-planner" href="https://transportnsw.info/trip" target="_blank" rel="noopener">Trip Planner</a>
+            <a href="impact.html">Why it matters</a>
             <a href="../diesel-framework/">Diesel framework</a>
             <a href="#top" style="font-weight:600;border-bottom-color:rgba(255,255,255,0.4)" aria-current="page">Joule</a>
         </div>
@@ -1205,7 +1206,7 @@ footer {
                 <div class="result-score"><span id="result-score-num">72</span><span class="slash"> / 100</span></div>
                 <div class="result-verdict" id="result-verdict">This trip holds the line.</div>
                 <div class="result-explain" id="result-explain">
-                    A solo car commute from Blacktown adds moderate pressure to NSW's fuel reserve, but the corridor has room to absorb it this week.
+                    A solo car commute adds moderate pressure to Australia's fuel reserve, but the corridor has room to absorb it this week.
                 </div>
                 <div class="result-rows">
                     <div>
@@ -1233,7 +1234,7 @@ footer {
             <div class="suggest-head">Joule suggestion</div>
             <div class="suggest-body" id="suggest-body">
                 <strong>Swap one car commute a week for the T1 train.</strong>
-                With Sydney ULP at 213.1 c/L and diesel reserves sitting at <span data-live="diesel-days-num">29</span> days, a single weekly swap returns about 3.2 L of petrol to the reserve each week — roughly 166 L over a year, or about 3 tanks of petrol, saving you about $354 at the pump.
+                With petrol above 2 dollars a litre and diesel reserves sitting at <span data-live="diesel-days-num">29</span> days, a single weekly swap returns about 3.2 L of petrol to the reserve each week — roughly 166 L over a year, or about 3 tanks of petrol, saving you about $354 at the pump.
             </div>
         </div>
     </div>
@@ -1294,7 +1295,7 @@ footer {
         </div>
         <div class="explainer-body">
             <p>
-                Joule converts your trip into a single score from 0 to 100. A higher score means your choice puts less pressure on the state's fuel reserve — and the transport network has more room to absorb it.
+                Joule converts your trip into a single score from 0 to 100. A higher score means your choice puts less pressure on Australia's fuel reserve, and the transport network has more room to absorb it.
             </p>
 
             <div class="formula-row">
@@ -1306,10 +1307,10 @@ footer {
             </div>
 
             <p>
-                Your <strong>fuel impact</strong> is measured in kilowatt-hour-equivalents — so electricity, petrol, and diesel all sit on one axis. <strong>Corridor load</strong> reads live bus and train capacity on the line you're using: if your train has spare seats, your walk-on trip is worth more to the state. <strong>Time cost</strong> keeps the score honest — if the alternative takes two hours longer, Joule won't pretend that's a free swap.
+                Your <strong>fuel impact</strong> is measured in kilowatt-hour-equivalents — so electricity, petrol, and diesel all sit on one axis. <strong>Corridor load</strong> uses the typical peak loading on the line you're using: if your train, tram, ferry or bus has spare seats, your walk-on trip is worth more to the network. <strong>Time cost</strong> keeps the score honest — if the alternative takes two hours longer, Joule won't pretend that's a free swap.
             </p>
             <p>
-                Joule never tells you not to travel. The goal is the opposite: <strong>keep New South Wales moving</strong>, with one fewer barrel of imported fuel behind every journey.
+                Joule never tells you not to travel. The goal is the opposite: <strong>keep Australia moving</strong>, with one fewer barrel of imported fuel behind every journey, so more diesel is left for the trucks that carry our food and the generators that power remote communities. <a href="impact.html" style="color:inherit;text-decoration:underline">See why it matters beyond your trip</a>.
             </p>
         </div>
     </div>
@@ -1346,6 +1347,7 @@ footer {
             <h4>Plan a trip</h4>
             <ul>
                 <li><a id="ft-planner" href="https://transportnsw.info/trip" target="_blank" rel="noopener">Plan a trip in NSW</a></li>
+                <li><a href="impact.html">Why it matters: food and remote power</a></li>
                 <li><a href="../diesel-framework/">Diesel import reduction framework</a></li>
             </ul>
         </div>
@@ -2006,7 +2008,7 @@ function verdictFor(score, mode) {
     if (score >= 70) return {
         pillClass: 'good', pillText: 'Good',
         verdict: 'This trip holds the line.',
-        explain: 'Your choice keeps pressure off the state\'s liquid-fuel reserve this week. Small, consistent trips like this add up at state scale.'
+        explain: 'Your choice keeps pressure off Australia\'s liquid-fuel reserve this week. Small, consistent trips like this add up at national scale.'
     };
     if (score >= 50) return {
         pillClass: 'ok', pillText: 'OK',
@@ -2016,7 +2018,7 @@ function verdictFor(score, mode) {
     return {
         pillClass: 'poor', pillText: 'High impact',
         verdict: 'This trip puts real pressure on the reserve.',
-        explain: 'Solo long-distance driving on a well-served corridor is the hardest case for the state. The train or coach on this line has spare seats right now — see alternatives below.'
+        explain: 'Solo long-distance driving on a well-served corridor is the hardest case for the fuel reserve. The train or coach on this line has spare seats right now — see alternatives below.'
     };
 }
 
@@ -2064,7 +2066,7 @@ function suggestionFor(mode, corridor, km, freq, score) {
             return {
                 head: 'Practical and powerful',
                 body: `<strong>Active transport at this distance is a genuine commute for most people.</strong>
-                       No fuel, no fare, no grid draw — every trip is pure contribution to the state's fuel reserve.
+                       No fuel, no fare, no grid draw — every trip is pure contribution to Australia's fuel reserve.
                        Consider an e-bike if the hills are a problem.`
             };
         }
