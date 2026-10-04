@@ -32,4 +32,4 @@ Turn on GitHub Pages under **Settings → Pages → Deploy from a branch → `ma
 
 ## Joule
 
-A copy of [Joule](https://github.com/Rexcat1/DataHack2026) lives in `../joule/`. Its diesel cover and Brent figures read `data/live.json` from this folder and keep their April 2026 values if the fetch fails. Once Pages is on, it is at `https://ajcbwips.github.io/energy-policy/joule/`.
+A nationwide copy of [Joule](https://github.com/Rexcat1/DataHack2026) lives in `../joule/`. Its gauge, diesel cover, Brent, capital-city fuel prices and NEM power prices read `data/live.json` from this folder and keep their April 2026 values if the fetch fails. It is published at `https://ajcbwips.github.io/energy-policy/joule/`.

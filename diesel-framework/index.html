@@ -40,6 +40,11 @@
   .links { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; }
   ul { padding-left: 20px; }
   li { margin-bottom: 6px; }
+  .joule { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px 24px;
+           background: #002664; color: #fff; border-radius: 12px; padding: 18px 20px; margin-top: 20px; }
+  .joule h3 { margin: 0 0 4px; font-size: 18px; }
+  .joule p { margin: 0; color: rgba(255,255,255,0.85); font-size: 14.5px; max-width: 560px; }
+  .joule a.btn { background: #fff; color: #002664; font-weight: 650; text-decoration: none; padding: 10px 16px; border-radius: 8px; white-space: nowrap; }
   footer { margin-top: 48px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--rule); padding-top: 16px; }
 </style>
 </head>
@@ -57,6 +62,13 @@
   <h2>Fuel security now</h2>
   <p class="meta" id="updated">Loading live data…</p>
   <div class="tiles" id="tiles"></div>
+  <div class="joule">
+    <div>
+      <h3>Joule: what your trip does to the reserve</h3>
+      <p>Pick your state, route and distance, and Joule scores the trip against today's diesel cover, local fuel prices and grid prices, then suggests a swap.</p>
+    </div>
+    <a class="btn" href="../joule/">Open Joule</a>
+  </div>
 
   <h2>Where the diesel goes</h2>
   <p>Mining and trucks burn half of Australia's diesel, so those two uses decide whether imports can approach zero.</p>
@@ -76,7 +88,7 @@
   </ul>
 
   <h2>How this links to Joule</h2>
-  <p><a href="../joule/">Joule</a> shows travellers how each trip affects New South Wales' fuel reserve. It reads the same <a href="data/live.json">live data file</a> this page uses, so its diesel cover and price figures stay current instead of fixed at April 2026.</p>
+  <p><a href="../joule/">Joule</a> shows travellers in every state and territory how each trip affects Australia's fuel reserve. It reads the same <a href="data/live.json">live data file</a> this page uses, so its gauge, diesel cover, capital-city fuel prices and grid prices stay current instead of fixed at April 2026.</p>
 
   <footer>
     Live sources: <a href="https://fred.stlouisfed.org/series/DCOILBRENTEU">Brent (FRED)</a>, <a href="https://fred.stlouisfed.org/series/DDFUELUSGULF">US Gulf Coast diesel (FRED)</a>, <a href="https://fred.stlouisfed.org/series/DEXUSAL">AUD exchange rate (FRED)</a>, <a href="https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem">AEMO NEM dashboard</a>, <a href="https://fuelplan.gov.au/fuel-statistics">DCCEEW diesel stocks via fuelplan.gov.au</a>. Figures marked stale could not be refreshed on the last run.

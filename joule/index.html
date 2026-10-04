@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Joule — Fuel Security Gauge · Transport for NSW</title>
+<title>Joule — Fuel Security Gauge · Australia</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -956,6 +956,22 @@ footer {
 }
 
 /* ==========================================================
+   STATE PICKER (hero)
+   ========================================================== */
+.state-pick-label {
+    font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: rgba(255,255,255,0.7); font-weight: 600; margin-bottom: 8px;
+}
+.state-pick { display: flex; flex-wrap: wrap; gap: 6px; margin-bottom: 8px; }
+.state-pick button {
+    background: transparent; color: var(--nsw-white);
+    border: 1.5px solid rgba(255,255,255,0.35); border-radius: 999px;
+    padding: 6px 13px; font: inherit; font-size: 13px; font-weight: 600; cursor: pointer;
+}
+.state-pick button:hover { border-color: var(--nsw-white); }
+.state-pick button.active { background: var(--nsw-white); color: var(--nsw-navy); border-color: var(--nsw-white); }
+
+/* ==========================================================
    UTILITY
    ========================================================== */
 .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
@@ -977,13 +993,13 @@ footer {
                 <circle cx="30" cy="30" r="4" fill="#ffffff"/>
             </svg>
             <div>
-                <div class="masthead-title">Transport for NSW</div>
-                <div style="font-size:11px;color:rgba(255,255,255,0.65);letter-spacing:0.1em;text-transform:uppercase;font-weight:500">Customer energy intelligence</div>
+                <div class="masthead-title">Joule Australia</div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.65);letter-spacing:0.1em;text-transform:uppercase;font-weight:500">Transport energy intelligence</div>
             </div>
         </div>
         <div class="masthead-right">
-            <a href="https://transportnsw.info/trip" target="_blank" rel="noopener">Trip Planner</a>
-            <a href="https://transportnsw.info/tickets-fares" target="_blank" rel="noopener">Opal</a>
+            <a id="mh-planner" href="https://transportnsw.info/trip" target="_blank" rel="noopener">Trip Planner</a>
+            <a href="../diesel-framework/">Diesel framework</a>
             <a href="#top" style="font-weight:600;border-bottom-color:rgba(255,255,255,0.4)" aria-current="page">Joule</a>
         </div>
     </div>
@@ -992,34 +1008,10 @@ footer {
 <!-- ==========================================================
      LIVE STATE TICKER
      ========================================================== -->
-<div class="ticker" aria-label="Live NSW fuel and grid status">
+<div class="ticker" aria-label="Live fuel and grid status">
     <div class="ticker-inner">
-        <div class="ticker-set">
-            <span class="ticker-item dot"><span>NSW fuel security index</span><strong id="tk-fsi">58 / 100</strong></span>
-            <span class="ticker-item alert"><span>Diesel cover (AU)</span><strong data-live="diesel-days">29 days</strong></span>
-            <span class="ticker-item alert"><span>Petrol cover (AU)</span><strong>39 days</strong></span>
-            <span class="ticker-item dot"><span>NSW grid demand</span><strong>10.2 GW</strong></span>
-            <span class="ticker-item dot"><span>VPP dispatch active</span><strong>412 MW</strong></span>
-            <span class="ticker-item up"><span>Brent crude</span><strong data-live="brent-usd">US$90.89</strong></span>
-            <span class="ticker-item dot"><span>Sydney ULP avg</span><strong>213.1 c/L</strong></span>
-            <span class="ticker-item alert"><span>Sydney diesel avg</span><strong>318.1 c/L</strong></span>
-            <span class="ticker-item alert"><span>Strait of Hormuz</span><strong>Contested — passage restricted</strong></span>
-            <span class="ticker-item dot"><span>Federal excise (halved)</span><strong>26.3 c/L</strong></span>
-            <span class="ticker-item dot"><span>Last update</span><strong id="tk-ts">just now</strong></span>
-        </div>
-        <div class="ticker-set" aria-hidden="true">
-            <span class="ticker-item dot"><span>NSW fuel security index</span><strong id="tk-fsi-2">58 / 100</strong></span>
-            <span class="ticker-item alert"><span>Diesel cover (AU)</span><strong data-live="diesel-days">29 days</strong></span>
-            <span class="ticker-item alert"><span>Petrol cover (AU)</span><strong>39 days</strong></span>
-            <span class="ticker-item dot"><span>NSW grid demand</span><strong>10.2 GW</strong></span>
-            <span class="ticker-item dot"><span>VPP dispatch active</span><strong>412 MW</strong></span>
-            <span class="ticker-item up"><span>Brent crude</span><strong data-live="brent-usd">US$90.89</strong></span>
-            <span class="ticker-item dot"><span>Sydney ULP avg</span><strong>213.1 c/L</strong></span>
-            <span class="ticker-item alert"><span>Sydney diesel avg</span><strong>318.1 c/L</strong></span>
-            <span class="ticker-item alert"><span>Strait of Hormuz</span><strong>Contested — passage restricted</strong></span>
-            <span class="ticker-item dot"><span>Federal excise (halved)</span><strong>26.3 c/L</strong></span>
-            <span class="ticker-item dot"><span>Last update</span><strong id="tk-ts-2">just now</strong></span>
-        </div>
+        <div class="ticker-set" id="ticker-a"></div>
+        <div class="ticker-set" id="ticker-b" aria-hidden="true"></div>
     </div>
 </div>
 
@@ -1031,18 +1023,20 @@ footer {
         <div>
             <div class="hero-brand-line"><span class="dot"></span>Live · Fuel Security Intelligence</div>
             <h1>Joule<span class="punct">.</span></h1>
-            <p class="lede">A real-time gauge for how your trip affects New South Wales' fuel security — so you can keep moving, smartly.</p>
+            <p class="lede">A live gauge for how your trip affects Australia's fuel security, wherever you live, so you can keep moving, smartly.</p>
+                <div class="state-pick-label">Your state or territory</div>
+                <div class="state-pick" id="state-pick" role="radiogroup" aria-label="Your state or territory"></div>
             <div class="hero-meta">
                 <div>
                     <strong>Why it matters today</strong>
-                    Australia holds just <span data-live="diesel-days-num">29</span> days of diesel cover and 39 days of petrol. Around 20% of the world's seaborne oil passes through the Strait of Hormuz — a waterway that has been disrupted for weeks and whose status remains <a href="https://www.dcceew.gov.au/about/news/securing-australias-fuel-supply" target="_blank" rel="noopener" style="color:#cbedfd; text-decoration:underline">contested and volatile</a>. Every kilometre you don't drive is a litre that stays in the national reserve for essential services.
+                    Australia holds about <span data-live="diesel-days-num">29</span> days of diesel cover, well short of the 90 days the IEA expects. With the Strait of Hormuz and Bab el-Mandeb <a href="https://fuelplan.gov.au/fuel-statistics" target="_blank" rel="noopener" style="color:#cbedfd; text-decoration:underline">closed to most tankers</a>, every kilometre you don't drive is a litre that stays in the national reserve for food, freight and essential services.
                 </div>
             </div>
         </div>
 
         <div class="gauge-card">
             <div class="gauge-label-row">
-                <div class="gauge-label">NSW Fuel Security Index</div>
+                <div class="gauge-label">National Fuel Security Index</div>
                 <div class="gauge-live">Live</div>
             </div>
             <div class="gauge-svg-wrap">
@@ -1115,16 +1109,17 @@ footer {
                 <div class="gauge-caption" id="gauge-caption">Watch · reserves thinning</div>
             </div>
             <div class="gauge-ticker">
-                <div>Petrol cover<br><strong>39 days</strong></div>
                 <div>Diesel cover<br><strong data-live="diesel-days">29 days</strong></div>
-                <div>VPP firming<br><strong>412 MW</strong></div>
+                <div><span data-st="city">Sydney</span> diesel<br><strong id="g-diesel">$3.18/L</strong></div>
+                <div><span data-st="short">NSW</span> power<br><strong id="g-grid">–</strong></div>
             </div>
             <div style="text-align:center; margin-top: 12px; font-size: 11px; color: var(--nsw-grey);">
-                Stockhold figures:
-                <a href="https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks" target="_blank" rel="noopener" style="color: var(--nsw-navy); text-decoration: underline;">DCCEEW Liquid Fuel Stocks</a>
+                Stocks and prices:
+                <a href="https://fuelplan.gov.au/fuel-statistics" target="_blank" rel="noopener" style="color: var(--nsw-navy); text-decoration: underline;">fuelplan.gov.au</a>
                 &nbsp;·&nbsp;
-                Prices:
-                <a href="https://www.fuelcheck.nsw.gov.au/" target="_blank" rel="noopener" style="color: var(--nsw-navy); text-decoration: underline;">NSW FuelCheck</a>
+                Local prices:
+                <a id="src-price" href="https://www.fuelcheck.nsw.gov.au/" target="_blank" rel="noopener" style="color: var(--nsw-navy); text-decoration: underline;">NSW FuelCheck</a>
+                <div id="live-updated" style="margin-top:4px"></div>
             </div>
         </div>
     </div>
@@ -1138,7 +1133,7 @@ footer {
     <h2 class="section-h">Plan your trip</h2>
     <h3 class="lede-h">Tell us where you're going. We'll score it against the network.</h3>
     <p class="lede-p">
-        Pick a mode, corridor, and distance. Joule reads the NSW fuel security index, the state's freight load, and the current trip's impact — then tells you whether your plan helps, holds, or hurts, and suggests one small swap if it would make a real difference.
+        Pick a mode, corridor, and distance. Joule reads the national fuel security index, <span data-st="name">New South Wales</span>' local fuel prices and network load, and the current trip's impact — then tells you whether your plan helps, holds, or hurts, and suggests one small swap if it would make a real difference.
     </p>
 
     <div class="planner">
@@ -1170,44 +1165,7 @@ footer {
 
                 <div class="field" id="corridor-field">
                     <label for="m-corridor">Route or corridor</label>
-                    <select id="m-corridor">
-                        <optgroup label="🚆 Train corridors — Greater Sydney">
-                            <option value="blacktown">Blacktown / Mount Druitt — T1 Western</option>
-                            <option value="penrith">Penrith / St Marys — T1 Western</option>
-                            <option value="parramatta">Parramatta — T1 / T5</option>
-                            <option value="campbelltown">Campbelltown — T8 Airport &amp; South</option>
-                            <option value="liverpool">Liverpool — T2</option>
-                            <option value="bankstown">Bankstown — T3</option>
-                            <option value="chatswood">Chatswood — Metro / T1</option>
-                        </optgroup>
-                        <optgroup label="🚆 Train corridors — Intercity">
-                            <option value="gosford">Gosford / Wyong — Central Coast &amp; Newcastle</option>
-                            <option value="wollongong">Wollongong — South Coast</option>
-                            <option value="lithgow">Lithgow — Blue Mountains</option>
-                            <option value="bathurst">Bathurst — Central West coach</option>
-                        </optgroup>
-                        <optgroup label="🚍 Bus routes — Eastern / Inner Sydney">
-                            <option value="b1">B1 B-Line — Mona Vale → Wynyard</option>
-                            <option value="r350">350 — Bondi Junction → Airport</option>
-                            <option value="r380">380 — Bondi Beach → Circular Quay</option>
-                            <option value="r333">333 — Bondi Beach → Circular Quay (PrePay)</option>
-                            <option value="r400">400 — Bondi Junction → Eastgardens</option>
-                            <option value="r370">370 — Coogee → Leichhardt</option>
-                            <option value="r891">891 — Central → UNSW</option>
-                        </optgroup>
-                        <optgroup label="🚍 Bus routes — Cross-town / Western">
-                            <option value="m90">M90 — Liverpool → Burwood</option>
-                            <option value="m91">M91 — Parramatta → Hurstville</option>
-                            <option value="t80">T80 — Liverpool ↔ Parramatta (T-Way)</option>
-                            <option value="r545">545 — Chatswood → Parramatta</option>
-                            <option value="r500">500 — Central → Olympic Park</option>
-                            <option value="r610x">610X — Castle Hill → Wynyard (express)</option>
-                            <option value="rL90">L90 — Palm Beach → City (Limited)</option>
-                        </optgroup>
-                        <optgroup label="🏙 Inner Sydney">
-                            <option value="inner">Inner Sydney / CBD — multiple options</option>
-                        </optgroup>
-                    </select>
+                    <select id="m-corridor"></select>
                 </div>
 
                 <div class="field">
@@ -1216,7 +1174,7 @@ footer {
                         <input type="range" id="m-km" min="2" max="200" value="40" step="2">
                         <span class="val"><span id="m-km-v">40</span> km</span>
                     </div>
-                    <div class="hint">Typical Blacktown → Parramatta → Blacktown return is ~36 km.</div>
+                    <div class="hint" id="km-hint">Typical Blacktown → Parramatta → Blacktown return is ~36 km.</div>
                 </div>
 
                 <div class="field">
@@ -1297,30 +1255,30 @@ footer {
     <!-- ======================================================
          STATE STATUS STRIP
          ====================================================== -->
-    <div class="status-strip" role="region" aria-label="NSW state transport energy status">
+    <div class="status-strip" role="region" aria-label="State transport energy status">
         <div class="status-head">
-            NSW state status
-            <span>Updated every 15 min</span>
+            <span data-st="short" style="display:inline;font-size:inherit;color:inherit;margin:0;letter-spacing:inherit">NSW</span> status
+            <span>Live data, refreshed every 6 hours</span>
         </div>
         <div class="status-item">
-            <div class="sl">Diesel cover</div>
+            <div class="sl">Diesel cover (AU)</div>
             <div class="sv"><span data-live="diesel-days-num">29</span><span class="su">days</span></div>
-            <div class="st down">Below 90-day IEA target</div>
+            <div class="st down" id="st-diesel">Below 90-day IEA target</div>
         </div>
         <div class="status-item">
-            <div class="sl">Sydney ULP</div>
-            <div class="sv">213.1<span class="su">c/L</span></div>
-            <div class="st up">↓ 8.3c this week</div>
+            <div class="sl"><span data-st="city">Sydney</span> petrol</div>
+            <div class="sv" id="st-petrol">213.1<span class="su">c/L</span></div>
+            <div class="st" id="st-petrol-chg">April 2026</div>
         </div>
         <div class="status-item">
-            <div class="sl">VPP firming</div>
-            <div class="sv">412<span class="su">MW</span></div>
-            <div class="st up">Household batteries dispatching</div>
+            <div class="sl"><span data-st="short">NSW</span> wholesale power</div>
+            <div class="sv" id="st-grid">–</div>
+            <div class="st" id="st-grid-note">AEMO</div>
         </div>
         <div class="status-item">
             <div class="sl">Brent crude</div>
             <div class="sv"><span data-live="brent-num">90.89</span><span class="su">USD/bbl</span></div>
-            <div class="st">Volatile — Hormuz passage disputed</div>
+            <div class="st" id="st-brent">Volatile with Gulf shipping closed</div>
         </div>
     </div>
 
@@ -1365,7 +1323,7 @@ footer {
     <div class="footer-inner">
         <div>
             <h4>Joule</h4>
-            <p>A public-facing energy accounting service concept for Transport for NSW and NSW Climate &amp; Energy Action. Joule is an awareness tool — it does not collect, track, or log your trips.</p>
+            <p>A public-facing energy accounting concept for Australian transport agencies, extended nationwide from the DataHack 2026 NSW prototype. Joule is an awareness tool — it does not collect, track, or log your trips.</p>
 
             <h4 style="margin-top:24px;">Useful External Resources</h4>
             <ul>
@@ -1378,46 +1336,40 @@ footer {
                 <li><a href="https://www.energy.gov.au/energy-data/australian-petroleum-statistics" target="_blank" rel="noopener">DCCEEW Australian Petroleum Statistics</a></li>
                 <li><a href="https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks" target="_blank" rel="noopener">DCCEEW liquid fuel stocks</a></li>
                 <li><a href="https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem/" target="_blank" rel="noopener">AEMO NEM data dashboard</a></li>
-                <li><a href="https://www.fuelcheck.nsw.gov.au/" target="_blank" rel="noopener">NSW FuelCheck (live prices)</a></li>
+                <li><a href="https://fuelplan.gov.au/fuel-statistics" target="_blank" rel="noopener">fuelplan.gov.au fuel statistics</a></li>
+                <li><a id="ft-price" href="https://www.fuelcheck.nsw.gov.au/" target="_blank" rel="noopener">NSW FuelCheck</a> (local prices)</li>
+                <li><a href="https://fred.stlouisfed.org/series/DCOILBRENTEU" target="_blank" rel="noopener">FRED Brent crude</a></li>
                 <li><a href="https://www.accc.gov.au/consumers/petrol-and-fuel/petrol-price-cycles-in-the-5-largest-cities" target="_blank" rel="noopener">ACCC Fuel Price Monitoring</a></li>
-                <li><a href="https://www.energy.nsw.gov.au/households/grants-rebates/household-energy-saving-upgrades/connect-your-battery-virtual-power-plant" target="_blank" rel="noopener">NSW PDRS Virtual Power Plant incentive</a></li>
-            </ul>
+                </ul>
         </div>
         <div>
             <h4>Plan a trip</h4>
             <ul>
-                <li><a href="https://transportnsw.info/trip" target="_blank" rel="noopener">Trip Planner</a></li>
-                <li><a href="https://transportnsw.info/tickets-fares" target="_blank" rel="noopener">Opal fares</a></li>
-                <li><a href="https://transportnsw.info/alerts/all" target="_blank" rel="noopener">Service alerts</a></li>
-                <li><a href="https://transportnsw.info/" target="_blank" rel="noopener">transportnsw.info</a></li>
+                <li><a id="ft-planner" href="https://transportnsw.info/trip" target="_blank" rel="noopener">Plan a trip in NSW</a></li>
+                <li><a href="../diesel-framework/">Diesel import reduction framework</a></li>
             </ul>
         </div>
     </div>
     <div class="footer-bottom">
-        <div>© State of New South Wales (Transport for NSW), 2026. Concept demonstration.</div>
+        <div>Concept demonstration, not an official government service.</div>
         <div>by Unit 8200</div>
     </div>
 </footer>
 
 <script>
 // ==========================================================
-// LIVE STATE DATA — April 2026
-// Real-world values from published sources. In a production deployment these
-// would be fetched every 15 min from the following official APIs:
-//   • Fuel prices    → NSW FuelCheck API (fuelcheck.nsw.gov.au)
-//   • Fuel reserves  → DCCEEW Liquid Fuels Gateway / MSO weekly publication
-//   • Grid demand    → AEMO NEM data dashboard (5-min dispatch)
-//   • Brent crude    → ICE futures feed
-// Values as of 18 Apr 2026:
-//   • Brent: $90.89/bbl (ICE futures, volatile on contested Hormuz passage)
-//   • Sydney ULP avg: 213.1 c/L (NRMA Weekly Fuel Report)
-//   • Sydney diesel avg: 318.1 c/L (NRMA)
-//   • AU petrol stockhold: 39 days; diesel 29 days (DCCEEW MSO, Apr 2026)
-//   • Half-excise cut: -26.3 c/L in effect 1 Apr – 30 Jun 2026
-// The FSI is a composite: diesel cover days × 2 + geopolitical risk adjustment.
+// LIVE DATA
+// Diesel cover, Brent, capital-city fuel prices and NEM wholesale power are
+// read from ../diesel-framework/data/live.json, which a GitHub Action
+// refreshes every 6 hours from fuelplan.gov.au, FRED and AEMO.
+// The values below are the April 2026 figures (DCCEEW MSO, NRMA, ICE) and stay
+// on screen if live data can't be loaded.
+//
+// Fuel Security Index = diesel cover days x 2 (capped at 100), minus one point
+// for every US$5/bbl Brent sits above US$90 (the April 2026 baseline).
 // ==========================================================
 const STATE = {
-    fsi: 58,              // Fuel Security Index (composite) — contested Hormuz situation
+    fsi: 58,              // Fuel Security Index (see formula above)
     fuelDaysPetrol: 39,   // days of petrol cover (DCCEEW MSO, Apr 2026)
     fuelDaysDiesel: 29,   // days of diesel cover (DCCEEW MSO, Apr 2026)
     fuelDaysJet: 30,      // days of jet fuel cover
@@ -1425,7 +1377,8 @@ const STATE = {
     vppFiring: 412,       // MW — indicative NSW PDRS/VPP dispatch capacity
     brent: 90.89,         // USD/bbl (18 Apr 2026)
     tripsShifted: 3127,   // simulated user-level counter
-    hormuzStatus: 'Contested — passage disputed'
+    hormuzStatus: 'Closed',
+    live: null            // contents of live.json once loaded
 };
 
 // ==========================================================
@@ -1440,7 +1393,7 @@ const STATE = {
 // sources:   TfNSW timetables; NRMA/BusNSW route histories; rome2rio trip data;
 //            ABS 2021 Census journey-to-work mode share by LGA.
 // ==========================================================
-const CORRIDORS = {
+const NSW_CORRIDORS = {
     // === Sydney Trains / Metro / Intercity (rail) ===
     blacktown:    { name: 'Blacktown / Mount Druitt',       type: 'rail', transit: 'T1',  line: 'T1 Western',           km: 36,  freqPerHr: 12, loadPct: 0.62, carDep: 0.92 },
     penrith:      { name: 'Penrith / St Marys',             type: 'rail', transit: 'T1',  line: 'T1 Western',           km: 58,  freqPerHr: 10, loadPct: 0.58, carDep: 0.94 },
@@ -1507,12 +1460,223 @@ const LINE_COLOURS = {
 };
 
 // ==========================================================
+// STATES AND TERRITORIES
+// Corridor attributes outside NSW are indicative estimates from operator
+// timetables and ABS 2021 journey-to-work data, in the same form as the
+// NSW set above. Fares are indicative adult return fares (perKm up to a cap,
+// or a flat fare); check the local operator for current prices.
+// nem:      AEMO region for live wholesale power, or null off the NEM
+// cityCode: fuelplan.gov.au city code for live retail prices; states without
+//           one fall back to the 5-capital average
+// ==========================================================
+NSW_CORRIDORS.gosford.vehicle = 'line';
+NSW_CORRIDORS.chatswood.vehicle = 'Metro';
+NSW_CORRIDORS.inner.line = 'CBD trains, Metro and light rail';
+NSW_CORRIDORS.inner.vehicle = '';
+
+const STATES = {
+    NSW: {
+        name: 'New South Wales', short: 'NSW', city: 'Sydney', cityCode: 'SYD', nem: 'NSW1',
+        tz: ['Australia/Sydney', 'Australia/Broken_Hill', 'Australia/Lord_Howe'],
+        planner: { label: 'Trip Planner', url: 'https://transportnsw.info/trip' },
+        price: { label: 'NSW FuelCheck', url: 'https://www.fuelcheck.nsw.gov.au/' },
+        fare: { train: { perKm: 0.20, cap: 9.50 }, bus: { perKm: 0.18, cap: 5.25 } },
+        corridors: NSW_CORRIDORS,
+        groups: [
+            ['🚆 Train corridors — Greater Sydney', ['blacktown', 'penrith', 'parramatta', 'campbelltown', 'liverpool', 'bankstown', 'chatswood']],
+            ['🚆 Train corridors — Intercity', ['gosford', 'wollongong', 'lithgow', 'bathurst']],
+            ['🚍 Bus routes — Eastern / Inner Sydney', ['b1', 'r350', 'r380', 'r333', 'r400', 'r370', 'r891']],
+            ['🚍 Bus routes — Cross-town / Western', ['m90', 'm91', 't80', 'r545', 'r500', 'r610x', 'rL90']],
+            ['🏙 Inner Sydney', ['inner']]
+        ]
+    },
+    VIC: {
+        name: 'Victoria', short: 'VIC', city: 'Melbourne', cityCode: 'MEL', nem: 'VIC1',
+        tz: ['Australia/Melbourne'],
+        planner: { label: 'Journey planner', url: 'https://transport.vic.gov.au/' },
+        price: { label: 'ACCC fuel monitoring', url: 'https://www.accc.gov.au/consumers/petrol-and-fuel' },
+        fare: { train: { perKm: 0.25, cap: 11.00 }, bus: { perKm: 0.25, cap: 11.00 } },
+        corridors: {
+            frankston:   { name: 'Frankston',              type: 'rail', transit: 'FKN', line: 'Frankston line',      km: 84,  freqPerHr: 6,  loadPct: 0.55, carDep: 0.88, colour: '#0072CE' },
+            dandenong:   { name: 'Dandenong / Pakenham',   type: 'rail', transit: 'MTN', line: 'Metro Tunnel (Pakenham & Cranbourne)', km: 62, freqPerHr: 10, loadPct: 0.68, carDep: 0.90, colour: '#0072CE' },
+            craigieburn: { name: 'Craigieburn',            type: 'rail', transit: 'CGB', line: 'Craigieburn line',    km: 50,  freqPerHr: 6,  loadPct: 0.60, carDep: 0.90, colour: '#0072CE' },
+            werribee:    { name: 'Werribee',               type: 'rail', transit: 'WER', line: 'Werribee line',       km: 64,  freqPerHr: 6,  loadPct: 0.62, carDep: 0.90, colour: '#0072CE' },
+            lilydale:    { name: 'Ringwood / Lilydale',    type: 'rail', transit: 'LIL', line: 'Lilydale line',       km: 50,  freqPerHr: 8,  loadPct: 0.58, carDep: 0.88, colour: '#0072CE' },
+            sunbury:     { name: 'Sunbury',                type: 'rail', transit: 'SUY', line: 'Sunbury line',        km: 80,  freqPerHr: 6,  loadPct: 0.55, carDep: 0.93, colour: '#0072CE' },
+            geelong:     { name: 'Geelong',                type: 'rail', transit: 'GEL', line: 'V/Line Geelong',      km: 150, freqPerHr: 3,  loadPct: 0.70, carDep: 0.95, colour: '#8F1A95' },
+            ballarat:    { name: 'Ballarat',               type: 'rail', transit: 'BAL', line: 'V/Line Ballarat',     km: 200, freqPerHr: 2,  loadPct: 0.60, carDep: 0.96, colour: '#8F1A95' },
+            tram96:      { name: '96 — Brunswick East → St Kilda Beach', type: 'rail', transit: '96', line: 'Route 96', vehicle: 'tram', km: 26, freqPerHr: 10, loadPct: 0.80, carDep: 0.45, colour: '#78BE20' },
+            tram86:      { name: '86 — Bundoora → Waterfront City',       type: 'rail', transit: '86', line: 'Route 86', vehicle: 'tram', km: 30, freqPerHr: 8,  loadPct: 0.70, carDep: 0.62, colour: '#78BE20' },
+            tram109:     { name: '109 — Box Hill → Port Melbourne',       type: 'rail', transit: '109', line: 'Route 109', vehicle: 'tram', km: 36, freqPerHr: 8, loadPct: 0.72, carDep: 0.60, colour: '#78BE20' },
+            sb901:       { name: '901 — Frankston → Melbourne Airport',   type: 'bus', transit: '901', line: 'SmartBus 901', km: 30, freqPerHr: 4, loadPct: 0.50, carDep: 0.90, colour: '#FF8200' },
+            sb903:       { name: '903 — Altona → Mordialloc',             type: 'bus', transit: '903', line: 'SmartBus 903', km: 30, freqPerHr: 4, loadPct: 0.52, carDep: 0.88, colour: '#FF8200' },
+            innermel:    { name: 'Inner Melbourne / CBD',  type: 'rail', transit: 'MUL', line: 'City Loop and Free Tram Zone', vehicle: '', km: 8, freqPerHr: 30, loadPct: 0.78, carDep: 0.45, colour: '#002664' }
+        },
+        groups: [
+            ['🚆 Metro trains — Melbourne', ['frankston', 'dandenong', 'craigieburn', 'werribee', 'lilydale', 'sunbury']],
+            ['🚆 V/Line regional', ['geelong', 'ballarat']],
+            ['🚋 Trams', ['tram96', 'tram86', 'tram109']],
+            ['🚍 SmartBus', ['sb901', 'sb903']],
+            ['🏙 Inner Melbourne', ['innermel']]
+        ]
+    },
+    QLD: {
+        name: 'Queensland', short: 'QLD', city: 'Brisbane', cityCode: 'BNE', nem: 'QLD1',
+        tz: ['Australia/Brisbane', 'Australia/Lindeman'],
+        planner: { label: 'Journey planner', url: 'https://translink.com.au/' },
+        price: { label: 'ACCC fuel monitoring', url: 'https://www.accc.gov.au/consumers/petrol-and-fuel' },
+        fare: { train: { flat: 1.00 }, bus: { flat: 1.00 } },   // 50c Translink fares
+        corridors: {
+            ipswich:     { name: 'Ipswich / Rosewood',     type: 'rail', transit: 'IPS', line: 'Ipswich line',        km: 80,  freqPerHr: 4,  loadPct: 0.55, carDep: 0.92, colour: '#00539F' },
+            caboolture:  { name: 'Caboolture',             type: 'rail', transit: 'CAB', line: 'Caboolture line',     km: 90,  freqPerHr: 4,  loadPct: 0.55, carDep: 0.93, colour: '#00539F' },
+            redcliffe:   { name: 'Redcliffe Peninsula',    type: 'rail', transit: 'RDP', line: 'Redcliffe Peninsula line', km: 70, freqPerHr: 4, loadPct: 0.50, carDep: 0.93, colour: '#00539F' },
+            springfield: { name: 'Springfield',            type: 'rail', transit: 'SFD', line: 'Springfield line',    km: 70,  freqPerHr: 4,  loadPct: 0.52, carDep: 0.94, colour: '#00539F' },
+            cleveland:   { name: 'Cleveland',              type: 'rail', transit: 'CLV', line: 'Cleveland line',      km: 70,  freqPerHr: 3,  loadPct: 0.50, carDep: 0.90, colour: '#00539F' },
+            goldcoast:   { name: 'Gold Coast',             type: 'rail', transit: 'GCL', line: 'Gold Coast line',     km: 160, freqPerHr: 4,  loadPct: 0.60, carDep: 0.95, colour: '#00539F' },
+            sunshine:    { name: 'Sunshine Coast (Nambour)', type: 'rail', transit: 'SHC', line: 'Sunshine Coast line', km: 200, freqPerHr: 1, loadPct: 0.45, carDep: 0.97, colour: '#00539F' },
+            glink:       { name: 'G:link — Helensvale → Broadbeach', type: 'rail', transit: 'G', line: 'G:link', vehicle: 'light rail', km: 40, freqPerHr: 8, loadPct: 0.60, carDep: 0.85, colour: '#FFC72C' },
+            m1:          { name: 'M1 — Eight Mile Plains → RBWH',     type: 'bus', transit: 'M1', line: 'Brisbane Metro M1', vehicle: '', km: 36, freqPerHr: 12, loadPct: 0.70, carDep: 0.75, colour: '#C8102E' },
+            m2:          { name: 'M2 — UQ Lakes → RBWH',              type: 'bus', transit: 'M2', line: 'Brisbane Metro M2', vehicle: '', km: 24, freqPerHr: 12, loadPct: 0.78, carDep: 0.60, colour: '#C8102E' },
+            innerbne:    { name: 'Inner Brisbane / CBD',   type: 'rail', transit: 'MUL', line: 'CBD trains, Metro and buses', vehicle: '', km: 8, freqPerHr: 20, loadPct: 0.70, carDep: 0.55, colour: '#002664' }
+        },
+        groups: [
+            ['🚆 Queensland Rail — Brisbane', ['ipswich', 'caboolture', 'redcliffe', 'springfield', 'cleveland']],
+            ['🚆 South East Queensland intercity', ['goldcoast', 'sunshine']],
+            ['🚍 Brisbane Metro', ['m1', 'm2']],
+            ['🚋 Gold Coast light rail', ['glink']],
+            ['🏙 Inner Brisbane', ['innerbne']]
+        ]
+    },
+    SA: {
+        name: 'South Australia', short: 'SA', city: 'Adelaide', cityCode: 'ADL', nem: 'SA1',
+        tz: ['Australia/Adelaide'],
+        planner: { label: 'Adelaide Metro', url: 'https://www.adelaidemetro.com.au/' },
+        price: { label: 'ACCC fuel monitoring', url: 'https://www.accc.gov.au/consumers/petrol-and-fuel' },
+        fare: { train: { perKm: 0.25, cap: 8.80 }, bus: { perKm: 0.25, cap: 8.80 } },
+        corridors: {
+            gawler:      { name: 'Gawler',                 type: 'rail', transit: 'GAW', line: 'Gawler line',         km: 84,  freqPerHr: 4,  loadPct: 0.50, carDep: 0.92, colour: '#005DAA' },
+            seaford:     { name: 'Seaford',                type: 'rail', transit: 'SEA', line: 'Seaford line',        km: 70,  freqPerHr: 4,  loadPct: 0.52, carDep: 0.90, colour: '#005DAA' },
+            outerharbor: { name: 'Outer Harbor',           type: 'rail', transit: 'OH',  line: 'Outer Harbor line',   km: 44,  freqPerHr: 4,  loadPct: 0.50, carDep: 0.86, colour: '#005DAA' },
+            flinders:    { name: 'Flinders',               type: 'rail', transit: 'FLI', line: 'Flinders line',       km: 40,  freqPerHr: 4,  loadPct: 0.50, carDep: 0.85, colour: '#005DAA' },
+            belair:      { name: 'Belair',                 type: 'rail', transit: 'BEL', line: 'Belair line',         km: 40,  freqPerHr: 2,  loadPct: 0.45, carDep: 0.88, colour: '#005DAA' },
+            obahn:       { name: 'O-Bahn — Tea Tree Plaza → City', type: 'bus', transit: 'O-B', line: 'O-Bahn', km: 26, freqPerHr: 12, loadPct: 0.72, carDep: 0.88, colour: '#ED1C24' },
+            glenelg:     { name: 'Glenelg → Entertainment Centre', type: 'rail', transit: 'GLN', line: 'Glenelg', vehicle: 'tram', km: 30, freqPerHr: 8, loadPct: 0.65, carDep: 0.70, colour: '#00A651' },
+            inneradl:    { name: 'Inner Adelaide / CBD',   type: 'rail', transit: 'MUL', line: 'CBD trams and buses', vehicle: '', km: 6, freqPerHr: 15, loadPct: 0.60, carDep: 0.55, colour: '#002664' }
+        },
+        groups: [
+            ['🚆 Adelaide Metro trains', ['gawler', 'seaford', 'outerharbor', 'flinders', 'belair']],
+            ['🚍 O-Bahn busway', ['obahn']],
+            ['🚋 Tram', ['glenelg']],
+            ['🏙 Inner Adelaide', ['inneradl']]
+        ]
+    },
+    WA: {
+        name: 'Western Australia', short: 'WA', city: 'Perth', cityCode: 'PER', nem: null,
+        gridNote: 'WA runs its own grid (the SWIS), outside the NEM feed',
+        tz: ['Australia/Perth', 'Australia/Eucla'],
+        planner: { label: 'Transperth', url: 'https://www.transperth.wa.gov.au/' },
+        price: { label: 'FuelWatch', url: 'https://www.fuelwatch.wa.gov.au/' },
+        fare: { train: { perKm: 0.20, cap: 10.20 }, bus: { perKm: 0.20, cap: 10.20 } },
+        corridors: {
+            joondalup:   { name: 'Joondalup / Yanchep',    type: 'rail', transit: 'YAN', line: 'Yanchep line',        km: 60,  freqPerHr: 8,  loadPct: 0.62, carDep: 0.92, colour: '#0072BC' },
+            mandurah:    { name: 'Mandurah',               type: 'rail', transit: 'MAN', line: 'Mandurah line',       km: 140, freqPerHr: 6,  loadPct: 0.58, carDep: 0.94, colour: '#0072BC' },
+            armadale:    { name: 'Armadale',               type: 'rail', transit: 'ARM', line: 'Armadale line',       km: 60,  freqPerHr: 4,  loadPct: 0.50, carDep: 0.90, colour: '#0072BC' },
+            midland:     { name: 'Midland',                type: 'rail', transit: 'MID', line: 'Midland line',        km: 32,  freqPerHr: 4,  loadPct: 0.50, carDep: 0.88, colour: '#0072BC' },
+            fremantle:   { name: 'Fremantle',              type: 'rail', transit: 'FRE', line: 'Fremantle line',      km: 40,  freqPerHr: 4,  loadPct: 0.50, carDep: 0.82, colour: '#0072BC' },
+            ellenbrook:  { name: 'Ellenbrook',             type: 'rail', transit: 'ELL', line: 'Ellenbrook line',     km: 50,  freqPerHr: 4,  loadPct: 0.45, carDep: 0.95, colour: '#0072BC' },
+            airportwa:   { name: 'High Wycombe / Airport', type: 'rail', transit: 'AIR', line: 'Airport line',        km: 40,  freqPerHr: 4,  loadPct: 0.45, carDep: 0.90, colour: '#0072BC' },
+            b950:        { name: '950 — Morley → UWA / QEII', type: 'bus', transit: '950', line: 'Route 950', km: 30, freqPerHr: 8, loadPct: 0.70, carDep: 0.75, colour: '#00843D' },
+            cat:         { name: 'CAT — Perth CBD free bus', type: 'bus', transit: 'CAT', line: 'CAT', km: 4, freqPerHr: 12, loadPct: 0.60, carDep: 0.40, colour: '#00843D' },
+            innerper:    { name: 'Inner Perth / CBD',      type: 'rail', transit: 'MUL', line: 'CBD trains and buses', vehicle: '', km: 6, freqPerHr: 15, loadPct: 0.60, carDep: 0.55, colour: '#002664' }
+        },
+        groups: [
+            ['🚆 Transperth trains', ['joondalup', 'mandurah', 'armadale', 'midland', 'fremantle', 'ellenbrook', 'airportwa']],
+            ['🚍 Buses', ['b950', 'cat']],
+            ['🏙 Inner Perth', ['innerper']]
+        ]
+    },
+    TAS: {
+        name: 'Tasmania', short: 'TAS', city: 'Hobart', cityCode: 'HBA', nem: 'TAS1',
+        tz: ['Australia/Hobart', 'Australia/Currie'],
+        planner: { label: 'Metro Tasmania', url: 'https://www.metrotas.com.au/' },
+        price: { label: 'ACCC fuel monitoring', url: 'https://www.accc.gov.au/consumers/petrol-and-fuel' },
+        fare: { train: { perKm: 0.20, cap: 6.00 }, bus: { perKm: 0.20, cap: 6.00 } },
+        corridors: {
+            kingston:    { name: 'Kingston → Hobart',      type: 'bus', transit: 'KGN', line: 'Kingston',    km: 30,  freqPerHr: 4,  loadPct: 0.55, carDep: 0.90, colour: '#00A3AD' },
+            glenorchy:   { name: 'Glenorchy → Hobart',     type: 'bus', transit: 'GLY', line: 'Main Road',   km: 22,  freqPerHr: 8,  loadPct: 0.60, carDep: 0.85, colour: '#00A3AD' },
+            eastern:     { name: 'Eastern Shore → Hobart', type: 'bus', transit: 'EAS', line: 'Eastern Shore', km: 16, freqPerHr: 6, loadPct: 0.55, carDep: 0.88, colour: '#00A3AD' },
+            launceston:  { name: 'Launceston city',        type: 'bus', transit: 'LST', line: 'Launceston city',  km: 14,  freqPerHr: 3,  loadPct: 0.45, carDep: 0.90, colour: '#00A3AD' },
+            northwest:   { name: 'Burnie → Devonport',     type: 'bus', transit: 'NWC', line: 'North West coach', vehicle: '', km: 100, freqPerHr: 1, loadPct: 0.40, carDep: 0.97, colour: '#00A3AD' },
+            innerhba:    { name: 'Inner Hobart / CBD',     type: 'bus', transit: 'MUL', line: 'CBD buses', vehicle: '', km: 6, freqPerHr: 10, loadPct: 0.50, carDep: 0.60, colour: '#002664' }
+        },
+        groups: [
+            ['🚍 Hobart buses', ['kingston', 'glenorchy', 'eastern']],
+            ['🚍 North and North West', ['launceston', 'northwest']],
+            ['🏙 Inner Hobart', ['innerhba']]
+        ]
+    },
+    ACT: {
+        name: 'the ACT', short: 'ACT', city: 'Canberra', cityCode: 'CBR', nem: 'NSW1',
+        gridNoteSuffix: ' (ACT is in the NSW region)',
+        tz: [],
+        planner: { label: 'Transport Canberra', url: 'https://www.transport.act.gov.au/' },
+        price: { label: 'ACCC fuel monitoring', url: 'https://www.accc.gov.au/consumers/petrol-and-fuel' },
+        fare: { train: { perKm: 0.20, cap: 6.70 }, bus: { perKm: 0.20, cap: 6.70 } },
+        corridors: {
+            r1:          { name: 'Gungahlin → City',       type: 'rail', transit: 'R1', line: 'Light rail R1', vehicle: '', km: 24, freqPerHr: 10, loadPct: 0.65, carDep: 0.80, colour: '#D7153A' },
+            belconnen:   { name: 'Belconnen → City',       type: 'bus', transit: 'BEL', line: 'Belconnen rapid', km: 20, freqPerHr: 8, loadPct: 0.60, carDep: 0.82, colour: '#00A3AD' },
+            woden:       { name: 'Woden → City',           type: 'bus', transit: 'WOD', line: 'Woden rapid',     km: 20, freqPerHr: 8, loadPct: 0.60, carDep: 0.80, colour: '#00A3AD' },
+            tuggeranong: { name: 'Tuggeranong → City',     type: 'bus', transit: 'TUG', line: 'Tuggeranong rapid', km: 50, freqPerHr: 6, loadPct: 0.55, carDep: 0.88, colour: '#00A3AD' },
+            innercbr:    { name: 'Inner Canberra / Civic', type: 'bus', transit: 'MUL', line: 'Civic buses and light rail', vehicle: '', km: 6, freqPerHr: 10, loadPct: 0.50, carDep: 0.70, colour: '#002664' }
+        },
+        groups: [
+            ['🚋 Light rail', ['r1']],
+            ['🚍 Rapid buses', ['belconnen', 'woden', 'tuggeranong']],
+            ['🏙 Inner Canberra', ['innercbr']]
+        ]
+    },
+    NT: {
+        name: 'the Northern Territory', short: 'NT', city: 'Darwin', cityCode: 'DRW', nem: null,
+        gridNote: 'The NT grids sit outside the NEM feed',
+        tz: ['Australia/Darwin'],
+        planner: { label: 'NT public buses', url: 'https://nt.gov.au/driving/public-transport-cycling/public-buses' },
+        price: { label: 'MyFuel NT', url: 'https://myfuelnt.nt.gov.au/' },
+        fare: { train: { flat: 3.00 }, bus: { flat: 3.00 } },
+        corridors: {
+            casuarina:   { name: 'Casuarina → Darwin City',  type: 'bus', transit: 'CAS', line: 'Casuarina',  km: 30, freqPerHr: 4, loadPct: 0.40, carDep: 0.92, colour: '#F37021' },
+            palmerston:  { name: 'Palmerston → Darwin City', type: 'bus', transit: 'PAL', line: 'Palmerston', km: 44, freqPerHr: 2, loadPct: 0.40, carDep: 0.95, colour: '#F37021' },
+            cdu:         { name: 'Charles Darwin University → City', type: 'bus', transit: 'CDU', line: 'CDU', km: 26, freqPerHr: 3, loadPct: 0.45, carDep: 0.90, colour: '#F37021' },
+            alice:       { name: 'Alice Springs town',      type: 'bus', transit: 'ASP', line: 'Alice Springs town', km: 12, freqPerHr: 1, loadPct: 0.30, carDep: 0.95, colour: '#F37021' }
+        },
+        groups: [
+            ['🚍 Darwin buses', ['casuarina', 'palmerston', 'cdu']],
+            ['🚍 Central Australia', ['alice']]
+        ]
+    }
+};
+
+let CORRIDORS = NSW_CORRIDORS;
+
+// Return fare for one round trip on public transport in the selected state.
+function fareFor(kind, km) {
+    const f = STATES[S.state].fare[kind];
+    if (f.flat !== undefined) return f.flat;
+    return Math.min(km * f.perKm, f.cap);
+}
+
+// Word that follows a line name in suggestions ("the Frankston line train").
+function vehicleWord(c) {
+    if (c.vehicle !== undefined) return c.vehicle ? ' ' + c.vehicle : '';
+    return c.type === 'bus' ? ' bus' : ' train';
+}
+
+// ==========================================================
 // CONSTANTS
 // ==========================================================
 const PETROL_KWH_L = 9.5;         // kWh per L (HHV)
 const PETROL_L_100 = 8.0;         // L/100km typical passenger car
-const PETROL_PRICE = 2.13;        // AUD/L Sydney avg, NRMA 18 Apr 2026 (post half-excise relief)
-const DIESEL_PRICE = 3.18;        // AUD/L Sydney avg, NRMA 18 Apr 2026
+let PETROL_PRICE = 2.13;          // AUD/L; replaced by the live capital-city price
+let DIESEL_PRICE = 3.18;          // AUD/L; replaced by the live capital-city price
 const TRAIN_KWH_PKM = 0.15;       // kWh per passenger-km (electric train, Sydney)
 const BUS_KWH_PKM   = 0.40;       // kWh/pkm (diesel bus, moderate occupancy)
 const METRO_KWH_PKM = 0.12;       // kWh/pkm (Metro, high load)
@@ -1521,6 +1685,7 @@ const METRO_KWH_PKM = 0.12;       // kWh/pkm (Metro, high load)
 // STATE DOM
 // ==========================================================
 const S = {
+    state: 'NSW',
     mode: 'car',
     corridor: 'blacktown',
     km: 40,
@@ -1592,12 +1757,12 @@ function calcModeImpact(mode, corridor, km, freq, occ) {
     } else if (mode === 'train') {
         litresPerTrip = 0;
         kwhPerTrip    = km * TRAIN_KWH_PKM;
-        cost          = Math.min(km * 0.20, 9.50) * freq; // Opal capped
+        cost          = fareFor('train', km) * freq;
         travelTime    = km / 50 * 60 + 10;
     } else if (mode === 'bus') {
         litresPerTrip = km * BUS_KWH_PKM / 10.6;
         kwhPerTrip    = km * BUS_KWH_PKM;
-        cost          = Math.min(km * 0.18, 5.25) * freq;
+        cost          = fareFor('bus', km) * freq;
         travelTime    = km / 35 * 60 + 8;
     } else { // active
         litresPerTrip = 0;
@@ -1683,7 +1848,7 @@ function calcJouleScore(mode, corridor, km, freq, occ) {
 function verdictFor(score, mode) {
     if (score >= 85) return {
         pillClass: 'good', pillText: 'Excellent',
-        verdict: mode === 'active' ? 'This trip strengthens NSW fuel security.' : 'This trip strengthens the network.',
+        verdict: mode === 'active' ? 'This trip strengthens Australia\'s fuel security.' : 'This trip strengthens the network.',
         explain: 'You\'re using the spare capacity that\'s already there. No new infrastructure, no extra fuel — just the network doing its job.'
     };
     if (score >= 70) return {
@@ -1721,7 +1886,7 @@ function suggestionFor(mode, corridor, km, freq, score) {
 
         return {
             head: 'Joule suggestion',
-            body: `<strong>Swap one car commute a week for the ${c.line} ${c.transit === 'M' ? 'Metro' : c.transit === 'CCN' ? 'Central Coast line' : c.type === 'bus' ? 'bus' : 'train'}.</strong>
+            body: `<strong>Swap one car commute a week for the ${c.line}${vehicleWord(c)}.</strong>
                    The service on this corridor has about ${Math.round((1 - c.loadPct) * 100)}% spare capacity at peak,
                    so you'll have a seat. That single weekly swap returns about <strong>${litresPerTrip.toFixed(1)} L of petrol</strong> to the reserve each week —
                    roughly <strong>${annualLitres} L</strong> over a year, or ${tankText}, saving you about <strong>$${annualDollars}</strong> at the pump.`
@@ -1740,7 +1905,7 @@ function suggestionFor(mode, corridor, km, freq, score) {
             return {
                 head: 'You\'re on the leaderboard',
                 body: `<strong>A short active trip is the highest-scoring option Joule can record.</strong>
-                       Zero fuel, zero grid draw, full credit. If this is a regular trip, you're a silent contributor to NSW's fuel cover.`
+                       Zero fuel, zero grid draw, full credit. If this is a regular trip, you're a silent contributor to Australia's fuel cover.`
             };
         }
         if (km <= 12) {
@@ -1793,6 +1958,7 @@ function render() {
 
     // value readouts
     document.getElementById('m-km-v').textContent = km;
+    document.getElementById('km-hint').textContent = `A typical return trip on this corridor is about ${Math.min(CORRIDORS[corridor].km, 200)} km.`;
     document.getElementById('m-freq-v').textContent = freq;
     document.getElementById('m-occ-v').textContent = occ;
 
@@ -1858,12 +2024,12 @@ function renderCompare(corridor, km, freq, currentMode) {
         // Chip colour and text depend on the mode.
         let chipBg, chipText, chipColour;
         if (r.mode === 'train') {
-            chipBg = LINE_COLOURS[c.transit] || '#002664';
+            chipBg = c.colour || LINE_COLOURS[c.transit] || '#002664';
             chipText = c.transit;
             chipColour = readableTextOn(chipBg);
         } else if (r.mode === 'bus') {
             // If the corridor IS a bus route, use its own route code + colour (B-Line yellow etc).
-            chipBg = LINE_COLOURS[c.transit] || '#00B5EF';
+            chipBg = c.colour || LINE_COLOURS[c.transit] || '#00B5EF';
             chipText = c.transit;
             chipColour = readableTextOn(chipBg);
         } else if (r.mode === 'active') {
@@ -1944,6 +2110,7 @@ document.querySelectorAll('.mode-btn').forEach(btn => {
 
 document.getElementById('m-corridor').addEventListener('change', e => {
     S.corridor = e.target.value;
+    setKmForCorridor();
     // Auto-align the planner mode with the corridor type, so users don't pick
     // "train" on a bus-only route (which would compute meaningless numbers).
     const c = CORRIDORS[S.corridor];
@@ -1978,58 +2145,216 @@ document.getElementById('m-occ').addEventListener('input', e => {
 });
 
 // ==========================================================
-// LIVE TICKER updates — simulate fluctuation every ~12s
+// STATE SELECTION
 // ==========================================================
-function tickLiveUpdate() {
-    // small random walk around baseline (58 = watch band)
-    STATE.fsi += (Math.random() - 0.5) * 1.5;
-    STATE.fsi = Math.max(45, Math.min(72, STATE.fsi));
-    STATE.tripsShifted += Math.floor(Math.random() * 12);
-    renderGauge(STATE.fsi);
+const STATE_ORDER = ['NSW', 'VIC', 'QLD', 'SA', 'WA', 'TAS', 'ACT', 'NT'];
 
-    document.getElementById('tk-fsi').textContent = Math.round(STATE.fsi) + ' / 100';
-    document.getElementById('tk-fsi-2').textContent = Math.round(STATE.fsi) + ' / 100';
-    const now = new Date();
-    const hh = String(now.getHours()).padStart(2, '0');
-    const mm = String(now.getMinutes()).padStart(2, '0');
-    document.getElementById('tk-ts').textContent = `${hh}:${mm}`;
-    document.getElementById('tk-ts-2').textContent = `${hh}:${mm}`;
+// Pick the starting state: saved choice, then the browser's time zone, then NSW.
+function detectState() {
+    try {
+        const saved = localStorage.getItem('joule-state');
+        if (saved && STATES[saved]) return saved;
+    } catch (e) { /* storage blocked: fall through */ }
+    try {
+        const tz = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        for (const code of STATE_ORDER) if (STATES[code].tz.includes(tz)) return code;
+    } catch (e) { /* no Intl: fall through */ }
+    return 'NSW';
+}
+
+function buildStatePicker() {
+    const pick = document.getElementById('state-pick');
+    pick.innerHTML = STATE_ORDER.map(code =>
+        `<button type="button" role="radio" data-state="${code}">${code}</button>`).join('');
+    pick.querySelectorAll('button').forEach(btn => {
+        btn.addEventListener('click', () => applyState(btn.dataset.state, true));
+    });
+}
+
+function buildCorridorSelect() {
+    const st = STATES[S.state];
+    document.getElementById('m-corridor').innerHTML = st.groups.map(([label, keys]) =>
+        `<optgroup label="${label}">` +
+        keys.map(k => `<option value="${k}">${st.corridors[k].name}${st.corridors[k].type === 'rail' && st.corridors[k].transit !== 'MUL' ? ' — ' + st.corridors[k].line : ''}</option>`).join('') +
+        '</optgroup>').join('');
+    document.getElementById('m-corridor').value = S.corridor;
+}
+
+function setKmForCorridor() {
+    const km = Math.max(2, Math.min(200, Math.round(CORRIDORS[S.corridor].km / 2) * 2));
+    S.km = km;
+    document.getElementById('m-km').value = km;
+}
+
+function syncModeButtons() {
+    document.querySelectorAll('.mode-btn').forEach(b => b.classList.toggle('active', b.dataset.mode === S.mode));
+}
+
+function applyState(code, save) {
+    S.state = code;
+    const st = STATES[code];
+    CORRIDORS = st.corridors;
+    S.corridor = st.groups[0][1][0];
+    const c = CORRIDORS[S.corridor];
+    if (S.mode === 'train' && c.type === 'bus') S.mode = 'bus';
+    if (S.mode === 'bus' && c.type === 'rail') S.mode = 'train';
+    syncModeButtons();
+    if (save) { try { localStorage.setItem('joule-state', code); } catch (e) { /* ignore */ } }
+
+    document.querySelectorAll('#state-pick button').forEach(b => {
+        const on = b.dataset.state === code;
+        b.classList.toggle('active', on);
+        b.setAttribute('aria-checked', on ? 'true' : 'false');
+    });
+    document.querySelectorAll('[data-st]').forEach(el => { el.textContent = st[el.dataset.st]; });
+    const planner = document.getElementById('mh-planner');
+    planner.href = st.planner.url; planner.textContent = st.planner.label;
+    const ftPlanner = document.getElementById('ft-planner');
+    ftPlanner.href = st.planner.url; ftPlanner.textContent = `Plan a trip in ${st.short} (${st.planner.label})`;
+    ['src-price', 'ft-price'].forEach(id => {
+        const a = document.getElementById(id);
+        a.href = st.price.url; a.textContent = st.price.label;
+    });
+
+    buildCorridorSelect();
+    setKmForCorridor();
+    renderLive();
+    render();
 }
 
 // ==========================================================
-// LIVE FUEL DATA
-// Diesel cover and Brent are refreshed every 6 hours by the diesel import
-// reduction framework (github.com/ajcbWIPs/energy-policy). If the fetch
-// fails, the April 2026 values above stay on screen.
+// LIVE FUEL AND GRID DATA
 // ==========================================================
 const LIVE_DATA_URL = '../diesel-framework/data/live.json';
+
+function computeFsi(days, brent) {
+    const base = Math.min(100, days * 2);
+    const brentPenalty = Math.max(0, (brent - 90) / 5);
+    return Math.max(0, Math.min(100, base - brentPenalty));
+}
+
+// Live retail prices for the selected state's capital, or the 5-capital average.
+function cityPrices() {
+    const rf = STATE.live && STATE.live.indicators && STATE.live.indicators.retail_fuel;
+    if (!rf) return null;
+    const st = STATES[S.state];
+    const city = rf.cities && rf.cities[st.cityCode];
+    if (city) return { where: st.city, petrol: city.petrol_aud_l, diesel: city.diesel_aud_l,
+                       petrolChg: city.petrol_change_7d_pct, dieselChg: city.diesel_change_7d_pct, asOf: rf.as_of };
+    return { where: '5-capital avg', petrol: rf.retail_petrol_aud_l, diesel: rf.retail_diesel_aud_l,
+             petrolChg: null, dieselChg: rf.retail_diesel_change_7d_pct, asOf: rf.as_of };
+}
+
+function gridNow() {
+    const st = STATES[S.state];
+    const nem = STATE.live && STATE.live.indicators && STATE.live.indicators.nem;
+    if (!st.nem) return { note: st.gridNote };
+    const r = nem && nem.regions && nem.regions[st.nem];
+    if (!r) return null;
+    return { price: r.price_aud_mwh, demand: r.demand_mw, stale: nem.stale, note: 'AEMO ' + st.nem + (st.gridNoteSuffix || '') };
+}
+
+const pct = v => (v > 0 ? '+' : '') + v + '%';
+
+function renderTicker() {
+    const st = STATES[S.state];
+    const ind = (STATE.live && STATE.live.indicators) || {};
+    const prices = cityPrices();
+    const grid = gridNow();
+    const items = [
+        ['dot', 'National fuel security index', Math.round(STATE.fsi) + ' / 100'],
+        ['alert', 'Diesel cover (AU)', STATE.fuelDaysDiesel + ' days'],
+        ['up', 'Brent crude', 'US$' + STATE.brent.toFixed(2)],
+    ];
+    if (prices) {
+        items.push(['dot', `${prices.where} petrol`, '$' + prices.petrol.toFixed(2) + '/L']);
+        items.push(['alert', `${prices.where} diesel`, '$' + prices.diesel.toFixed(2) + '/L' + (prices.dieselChg !== null ? ' (' + pct(prices.dieselChg) + ' wk)' : '')]);
+    } else {
+        items.push(['dot', 'Sydney petrol (Apr)', '213.1 c/L'], ['alert', 'Sydney diesel (Apr)', '318.1 c/L']);
+    }
+    if (grid && grid.price !== undefined) {
+        items.push(['dot', `${st.short} grid demand`, (grid.demand / 1000).toFixed(1) + ' GW']);
+        items.push(['dot', `${st.short} wholesale power`, '$' + Math.round(grid.price) + '/MWh']);
+    }
+    const us = ind.us_gulf_ulsd_usd_gal, der = (STATE.live && STATE.live.derived) || {};
+    if (us && der.us_gulf_ulsd_aud_c_per_l) items.push(['up', 'Wholesale diesel (US Gulf)', der.us_gulf_ulsd_aud_c_per_l + ' AU c/L']);
+    items.push(['alert', 'Strait of Hormuz', 'Closed'], ['alert', 'Bab el-Mandeb', 'Closed']);
+    if (STATE.live && STATE.live.updated) {
+        items.push(['dot', 'Data refreshed', new Date(STATE.live.updated).toLocaleString('en-AU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' })]);
+    }
+    const html = items.map(([cls, label, val]) =>
+        `<span class="ticker-item ${cls}"><span>${label}</span><strong>${val}</strong></span>`).join('');
+    document.getElementById('ticker-a').innerHTML = html;
+    document.getElementById('ticker-b').innerHTML = html;
+}
+
+// Push live values into the page for the selected state.
+function renderLive() {
+    const ind = (STATE.live && STATE.live.indicators) || {};
+    STATE.fsi = computeFsi(STATE.fuelDaysDiesel, STATE.brent);
+    renderGauge(STATE.fsi);
+
+    document.querySelectorAll('[data-live="diesel-days"]').forEach(el => { el.textContent = STATE.fuelDaysDiesel + ' days'; });
+    document.querySelectorAll('[data-live="diesel-days-num"]').forEach(el => { el.textContent = STATE.fuelDaysDiesel; });
+    document.querySelectorAll('[data-live="brent-usd"]').forEach(el => { el.textContent = 'US$' + STATE.brent.toFixed(2); });
+    document.querySelectorAll('[data-live="brent-num"]').forEach(el => { el.textContent = STATE.brent.toFixed(2); });
+
+    const stock = ind.diesel_stock;
+    if (stock) {
+        document.getElementById('st-diesel').textContent =
+            `Below 90-day IEA target · ${stock.stale ? 'last published ' : ''}${stock.as_of || ''}`;
+    }
+    const brent = ind.brent_usd_bbl;
+    if (brent) document.getElementById('st-brent').textContent = `FRED · ${brent.as_of}`;
+
+    const prices = cityPrices();
+    if (prices) {
+        PETROL_PRICE = prices.petrol;
+        DIESEL_PRICE = prices.diesel;
+        document.getElementById('g-diesel').textContent = '$' + prices.diesel.toFixed(2) + '/L';
+        document.getElementById('st-petrol').innerHTML = (prices.petrol * 100).toFixed(1) + '<span class="su">c/L</span>';
+        document.getElementById('st-petrol-chg').textContent =
+            (prices.petrolChg !== null ? pct(prices.petrolChg) + ' in 7 days · ' : '5-capital average · ') + prices.asOf;
+        document.querySelectorAll('[data-st="city"]').forEach(el => { el.textContent = prices.where; });
+    }
+
+    const grid = gridNow();
+    const gEl = document.getElementById('st-grid'), gNote = document.getElementById('st-grid-note');
+    if (grid && grid.price !== undefined) {
+        document.getElementById('g-grid').textContent = '$' + Math.round(grid.price) + '/MWh';
+        gEl.innerHTML = '$' + Math.round(grid.price) + '<span class="su">/MWh</span>';
+        gNote.textContent = `${Math.round(grid.demand).toLocaleString('en-AU')} MW demand · ${grid.note}`;
+    } else {
+        document.getElementById('g-grid').textContent = 'Off NEM';
+        gEl.innerHTML = 'Off NEM';
+        gNote.textContent = grid ? grid.note : 'Live grid data unavailable';
+    }
+
+    if (STATE.live && STATE.live.updated) {
+        document.getElementById('live-updated').textContent =
+            'Live data refreshed ' + new Date(STATE.live.updated).toLocaleString('en-AU', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    }
+    renderTicker();
+}
 
 async function loadLiveFuelData() {
     try {
         const res = await fetch(LIVE_DATA_URL, { cache: 'no-store' });
         if (!res.ok) return;
-        const ind = (await res.json()).indicators || {};
-        const stock = ind.diesel_stock;
-        if (stock && stock.diesel_days) {
-            const days = Math.round(stock.diesel_days);
-            STATE.fuelDaysDiesel = days;
-            document.querySelectorAll('[data-live="diesel-days"]').forEach(el => { el.textContent = days + ' days'; });
-            document.querySelectorAll('[data-live="diesel-days-num"]').forEach(el => { el.textContent = days; });
-        }
-        const brent = ind.brent_usd_bbl;
-        if (brent && brent.value) {
-            STATE.brent = brent.value;
-            document.querySelectorAll('[data-live="brent-usd"]').forEach(el => { el.textContent = 'US$' + brent.value.toFixed(2); });
-            document.querySelectorAll('[data-live="brent-num"]').forEach(el => { el.textContent = brent.value.toFixed(2); });
-        }
+        STATE.live = await res.json();
+        const ind = STATE.live.indicators || {};
+        if (ind.diesel_stock && ind.diesel_stock.diesel_days) STATE.fuelDaysDiesel = Math.round(ind.diesel_stock.diesel_days);
+        if (ind.brent_usd_bbl && ind.brent_usd_bbl.value) STATE.brent = ind.brent_usd_bbl.value;
+        renderLive();
+        render();
     } catch (e) {
         // Network or parse failure: keep the built-in April 2026 values.
     }
 }
 
+buildStatePicker();
+applyState(detectState(), false);
 loadLiveFuelData();
-tickLiveUpdate();
-setInterval(tickLiveUpdate, 12000);
 
 // first render
 render();

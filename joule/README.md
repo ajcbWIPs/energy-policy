@@ -1,6 +1,6 @@
 # Joule
 
-> Copied from [Rexcat1/DataHack2026](https://github.com/Rexcat1/DataHack2026) (April 2026). This copy reads live diesel cover and Brent prices from [`../diesel-framework/data/live.json`](../diesel-framework/data/live.json), refreshed every 6 hours, and falls back to the April 2026 values if that file can't be loaded.
+> Copied from [Rexcat1/DataHack2026](https://github.com/Rexcat1/DataHack2026) (April 2026) and extended nationwide in October 2026. Pick any state or territory to get its routes, fares, capital-city fuel prices and NEM wholesale power. The gauge, diesel cover, Brent and prices come from [`../diesel-framework/data/live.json`](../diesel-framework/data/live.json), refreshed every 6 hours, with the April 2026 values as a fallback. Routes outside NSW and all fares are indicative estimates.
 
 **A real-time fuel security gauge for New South Wales.**
 
