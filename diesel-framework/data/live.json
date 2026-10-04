@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-04T06:00:00+00:00",
+  "updated": "2026-10-04T05:57:00+00:00",
   "framework_doc": "https://claude.ai/code/artifact/4ef286f2-95fd-42d2-a0f1-b4cce22dff7a",
   "indicators": {
     "diesel_stock": {
@@ -9,8 +9,70 @@
       "source": "https://fuelplan.gov.au/fuel-statistics",
       "fetched": "2026-10-04T06:00:00+00:00",
       "stale": true
+    },
+    "brent_usd_bbl": {
+      "value": 113.96,
+      "as_of": "2026-09-29",
+      "source": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
+      "fetched": "2026-10-04T05:56:27+00:00",
+      "stale": false
+    },
+    "us_gulf_ulsd_usd_gal": {
+      "value": 4.866,
+      "as_of": "2026-09-29",
+      "source": "https://fred.stlouisfed.org/series/DDFUELUSGULF",
+      "fetched": "2026-10-04T05:56:27+00:00",
+      "stale": false
+    },
+    "usd_per_aud": {
+      "value": 0.7033,
+      "as_of": "2026-09-25",
+      "source": "https://fred.stlouisfed.org/series/DEXUSAL",
+      "fetched": "2026-10-04T05:56:27+00:00",
+      "stale": false
+    },
+    "nem": {
+      "regions": {
+        "NSW1": {
+          "price_aud_mwh": 90.0,
+          "demand_mw": 6174.97,
+          "as_of": "2026-10-04T16:00:00"
+        },
+        "QLD1": {
+          "price_aud_mwh": 35.74862,
+          "demand_mw": 5757.27,
+          "as_of": "2026-10-04T16:00:00"
+        },
+        "SA1": {
+          "price_aud_mwh": 142.86,
+          "demand_mw": 1409.19,
+          "as_of": "2026-10-04T16:00:00"
+        },
+        "TAS1": {
+          "price_aud_mwh": -12.07441,
+          "demand_mw": 984.43,
+          "as_of": "2026-10-04T16:00:00"
+        },
+        "VIC1": {
+          "price_aud_mwh": -12.06,
+          "demand_mw": 3850.58,
+          "as_of": "2026-10-04T16:00:00"
+        }
+      },
+      "source": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
+      "fetched": "2026-10-04T05:56:28+00:00",
+      "stale": false
     }
   },
-  "derived": {},
-  "status": {"seed": "values entered by hand on 2026-10-04; the first scheduled run replaces them"}
+  "derived": {
+    "brent_aud_c_per_l": 101.9,
+    "us_gulf_ulsd_aud_c_per_l": 182.8
+  },
+  "status": {
+    "brent_usd_bbl": "ok",
+    "us_gulf_ulsd_usd_gal": "ok",
+    "usd_per_aud": "ok",
+    "nem": "ok",
+    "diesel_stock": "failed: https://fuelplan.gov.au/fuel-statistics: diesel stock figures not found; https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics: The read operation timed out"
+  }
 }
