@@ -9,7 +9,6 @@ A framework for cutting Australia's net diesel imports towards zero by growing d
 | `index.html` | Framework page with live fuel security indicators and the two key charts |
 | `FRAMEWORK.md` | The full framework, with sources |
 | `data/live.json` | Live indicators, refreshed every 6 hours by `.github/workflows/diesel-live-data.yml` |
-| `joule-live-data.patch` | Change for [Joule](https://github.com/Rexcat1/DataHack2026) so its diesel cover and Brent figures read `live.json` |
 
 ## Live data
 
@@ -31,12 +30,6 @@ The diesel stock figure is parsed from page text, so it can break if the page la
 
 Turn on GitHub Pages under **Settings → Pages → Deploy from a branch → `main` / root**. The page is then at `https://ajcbwips.github.io/energy-policy/diesel-framework/`.
 
-## Linking Joule
+## Joule
 
-From a clone of `Rexcat1/DataHack2026`:
-
-```bash
-git apply path/to/joule-live-data.patch
-```
-
-Joule then fetches `live.json` from this repository's `main` branch and keeps its April 2026 values if the fetch fails.
+A copy of [Joule](https://github.com/Rexcat1/DataHack2026) lives in `../joule/`. Its diesel cover and Brent figures read `data/live.json` from this folder and keep their April 2026 values if the fetch fails. Once Pages is on, it is at `https://ajcbwips.github.io/energy-policy/joule/`.

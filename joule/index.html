@@ -1,0 +1,2065 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Joule — Fuel Security Gauge · Transport for NSW</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Public+Sans:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+/* ==========================================================
+   TRANSPORT FOR NSW — OFFICIAL COLOUR TOKENS
+   ========================================================== */
+:root {
+    /* NSW masterbrand */
+    --nsw-navy:        #002664;  /* Blue 01 · PMS 281C · corporate anchor */
+    --nsw-blue:        #146cfd;  /* Blue 02 · action / interactive */
+    --nsw-light-blue:  #cbedfd;  /* Blue 04 · info surface */
+    --nsw-lighter:     #e6f1fb;  /* derived tint */
+    --nsw-red:         #D7153A;  /* NSW Red · alert */
+    --nsw-black:       #22272b;
+    --nsw-dark-grey:   #495054;
+    --nsw-grey:        #6D7079;
+    --nsw-off-grey:    #cdd3d6;
+    --nsw-off-white:   #f4f7f9;
+    --nsw-white:       #ffffff;
+    --nsw-success:     #00a908;
+    --nsw-warning:     #dc5800;
+
+    /* Transport line accents (Opal / Trip Planner lines) */
+    --t1:   #F99D1C;  /* Western / North Shore */
+    --t2:   #0098CD;  /* Inner West & Leppington */
+    --t3:   #F37021;  /* Liverpool via Bankstown */
+    --t4:   #005AA3;  /* Eastern Suburbs & Illawarra */
+    --t5:   #C4258F;  /* Cumberland */
+    --t6:   #7C3E21;  /* Lidcombe & Bankstown */
+    --t7:   #6F818E;  /* Olympic Park */
+    --t8:   #00954C;  /* Airport & South */
+    --t9:   #D11F2F;  /* Northern */
+    --metro:#0098CD;  /* Sydney Metro */
+    --ferry:#5AB031;  /* Sydney Ferries */
+    --bus:  #00B5EF;  /* Bus */
+    --light-rail: #BE1622;
+
+    --radius: 4px;
+    --radius-lg: 8px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html {
+    scroll-behavior: smooth;
+}
+
+html, body {
+    background: var(--nsw-off-white);
+    color: var(--nsw-black);
+    font-family: 'Public Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+}
+
+/* ==========================================================
+   MASTHEAD (navy band — standard TfNSW header)
+   ========================================================== */
+.masthead {
+    background: var(--nsw-navy);
+    color: var(--nsw-white);
+    border-bottom: 4px solid var(--nsw-blue);
+}
+.masthead-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 14px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 24px;
+    font-size: 13px;
+}
+.masthead-left {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+}
+.waratah {
+    width: 26px; height: 26px;
+    flex-shrink: 0;
+}
+.masthead-title {
+    font-weight: 700;
+    letter-spacing: 0.2px;
+    font-size: 14px;
+}
+.masthead-right {
+    color: rgba(255,255,255,0.75);
+    font-size: 12px;
+    letter-spacing: 0.2px;
+}
+.masthead-right a {
+    color: var(--nsw-white);
+    margin-left: 16px;
+    text-decoration: none;
+    padding-bottom: 2px;
+    border-bottom: 1px solid transparent;
+}
+.masthead-right a:hover { border-bottom-color: var(--nsw-white); }
+
+/* ==========================================================
+   HERO — Joule brand + live gauge together
+   ========================================================== */
+.hero {
+    background: var(--nsw-navy);
+    color: var(--nsw-white);
+    position: relative;
+    overflow: hidden;
+}
+.hero::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    background:
+        radial-gradient(circle at 85% 50%, rgba(20,108,253,0.22), transparent 50%),
+        radial-gradient(circle at 10% 120%, rgba(203,237,253,0.08), transparent 40%);
+    pointer-events: none;
+}
+.hero-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 32px 64px;
+    display: grid;
+    grid-template-columns: 1.2fr 1fr;
+    gap: 48px;
+    align-items: center;
+    position: relative;
+}
+@media (max-width: 900px) {
+    .hero-inner { grid-template-columns: 1fr; padding: 32px 20px 40px; }
+}
+
+.hero-brand-line {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    margin-bottom: 12px;
+    font-size: 12px;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    font-weight: 500;
+}
+.hero-brand-line .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--nsw-success);
+    box-shadow: 0 0 12px rgba(0,169,8,0.7);
+    animation: pulse 2s infinite;
+}
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.4; }
+}
+
+.hero h1 {
+    font-size: 64px;
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+    margin-bottom: 16px;
+}
+.hero h1 .punct { color: var(--nsw-blue); }
+.hero .lede {
+    font-size: 19px;
+    font-weight: 400;
+    line-height: 1.45;
+    color: rgba(255,255,255,0.85);
+    max-width: 520px;
+    margin-bottom: 24px;
+}
+.hero-meta {
+    display: flex;
+    gap: 28px;
+    font-size: 13px;
+    color: rgba(255,255,255,0.7);
+    margin-top: 24px;
+    padding-top: 24px;
+    border-top: 1px solid rgba(255,255,255,0.15);
+}
+.hero-meta strong {
+    display: block;
+    color: var(--nsw-white);
+    font-weight: 600;
+    font-size: 15px;
+    margin-bottom: 2px;
+}
+
+/* ==========================================================
+   GAUGE — the central hero element
+   ========================================================== */
+.gauge-card {
+    background: var(--nsw-white);
+    color: var(--nsw-black);
+    border-radius: var(--radius-lg);
+    padding: 28px 32px 24px;
+    position: relative;
+}
+.gauge-label-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    margin-bottom: 4px;
+}
+.gauge-label {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: var(--nsw-grey);
+}
+.gauge-live {
+    font-size: 11px;
+    color: var(--nsw-success);
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+}
+.gauge-live::before {
+    content: '';
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--nsw-success);
+    animation: pulse 2s infinite;
+}
+
+.gauge-svg-wrap {
+    position: relative;
+    width: 100%;
+    margin: 8px 0 4px;
+}
+.gauge-svg-wrap svg {
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+.gauge-readout {
+    text-align: center;
+    margin-top: 4px;
+    position: relative;
+}
+.gauge-number {
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    color: var(--nsw-navy);
+    letter-spacing: -0.03em;
+    display: inline-block;
+    vertical-align: baseline;
+}
+.gauge-unit {
+    font-size: 17px;
+    color: var(--nsw-grey);
+    font-weight: 500;
+    margin-left: 4px;
+    vertical-align: baseline;
+}
+.gauge-caption {
+    font-size: 13px;
+    color: var(--nsw-grey);
+    margin-top: 4px;
+    font-weight: 600;
+    letter-spacing: 0.02em;
+}
+.gauge-legend {
+    display: flex;
+    justify-content: center;
+    gap: 22px;
+    margin-top: 8px;
+    font-size: 12px;
+    font-weight: 600;
+    color: var(--nsw-grey);
+    letter-spacing: 0.03em;
+}
+.gauge-legend .legend-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+}
+.gauge-legend .dot {
+    display: inline-block;
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    flex-shrink: 0;
+}
+.gauge-ticker {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+    padding-top: 16px;
+    border-top: 1px solid var(--nsw-off-grey);
+    font-size: 11.5px;
+    color: var(--nsw-grey);
+}
+.gauge-ticker strong {
+    display: block;
+    color: var(--nsw-navy);
+    font-size: 18px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+
+/* ==========================================================
+   MAIN CONTENT
+   ========================================================== */
+main {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 48px 32px 80px;
+}
+@media (max-width: 900px) {
+    main { padding: 32px 20px 48px; }
+}
+
+h2.section-h {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--nsw-navy);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+h2.section-h::before {
+    content: '';
+    width: 20px; height: 3px; background: var(--nsw-blue);
+}
+h3.lede-h {
+    font-size: 28px;
+    font-weight: 700;
+    color: var(--nsw-navy);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+    margin-bottom: 8px;
+    max-width: 760px;
+}
+p.lede-p {
+    font-size: 16px;
+    color: var(--nsw-dark-grey);
+    max-width: 760px;
+    margin-bottom: 28px;
+    line-height: 1.6;
+}
+
+/* ==========================================================
+   TRIP PLANNER CARD
+   ========================================================== */
+.planner {
+    background: var(--nsw-white);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin-bottom: 32px;
+    border: 1px solid var(--nsw-off-grey);
+}
+@media (max-width: 900px) { .planner { padding: 24px 20px; } }
+
+.planner-grid {
+    display: grid;
+    grid-template-columns: 1.1fr 1fr;
+    gap: 40px;
+}
+@media (max-width: 900px) { .planner-grid { grid-template-columns: 1fr; gap: 28px; } }
+
+.field {
+    margin-bottom: 20px;
+}
+.field label {
+    display: block;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--nsw-black);
+    margin-bottom: 6px;
+}
+.field .hint {
+    font-size: 12px;
+    color: var(--nsw-grey);
+    margin-top: 4px;
+}
+.field select,
+.field input[type="number"],
+.field input[type="text"] {
+    width: 100%;
+    padding: 10px 12px;
+    border: 1.5px solid var(--nsw-off-grey);
+    border-radius: var(--radius);
+    font-family: inherit;
+    font-size: 15px;
+    color: var(--nsw-black);
+    background: var(--nsw-white);
+    transition: border-color 0.15s;
+}
+.field select:focus,
+.field input:focus {
+    outline: none;
+    border-color: var(--nsw-blue);
+    box-shadow: 0 0 0 3px rgba(20,108,253,0.18);
+}
+
+.mode-toggle {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 6px;
+    margin-bottom: 4px;
+}
+@media (max-width: 600px) { .mode-toggle { grid-template-columns: repeat(2, 1fr); } }
+.mode-btn {
+    background: var(--nsw-white);
+    border: 1.5px solid var(--nsw-off-grey);
+    border-radius: var(--radius);
+    padding: 12px 8px;
+    font-family: inherit;
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--nsw-black);
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 6px;
+    transition: all 0.15s;
+}
+.mode-btn:hover {
+    border-color: var(--nsw-blue);
+    background: var(--nsw-lighter);
+}
+.mode-btn.active {
+    border-color: var(--nsw-navy);
+    background: var(--nsw-navy);
+    color: var(--nsw-white);
+}
+.mode-btn .ico {
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+}
+.mode-btn .ico svg { width: 100%; height: 100%; }
+
+.slider-row {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 12px;
+    align-items: center;
+}
+.slider-row input[type="range"] {
+    -webkit-appearance: none;
+    width: 100%;
+    height: 28px;
+    background: transparent;
+}
+.slider-row input[type="range"]::-webkit-slider-runnable-track {
+    height: 4px;
+    background: linear-gradient(90deg, var(--nsw-navy) 0%, var(--nsw-navy) var(--pct, 0%), var(--nsw-off-grey) var(--pct, 0%));
+    border-radius: 2px;
+}
+.slider-row input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none;
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--nsw-navy);
+    border: 3px solid var(--nsw-white);
+    box-shadow: 0 0 0 1px var(--nsw-navy);
+    margin-top: -8px;
+    cursor: pointer;
+}
+.slider-row .val {
+    font-weight: 700;
+    font-size: 16px;
+    color: var(--nsw-navy);
+    min-width: 62px;
+    text-align: right;
+}
+
+/* ==========================================================
+   RESULT CARD (live scorecard on the right of planner)
+   ========================================================== */
+.result {
+    background: linear-gradient(180deg, var(--nsw-navy) 0%, #001844 100%);
+    color: var(--nsw-white);
+    border-radius: var(--radius-lg);
+    padding: 28px;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    overflow: hidden;
+}
+.result::before {
+    content: '';
+    position: absolute;
+    top: -60%; right: -20%;
+    width: 380px; height: 380px;
+    background: radial-gradient(circle, rgba(20,108,253,0.35), transparent 60%);
+    pointer-events: none;
+}
+.result-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: 11.5px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    color: rgba(255,255,255,0.7);
+    font-weight: 600;
+    margin-bottom: 12px;
+}
+.result-score {
+    font-size: 88px;
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.03em;
+    margin-bottom: 4px;
+    position: relative;
+}
+.result-score .slash {
+    font-size: 32px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.5);
+    letter-spacing: 0;
+}
+.result-verdict {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 4px;
+    position: relative;
+}
+.result-explain {
+    font-size: 14px;
+    color: rgba(255,255,255,0.82);
+    line-height: 1.5;
+    margin-bottom: 22px;
+    position: relative;
+}
+.result-rows {
+    position: relative;
+    margin-top: auto;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.18);
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 14px 20px;
+    font-size: 13px;
+}
+.result-rows .row-label {
+    color: rgba(255,255,255,0.65);
+    font-size: 11.5px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    font-weight: 600;
+    margin-bottom: 2px;
+}
+.result-rows .row-val {
+    color: var(--nsw-white);
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+.result-rows .row-val .sub {
+    font-size: 12px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.6);
+    margin-left: 4px;
+}
+
+.score-pill {
+    display: inline-block;
+    padding: 3px 10px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-left: 8px;
+    vertical-align: middle;
+}
+.score-pill.good { background: var(--nsw-success); color: var(--nsw-white); }
+.score-pill.ok   { background: #F99D1C; color: var(--nsw-navy); }
+.score-pill.poor { background: var(--nsw-red); color: var(--nsw-white); }
+
+/* ==========================================================
+   SUGGESTION CARDS
+   ========================================================== */
+.suggest {
+    margin-top: 24px;
+    padding: 20px 24px;
+    background: var(--nsw-light-blue);
+    border-left: 4px solid var(--nsw-blue);
+    border-radius: 0 var(--radius) var(--radius) 0;
+}
+.suggest-head {
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--nsw-navy);
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+}
+.suggest-body {
+    font-size: 15px;
+    color: var(--nsw-black);
+    line-height: 1.5;
+}
+.suggest-body strong { color: var(--nsw-navy); }
+
+/* ==========================================================
+   COMPARE STRIP (3 alternatives)
+   ========================================================== */
+.compare-head {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 16px;
+}
+.compare {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 16px;
+}
+@media (max-width: 800px) { .compare { grid-template-columns: 1fr; } }
+.alt {
+    background: var(--nsw-white);
+    border: 1px solid var(--nsw-off-grey);
+    border-radius: var(--radius-lg);
+    padding: 20px;
+    position: relative;
+    transition: all 0.2s;
+}
+.alt.best {
+    border: 2px solid var(--nsw-success);
+    padding: 19px;
+}
+.alt.best::after {
+    content: 'Recommended';
+    position: absolute;
+    top: -10px; left: 16px;
+    background: var(--nsw-success);
+    color: var(--nsw-white);
+    font-size: 10.5px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    padding: 4px 10px;
+    border-radius: 12px;
+}
+.alt-head {
+    font-size: 13px;
+    color: var(--nsw-grey);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 8px;
+}
+.alt-mode {
+    font-size: 20px;
+    font-weight: 700;
+    color: var(--nsw-navy);
+    margin-bottom: 8px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+.alt-mode .line-chip {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 30px; height: 22px;
+    border-radius: 3px;
+    color: var(--nsw-white);
+    font-size: 12px;
+    font-weight: 800;
+    font-family: 'Public Sans', sans-serif;
+}
+.alt-detail {
+    font-size: 14px;
+    color: var(--nsw-dark-grey);
+    margin-bottom: 16px;
+    line-height: 1.5;
+}
+.alt-stats {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px 16px;
+    padding-top: 14px;
+    border-top: 1px solid var(--nsw-off-grey);
+}
+.alt-stat-label {
+    font-size: 11.5px;
+    color: var(--nsw-grey);
+    font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+.alt-stat-val {
+    font-size: 18px;
+    color: var(--nsw-navy);
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+.alt-stat-val .u {
+    font-size: 11px;
+    color: var(--nsw-grey);
+    font-weight: 500;
+    margin-left: 2px;
+}
+
+/* ==========================================================
+   STATE STATUS STRIP
+   ========================================================== */
+.status-strip {
+    background: var(--nsw-navy);
+    color: var(--nsw-white);
+    border-radius: var(--radius-lg);
+    padding: 20px 28px;
+    display: grid;
+    grid-template-columns: auto repeat(4, 1fr);
+    gap: 28px;
+    align-items: center;
+    margin-top: 32px;
+    overflow: hidden;
+    position: relative;
+}
+@media (max-width: 900px) {
+    .status-strip {
+        grid-template-columns: 1fr 1fr;
+        gap: 16px 20px;
+    }
+}
+.status-strip::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 0; bottom: 0;
+    width: 4px;
+    background: var(--nsw-success);
+}
+.status-head {
+    font-size: 12px;
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    font-weight: 700;
+    color: var(--nsw-white);
+}
+.status-head span {
+    display: block;
+    font-size: 10.5px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 500;
+    margin-top: 2px;
+    letter-spacing: 0.08em;
+}
+.status-item .sl {
+    font-size: 11px;
+    color: rgba(255,255,255,0.6);
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    margin-bottom: 2px;
+}
+.status-item .sv {
+    font-size: 22px;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+}
+.status-item .sv .su {
+    font-size: 13px;
+    font-weight: 500;
+    color: rgba(255,255,255,0.7);
+    margin-left: 2px;
+}
+.status-item .st {
+    font-size: 11.5px;
+    color: rgba(255,255,255,0.65);
+    margin-top: 2px;
+    font-weight: 500;
+}
+.status-item .st.up { color: #6df086; }
+.status-item .st.down { color: #ff8e98; }
+
+/* ==========================================================
+   EXPLAINER BAND
+   ========================================================== */
+.explainer {
+    background: var(--nsw-white);
+    border: 1px solid var(--nsw-off-grey);
+    border-radius: var(--radius-lg);
+    padding: 32px;
+    margin-top: 32px;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+    gap: 40px;
+    align-items: start;
+}
+@media (max-width: 800px) { .explainer { grid-template-columns: 1fr; gap: 24px; padding: 24px 20px; } }
+.explainer-title {
+    font-size: 22px;
+    font-weight: 700;
+    color: var(--nsw-navy);
+    line-height: 1.2;
+    letter-spacing: -0.01em;
+}
+.explainer-title .kicker {
+    display: block;
+    font-size: 12px;
+    font-weight: 700;
+    color: var(--nsw-blue);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+}
+.explainer-body p {
+    font-size: 15px;
+    color: var(--nsw-dark-grey);
+    line-height: 1.65;
+    margin-bottom: 12px;
+}
+.explainer-body p:last-child { margin-bottom: 0; }
+.explainer-body strong {
+    color: var(--nsw-navy);
+    font-weight: 600;
+}
+
+.formula-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+    padding: 16px 20px;
+    background: var(--nsw-lighter);
+    border-radius: var(--radius);
+    margin: 18px 0;
+    font-size: 14px;
+}
+.formula-token {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 4px;
+    background: var(--nsw-white);
+    border: 1px solid var(--nsw-off-grey);
+    font-weight: 600;
+    color: var(--nsw-navy);
+    font-size: 13px;
+}
+.formula-token .w {
+    background: var(--nsw-navy);
+    color: var(--nsw-white);
+    font-size: 11px;
+    padding: 2px 6px;
+    border-radius: 3px;
+    margin-right: 8px;
+    font-weight: 700;
+}
+.formula-op {
+    font-size: 18px;
+    color: var(--nsw-grey);
+    font-weight: 500;
+}
+
+/* ==========================================================
+   FOOTER
+   ========================================================== */
+footer {
+    background: var(--nsw-navy);
+    color: var(--nsw-white);
+    padding: 32px;
+    margin-top: 60px;
+}
+.footer-inner {
+    max-width: 1280px;
+    margin: 0 auto;
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    gap: 32px;
+    font-size: 13px;
+}
+@media (max-width: 700px) {
+    .footer-inner { grid-template-columns: 1fr; gap: 20px; }
+}
+.footer-inner h4 {
+    font-size: 13px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+    color: rgba(255,255,255,0.7);
+}
+.footer-inner p, .footer-inner li {
+    color: rgba(255,255,255,0.8);
+    line-height: 1.6;
+    list-style: none;
+}
+.footer-inner li { margin-bottom: 4px; }
+.footer-inner a { color: var(--nsw-white); text-decoration: none; border-bottom: 1px solid rgba(255,255,255,0.3); }
+.footer-inner a:hover { border-bottom-color: var(--nsw-white); }
+.footer-bottom {
+    max-width: 1280px;
+    margin: 24px auto 0;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,0.18);
+    font-size: 12px;
+    color: rgba(255,255,255,0.6);
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+/* ==========================================================
+   STATE TICKER (updates live)
+   ========================================================== */
+.ticker {
+    background: var(--nsw-black);
+    color: var(--nsw-white);
+    padding: 10px 0;
+    overflow: hidden;
+    border-bottom: 1px solid #000;
+    font-size: 13px;
+}
+.ticker-inner {
+    display: flex;
+    white-space: nowrap;
+    will-change: transform;
+}
+.ticker-set {
+    display: flex;
+    gap: 48px;
+    padding-right: 48px;
+    flex-shrink: 0;
+}
+.ticker-item {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: rgba(255,255,255,0.85);
+}
+.ticker-item strong {
+    color: var(--nsw-white);
+    font-weight: 700;
+}
+.ticker-item.alert strong { color: #ff8e98; }
+.ticker-item.up strong { color: #6df086; }
+.ticker-item.dot::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--nsw-blue);
+}
+
+/* ==========================================================
+   UTILITY
+   ========================================================== */
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+</style>
+</head>
+<body>
+
+<!-- ==========================================================
+     MASTHEAD
+     ========================================================== -->
+<div class="masthead" id="top">
+    <div class="masthead-inner">
+        <div class="masthead-left">
+            <svg class="waratah" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg">
+                <!-- Simplified waratah-inspired mark -->
+                <rect width="60" height="60" fill="#ffffff" rx="3"/>
+                <rect x="8" y="8" width="44" height="44" fill="#002664" rx="2"/>
+                <path d="M30 14 L40 26 L36 38 L24 38 L20 26 Z" fill="#D7153A"/>
+                <circle cx="30" cy="30" r="4" fill="#ffffff"/>
+            </svg>
+            <div>
+                <div class="masthead-title">Transport for NSW</div>
+                <div style="font-size:11px;color:rgba(255,255,255,0.65);letter-spacing:0.1em;text-transform:uppercase;font-weight:500">Customer energy intelligence</div>
+            </div>
+        </div>
+        <div class="masthead-right">
+            <a href="https://transportnsw.info/trip" target="_blank" rel="noopener">Trip Planner</a>
+            <a href="https://transportnsw.info/tickets-fares" target="_blank" rel="noopener">Opal</a>
+            <a href="#top" style="font-weight:600;border-bottom-color:rgba(255,255,255,0.4)" aria-current="page">Joule</a>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================
+     LIVE STATE TICKER
+     ========================================================== -->
+<div class="ticker" aria-label="Live NSW fuel and grid status">
+    <div class="ticker-inner">
+        <div class="ticker-set">
+            <span class="ticker-item dot"><span>NSW fuel security index</span><strong id="tk-fsi">58 / 100</strong></span>
+            <span class="ticker-item alert"><span>Diesel cover (AU)</span><strong data-live="diesel-days">29 days</strong></span>
+            <span class="ticker-item alert"><span>Petrol cover (AU)</span><strong>39 days</strong></span>
+            <span class="ticker-item dot"><span>NSW grid demand</span><strong>10.2 GW</strong></span>
+            <span class="ticker-item dot"><span>VPP dispatch active</span><strong>412 MW</strong></span>
+            <span class="ticker-item up"><span>Brent crude</span><strong data-live="brent-usd">US$90.89</strong></span>
+            <span class="ticker-item dot"><span>Sydney ULP avg</span><strong>213.1 c/L</strong></span>
+            <span class="ticker-item alert"><span>Sydney diesel avg</span><strong>318.1 c/L</strong></span>
+            <span class="ticker-item alert"><span>Strait of Hormuz</span><strong>Contested — passage restricted</strong></span>
+            <span class="ticker-item dot"><span>Federal excise (halved)</span><strong>26.3 c/L</strong></span>
+            <span class="ticker-item dot"><span>Last update</span><strong id="tk-ts">just now</strong></span>
+        </div>
+        <div class="ticker-set" aria-hidden="true">
+            <span class="ticker-item dot"><span>NSW fuel security index</span><strong id="tk-fsi-2">58 / 100</strong></span>
+            <span class="ticker-item alert"><span>Diesel cover (AU)</span><strong data-live="diesel-days">29 days</strong></span>
+            <span class="ticker-item alert"><span>Petrol cover (AU)</span><strong>39 days</strong></span>
+            <span class="ticker-item dot"><span>NSW grid demand</span><strong>10.2 GW</strong></span>
+            <span class="ticker-item dot"><span>VPP dispatch active</span><strong>412 MW</strong></span>
+            <span class="ticker-item up"><span>Brent crude</span><strong data-live="brent-usd">US$90.89</strong></span>
+            <span class="ticker-item dot"><span>Sydney ULP avg</span><strong>213.1 c/L</strong></span>
+            <span class="ticker-item alert"><span>Sydney diesel avg</span><strong>318.1 c/L</strong></span>
+            <span class="ticker-item alert"><span>Strait of Hormuz</span><strong>Contested — passage restricted</strong></span>
+            <span class="ticker-item dot"><span>Federal excise (halved)</span><strong>26.3 c/L</strong></span>
+            <span class="ticker-item dot"><span>Last update</span><strong id="tk-ts-2">just now</strong></span>
+        </div>
+    </div>
+</div>
+
+<!-- ==========================================================
+     HERO — brand + gauge
+     ========================================================== -->
+<section class="hero" aria-label="Joule fuel security gauge">
+    <div class="hero-inner">
+        <div>
+            <div class="hero-brand-line"><span class="dot"></span>Live · Fuel Security Intelligence</div>
+            <h1>Joule<span class="punct">.</span></h1>
+            <p class="lede">A real-time gauge for how your trip affects New South Wales' fuel security — so you can keep moving, smartly.</p>
+            <div class="hero-meta">
+                <div>
+                    <strong>Why it matters today</strong>
+                    Australia holds just <span data-live="diesel-days-num">29</span> days of diesel cover and 39 days of petrol. Around 20% of the world's seaborne oil passes through the Strait of Hormuz — a waterway that has been disrupted for weeks and whose status remains <a href="https://www.dcceew.gov.au/about/news/securing-australias-fuel-supply" target="_blank" rel="noopener" style="color:#cbedfd; text-decoration:underline">contested and volatile</a>. Every kilometre you don't drive is a litre that stays in the national reserve for essential services.
+                </div>
+            </div>
+        </div>
+
+        <div class="gauge-card">
+            <div class="gauge-label-row">
+                <div class="gauge-label">NSW Fuel Security Index</div>
+                <div class="gauge-live">Live</div>
+            </div>
+            <div class="gauge-svg-wrap">
+                <svg viewBox="10 10 420 230" xmlns="http://www.w3.org/2000/svg" aria-hidden="true">
+                    <!-- ==========================================================
+                         Geometry: centre (220, 215), outer arc r=160.
+                         The coloured bands are drawn at full opacity 0.75 so they
+                         stay visible. A thinner inner "live arc" sits below them
+                         (r=140, 10px wide) to indicate the current value's extent.
+                         ========================================================== -->
+
+                    <!-- Background track -->
+                    <path d="M 60 215 A 160 160 0 0 1 380 215"
+                          fill="none" stroke="#eef1f5" stroke-width="28" stroke-linecap="round"/>
+
+                    <!-- Coloured band segments (primary visual; full saturation) -->
+                    <!-- STRESSED: value 0–33 → arc from (60,215) to (140,76) -->
+                    <path d="M 60 215 A 160 160 0 0 1 140 76"
+                          fill="none" stroke="#D7153A" stroke-width="28" stroke-linecap="round" opacity="0.78"/>
+                    <!-- MODERATE: value 33–66 → (140,76) to (300,76) -->
+                    <path d="M 140 76 A 160 160 0 0 1 300 76"
+                          fill="none" stroke="#F99D1C" stroke-width="28" stroke-linecap="round" opacity="0.78"/>
+                    <!-- HEALTHY: value 66–100 → (300,76) to (380,215) -->
+                    <path d="M 300 76 A 160 160 0 0 1 380 215"
+                          fill="none" stroke="#00a908" stroke-width="28" stroke-linecap="round" opacity="0.78"/>
+
+                    <!-- Inner "pointer track" - thin navy arc showing the needle's current extent,
+                         drawn on a slightly smaller radius so it sits inside the coloured bands -->
+                    <path id="gauge-arc" d=""
+                          fill="none" stroke="#002664" stroke-width="4" stroke-linecap="round"
+                          opacity="0.35"/>
+
+                    <!-- Tick marks - small white notches on the coloured bands -->
+                    <g stroke="#ffffff" stroke-width="2.5" stroke-linecap="round">
+                        <line x1="107" y1="102" x2="113" y2="108"/>  <!-- 25 -->
+                        <line x1="220" y1="55"  x2="220" y2="63"/>   <!-- 50 -->
+                        <line x1="333" y1="102" x2="327" y2="108"/>  <!-- 75 -->
+                    </g>
+
+                    <!-- Tick numeric labels on outside -->
+                    <g font-family="Public Sans, sans-serif" font-size="12" font-weight="700"
+                       fill="#6D7079" text-anchor="middle">
+                        <text x="26"  y="222">0</text>
+                        <text x="80"  y="76">25</text>
+                        <text x="220" y="32">50</text>
+                        <text x="360" y="76">75</text>
+                        <text x="414" y="222">100</text>
+                    </g>
+
+                    <!-- Needle -->
+                    <g id="gauge-needle" transform="rotate(0 220 215)">
+                        <line x1="220" y1="215" x2="220" y2="78"
+                              stroke="#002664" stroke-width="3.5" stroke-linecap="round"/>
+                        <circle cx="220" cy="215" r="11" fill="#002664"/>
+                        <circle cx="220" cy="215" r="5" fill="#ffffff"/>
+                    </g>
+                </svg>
+            </div>
+
+            <!-- Band legend - clean horizontal row under the gauge with colour dots -->
+            <div class="gauge-legend">
+                <span class="legend-item"><span class="dot" style="background:#D7153A"></span>Stressed</span>
+                <span class="legend-item"><span class="dot" style="background:#F99D1C"></span>Moderate</span>
+                <span class="legend-item"><span class="dot" style="background:#00a908"></span>Healthy</span>
+            </div>
+
+            <!-- Score readout below the gauge -->
+            <div class="gauge-readout">
+                <span class="gauge-number" id="gauge-num">58</span><span class="gauge-unit">/ 100</span>
+                <div class="gauge-caption" id="gauge-caption">Watch · reserves thinning</div>
+            </div>
+            <div class="gauge-ticker">
+                <div>Petrol cover<br><strong>39 days</strong></div>
+                <div>Diesel cover<br><strong data-live="diesel-days">29 days</strong></div>
+                <div>VPP firming<br><strong>412 MW</strong></div>
+            </div>
+            <div style="text-align:center; margin-top: 12px; font-size: 11px; color: var(--nsw-grey);">
+                Stockhold figures:
+                <a href="https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks" target="_blank" rel="noopener" style="color: var(--nsw-navy); text-decoration: underline;">DCCEEW Liquid Fuel Stocks</a>
+                &nbsp;·&nbsp;
+                Prices:
+                <a href="https://www.fuelcheck.nsw.gov.au/" target="_blank" rel="noopener" style="color: var(--nsw-navy); text-decoration: underline;">NSW FuelCheck</a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ==========================================================
+     MAIN CONTENT
+     ========================================================== -->
+<main>
+
+    <h2 class="section-h">Plan your trip</h2>
+    <h3 class="lede-h">Tell us where you're going. We'll score it against the network.</h3>
+    <p class="lede-p">
+        Pick a mode, corridor, and distance. Joule reads the NSW fuel security index, the state's freight load, and the current trip's impact — then tells you whether your plan helps, holds, or hurts, and suggests one small swap if it would make a real difference.
+    </p>
+
+    <div class="planner">
+        <div class="planner-grid">
+            <!-- LEFT: INPUTS -->
+            <div>
+                <div class="field">
+                    <label for="m-mode">How are you planning to travel?</label>
+                    <div class="mode-toggle" role="radiogroup" aria-label="Travel mode">
+                        <button class="mode-btn active" data-mode="car" type="button">
+                            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 16v-4l2-5h12l2 5v4"/><circle cx="7" cy="16" r="2"/><circle cx="17" cy="16" r="2"/></svg></span>
+                            Car
+                        </button>
+                        <button class="mode-btn" data-mode="train" type="button">
+                            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="14" rx="2"/><path d="M5 11h14M9 17l-2 3M15 17l2 3"/></svg></span>
+                            Train
+                        </button>
+                        <button class="mode-btn" data-mode="bus" type="button">
+                            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="M4 10h16M8 16l-1 3M16 16l1 3"/></svg></span>
+                            Bus
+                        </button>
+                        <button class="mode-btn" data-mode="active" type="button">
+                            <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="5" cy="18" r="3"/><circle cx="19" cy="18" r="3"/><path d="M5 18l4-8h6l4 8M9 10l3-6"/></svg></span>
+                            Walk / Cycle
+                        </button>
+                    </div>
+                    <div class="hint">Choose your first-pick option. We'll show alternatives below.</div>
+                </div>
+
+                <div class="field" id="corridor-field">
+                    <label for="m-corridor">Route or corridor</label>
+                    <select id="m-corridor">
+                        <optgroup label="🚆 Train corridors — Greater Sydney">
+                            <option value="blacktown">Blacktown / Mount Druitt — T1 Western</option>
+                            <option value="penrith">Penrith / St Marys — T1 Western</option>
+                            <option value="parramatta">Parramatta — T1 / T5</option>
+                            <option value="campbelltown">Campbelltown — T8 Airport &amp; South</option>
+                            <option value="liverpool">Liverpool — T2</option>
+                            <option value="bankstown">Bankstown — T3</option>
+                            <option value="chatswood">Chatswood — Metro / T1</option>
+                        </optgroup>
+                        <optgroup label="🚆 Train corridors — Intercity">
+                            <option value="gosford">Gosford / Wyong — Central Coast &amp; Newcastle</option>
+                            <option value="wollongong">Wollongong — South Coast</option>
+                            <option value="lithgow">Lithgow — Blue Mountains</option>
+                            <option value="bathurst">Bathurst — Central West coach</option>
+                        </optgroup>
+                        <optgroup label="🚍 Bus routes — Eastern / Inner Sydney">
+                            <option value="b1">B1 B-Line — Mona Vale → Wynyard</option>
+                            <option value="r350">350 — Bondi Junction → Airport</option>
+                            <option value="r380">380 — Bondi Beach → Circular Quay</option>
+                            <option value="r333">333 — Bondi Beach → Circular Quay (PrePay)</option>
+                            <option value="r400">400 — Bondi Junction → Eastgardens</option>
+                            <option value="r370">370 — Coogee → Leichhardt</option>
+                            <option value="r891">891 — Central → UNSW</option>
+                        </optgroup>
+                        <optgroup label="🚍 Bus routes — Cross-town / Western">
+                            <option value="m90">M90 — Liverpool → Burwood</option>
+                            <option value="m91">M91 — Parramatta → Hurstville</option>
+                            <option value="t80">T80 — Liverpool ↔ Parramatta (T-Way)</option>
+                            <option value="r545">545 — Chatswood → Parramatta</option>
+                            <option value="r500">500 — Central → Olympic Park</option>
+                            <option value="r610x">610X — Castle Hill → Wynyard (express)</option>
+                            <option value="rL90">L90 — Palm Beach → City (Limited)</option>
+                        </optgroup>
+                        <optgroup label="🏙 Inner Sydney">
+                            <option value="inner">Inner Sydney / CBD — multiple options</option>
+                        </optgroup>
+                    </select>
+                </div>
+
+                <div class="field">
+                    <label>Distance (return)</label>
+                    <div class="slider-row">
+                        <input type="range" id="m-km" min="2" max="200" value="40" step="2">
+                        <span class="val"><span id="m-km-v">40</span> km</span>
+                    </div>
+                    <div class="hint">Typical Blacktown → Parramatta → Blacktown return is ~36 km.</div>
+                </div>
+
+                <div class="field">
+                    <label>Trip frequency</label>
+                    <div class="slider-row">
+                        <input type="range" id="m-freq" min="1" max="10" value="5" step="1">
+                        <span class="val"><span id="m-freq-v">5</span>×/wk</span>
+                    </div>
+                    <div class="hint">Weekly trips on this pattern — a commute is usually 5.</div>
+                </div>
+
+                <div class="field" id="car-occ-field">
+                    <label>Passengers in car (if driving)</label>
+                    <div class="slider-row">
+                        <input type="range" id="m-occ" min="1" max="5" value="1" step="1">
+                        <span class="val"><span id="m-occ-v">1</span></span>
+                    </div>
+                    <div class="hint">Solo driving has the biggest fuel security impact per passenger-km.</div>
+                </div>
+            </div>
+
+            <!-- RIGHT: RESULT -->
+            <div class="result" id="result-card">
+                <div class="result-head">
+                    <span>Your Joule score</span>
+                    <span id="result-pill-wrap"><span class="score-pill good" id="result-pill">Good</span></span>
+                </div>
+                <div class="result-score"><span id="result-score-num">72</span><span class="slash"> / 100</span></div>
+                <div class="result-verdict" id="result-verdict">This trip holds the line.</div>
+                <div class="result-explain" id="result-explain">
+                    A solo car commute from Blacktown adds moderate pressure to NSW's fuel reserve, but the corridor has room to absorb it this week.
+                </div>
+                <div class="result-rows">
+                    <div>
+                        <div class="row-label">Trip fuel use</div>
+                        <div class="row-val"><span id="r-fuel">3.2</span><span class="sub">L/trip</span></div>
+                    </div>
+                    <div>
+                        <div class="row-label">Weekly impact</div>
+                        <div class="row-val"><span id="r-weekly">16</span><span class="sub">L/week</span></div>
+                    </div>
+                    <div>
+                        <div class="row-label">Energy equivalent</div>
+                        <div class="row-val"><span id="r-kwh">152</span><span class="sub">kWh/wk</span></div>
+                    </div>
+                    <div>
+                        <div class="row-label">Cost to you</div>
+                        <div class="row-val">$<span id="r-cost">31.20</span><span class="sub">/week</span></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Suggestion -->
+        <div class="suggest" id="suggest-box">
+            <div class="suggest-head">Joule suggestion</div>
+            <div class="suggest-body" id="suggest-body">
+                <strong>Swap one car commute a week for the T1 train.</strong>
+                With Sydney ULP at 213.1 c/L and diesel reserves sitting at <span data-live="diesel-days-num">29</span> days, a single weekly swap returns about 3.2 L of petrol to the reserve each week — roughly 166 L over a year, or about 3 tanks of petrol, saving you about $354 at the pump.
+            </div>
+        </div>
+    </div>
+
+    <!-- ======================================================
+         COMPARE STRIP — 3 alternatives
+         ====================================================== -->
+    <div class="compare-head">
+        <div>
+            <h2 class="section-h" style="margin-bottom:4px">Your alternatives</h2>
+            <h3 class="lede-h" style="font-size:22px">Three ways to take the same trip</h3>
+        </div>
+    </div>
+
+    <div class="compare" id="compare-grid">
+        <!-- populated by JS -->
+    </div>
+
+    <!-- ======================================================
+         STATE STATUS STRIP
+         ====================================================== -->
+    <div class="status-strip" role="region" aria-label="NSW state transport energy status">
+        <div class="status-head">
+            NSW state status
+            <span>Updated every 15 min</span>
+        </div>
+        <div class="status-item">
+            <div class="sl">Diesel cover</div>
+            <div class="sv"><span data-live="diesel-days-num">29</span><span class="su">days</span></div>
+            <div class="st down">Below 90-day IEA target</div>
+        </div>
+        <div class="status-item">
+            <div class="sl">Sydney ULP</div>
+            <div class="sv">213.1<span class="su">c/L</span></div>
+            <div class="st up">↓ 8.3c this week</div>
+        </div>
+        <div class="status-item">
+            <div class="sl">VPP firming</div>
+            <div class="sv">412<span class="su">MW</span></div>
+            <div class="st up">Household batteries dispatching</div>
+        </div>
+        <div class="status-item">
+            <div class="sl">Brent crude</div>
+            <div class="sv"><span data-live="brent-num">90.89</span><span class="su">USD/bbl</span></div>
+            <div class="st">Volatile — Hormuz passage disputed</div>
+        </div>
+    </div>
+
+    <!-- ======================================================
+         EXPLAINER — how the score is calculated
+         ====================================================== -->
+    <div class="explainer">
+        <div>
+            <div class="explainer-title">
+                <span class="kicker">How Joule works</span>
+                A single number, in joules, for every choice you make.
+            </div>
+        </div>
+        <div class="explainer-body">
+            <p>
+                Joule converts your trip into a single score from 0 to 100. A higher score means your choice puts less pressure on the state's fuel reserve — and the transport network has more room to absorb it.
+            </p>
+
+            <div class="formula-row">
+                <span class="formula-token"><span class="w">60%</span>Fuel impact</span>
+                <span class="formula-op">+</span>
+                <span class="formula-token"><span class="w">25%</span>Corridor load</span>
+                <span class="formula-op">+</span>
+                <span class="formula-token"><span class="w">15%</span>Time cost to you</span>
+            </div>
+
+            <p>
+                Your <strong>fuel impact</strong> is measured in kilowatt-hour-equivalents — so electricity, petrol, and diesel all sit on one axis. <strong>Corridor load</strong> reads live bus and train capacity on the line you're using: if your train has spare seats, your walk-on trip is worth more to the state. <strong>Time cost</strong> keeps the score honest — if the alternative takes two hours longer, Joule won't pretend that's a free swap.
+            </p>
+            <p>
+                Joule never tells you not to travel. The goal is the opposite: <strong>keep New South Wales moving</strong>, with one fewer barrel of imported fuel behind every journey.
+            </p>
+        </div>
+    </div>
+
+</main>
+
+<!-- ==========================================================
+     FOOTER
+     ========================================================== -->
+<footer>
+    <div class="footer-inner">
+        <div>
+            <h4>Joule</h4>
+            <p>A public-facing energy accounting service concept for Transport for NSW and NSW Climate &amp; Energy Action. Joule is an awareness tool — it does not collect, track, or log your trips.</p>
+
+            <h4 style="margin-top:24px;">Useful External Resources</h4>
+            <ul>
+                <li><a href="https://abetterrouteplanner.com/" target="_blank" rel="noopener">A Better Route Planner</a> — EV route and charging optimiser</li>
+            </ul>
+        </div>
+        <div>
+            <h4>Data sources</h4>
+            <ul>
+                <li><a href="https://www.energy.gov.au/energy-data/australian-petroleum-statistics" target="_blank" rel="noopener">DCCEEW Australian Petroleum Statistics</a></li>
+                <li><a href="https://www.dcceew.gov.au/energy/security/australias-fuel-security/measures-of-liquid-fuel-stocks" target="_blank" rel="noopener">DCCEEW liquid fuel stocks</a></li>
+                <li><a href="https://www.aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem/" target="_blank" rel="noopener">AEMO NEM data dashboard</a></li>
+                <li><a href="https://www.fuelcheck.nsw.gov.au/" target="_blank" rel="noopener">NSW FuelCheck (live prices)</a></li>
+                <li><a href="https://www.accc.gov.au/consumers/petrol-and-fuel/petrol-price-cycles-in-the-5-largest-cities" target="_blank" rel="noopener">ACCC Fuel Price Monitoring</a></li>
+                <li><a href="https://www.energy.nsw.gov.au/households/grants-rebates/household-energy-saving-upgrades/connect-your-battery-virtual-power-plant" target="_blank" rel="noopener">NSW PDRS Virtual Power Plant incentive</a></li>
+            </ul>
+        </div>
+        <div>
+            <h4>Plan a trip</h4>
+            <ul>
+                <li><a href="https://transportnsw.info/trip" target="_blank" rel="noopener">Trip Planner</a></li>
+                <li><a href="https://transportnsw.info/tickets-fares" target="_blank" rel="noopener">Opal fares</a></li>
+                <li><a href="https://transportnsw.info/alerts/all" target="_blank" rel="noopener">Service alerts</a></li>
+                <li><a href="https://transportnsw.info/" target="_blank" rel="noopener">transportnsw.info</a></li>
+            </ul>
+        </div>
+    </div>
+    <div class="footer-bottom">
+        <div>© State of New South Wales (Transport for NSW), 2026. Concept demonstration.</div>
+        <div>by Unit 8200</div>
+    </div>
+</footer>
+
+<script>
+// ==========================================================
+// LIVE STATE DATA — April 2026
+// Real-world values from published sources. In a production deployment these
+// would be fetched every 15 min from the following official APIs:
+//   • Fuel prices    → NSW FuelCheck API (fuelcheck.nsw.gov.au)
+//   • Fuel reserves  → DCCEEW Liquid Fuels Gateway / MSO weekly publication
+//   • Grid demand    → AEMO NEM data dashboard (5-min dispatch)
+//   • Brent crude    → ICE futures feed
+// Values as of 18 Apr 2026:
+//   • Brent: $90.89/bbl (ICE futures, volatile on contested Hormuz passage)
+//   • Sydney ULP avg: 213.1 c/L (NRMA Weekly Fuel Report)
+//   • Sydney diesel avg: 318.1 c/L (NRMA)
+//   • AU petrol stockhold: 39 days; diesel 29 days (DCCEEW MSO, Apr 2026)
+//   • Half-excise cut: -26.3 c/L in effect 1 Apr – 30 Jun 2026
+// The FSI is a composite: diesel cover days × 2 + geopolitical risk adjustment.
+// ==========================================================
+const STATE = {
+    fsi: 58,              // Fuel Security Index (composite) — contested Hormuz situation
+    fuelDaysPetrol: 39,   // days of petrol cover (DCCEEW MSO, Apr 2026)
+    fuelDaysDiesel: 29,   // days of diesel cover (DCCEEW MSO, Apr 2026)
+    fuelDaysJet: 30,      // days of jet fuel cover
+    gridPeakMW: 10200,    // NSW peak operational demand typical shoulder season (AEMO)
+    vppFiring: 412,       // MW — indicative NSW PDRS/VPP dispatch capacity
+    brent: 90.89,         // USD/bbl (18 Apr 2026)
+    tripsShifted: 3127,   // simulated user-level counter
+    hormuzStatus: 'Contested — passage disputed'
+};
+
+// ==========================================================
+// CORRIDOR / ROUTE DEFINITIONS
+// Real and close-estimate attributes for NSW services.
+// type:      'rail' (train / metro / light rail) or 'bus'
+// transit:   line/route code for the colour chip
+// km:        typical full-corridor end-to-end distance (km)
+// freqPerHr: peak-hour service frequency
+// loadPct:   typical peak load factor (fraction of seated capacity used)
+// carDep:    car-dependence score for the residential catchment (0..1)
+// sources:   TfNSW timetables; NRMA/BusNSW route histories; rome2rio trip data;
+//            ABS 2021 Census journey-to-work mode share by LGA.
+// ==========================================================
+const CORRIDORS = {
+    // === Sydney Trains / Metro / Intercity (rail) ===
+    blacktown:    { name: 'Blacktown / Mount Druitt',       type: 'rail', transit: 'T1',  line: 'T1 Western',           km: 36,  freqPerHr: 12, loadPct: 0.62, carDep: 0.92 },
+    penrith:      { name: 'Penrith / St Marys',             type: 'rail', transit: 'T1',  line: 'T1 Western',           km: 58,  freqPerHr: 10, loadPct: 0.58, carDep: 0.94 },
+    parramatta:   { name: 'Parramatta',                     type: 'rail', transit: 'T1',  line: 'T1 / T5',              km: 22,  freqPerHr: 18, loadPct: 0.72, carDep: 0.78 },
+    campbelltown: { name: 'Campbelltown',                   type: 'rail', transit: 'T8',  line: 'T8 Airport & South',   km: 52,  freqPerHr: 8,  loadPct: 0.55, carDep: 0.94 },
+    liverpool:    { name: 'Liverpool',                      type: 'rail', transit: 'T2',  line: 'T2 Inner West & Leppington', km: 32, freqPerHr: 10, loadPct: 0.64, carDep: 0.88 },
+    bankstown:    { name: 'Bankstown',                      type: 'rail', transit: 'T3',  line: 'T3 Liverpool/Inner West',    km: 20, freqPerHr: 8,  loadPct: 0.58, carDep: 0.82 },
+    gosford:      { name: 'Gosford / Wyong',                type: 'rail', transit: 'CCN', line: 'Central Coast & Newcastle',  km: 76, freqPerHr: 4,  loadPct: 0.45, carDep: 0.96 },
+    chatswood:    { name: 'Chatswood',                      type: 'rail', transit: 'M',   line: 'Metro North West & Bankstown', km: 12, freqPerHr: 15, loadPct: 0.70, carDep: 0.65 },
+    wollongong:   { name: 'Wollongong',                     type: 'rail', transit: 'SCO', line: 'South Coast',          km: 86,  freqPerHr: 3,  loadPct: 0.50, carDep: 0.86 },
+    lithgow:      { name: 'Lithgow',                        type: 'rail', transit: 'BMT', line: 'Blue Mountains',       km: 140, freqPerHr: 2,  loadPct: 0.42, carDep: 0.96 },
+    bathurst:     { name: 'Bathurst',                       type: 'rail', transit: 'CWC', line: 'Central West Coach',   km: 200, freqPerHr: 0.5, loadPct: 0.35, carDep: 0.98 },
+    inner:        { name: 'Inner Sydney / CBD',             type: 'rail', transit: 'MUL', line: 'Multiple',             km: 8,   freqPerHr: 25, loadPct: 0.80, carDep: 0.48 },
+
+    // === Major Sydney bus routes ===
+    // B1 B-Line Northern Beaches express — 27 km, 5-min peak, double-deckers
+    b1:           { name: 'B1 B-Line — Mona Vale → Wynyard',          type: 'bus', transit: 'B1',  line: 'B-Line',               km: 27, freqPerHr: 12, loadPct: 0.85, carDep: 0.90 },
+    // 350 (ex-part of route 400) — Bondi Jct → Airport, ~13km, airport traffic
+    r350:         { name: '350 — Bondi Junction → Airport',           type: 'bus', transit: '350', line: 'Eastern Suburbs',      km: 13, freqPerHr: 6,  loadPct: 0.78, carDep: 0.68 },
+    // 380 — Circular Quay → Bondi Beach via Oxford St
+    r380:         { name: '380 — Bondi Beach → Circular Quay',        type: 'bus', transit: '380', line: 'Oxford St',            km: 10, freqPerHr: 12, loadPct: 0.80, carDep: 0.52 },
+    // 333 — prepay, Circular Quay → Watsons Bay / Bondi
+    r333:         { name: '333 — Bondi Beach → Circular Quay (PrePay)', type: 'bus', transit: '333', line: 'Eastern Express',    km: 9,  freqPerHr: 10, loadPct: 0.75, carDep: 0.55 },
+    // 370 — Coogee → Leichhardt, UNSW/Newtown spine
+    r370:         { name: '370 — Coogee → Leichhardt (UNSW)',         type: 'bus', transit: '370', line: 'Cross-Town',           km: 13, freqPerHr: 6,  loadPct: 0.72, carDep: 0.60 },
+    // 891 — Central → UNSW shuttle
+    r891:         { name: '891 — Central → UNSW',                     type: 'bus', transit: '891', line: 'University Shuttle',   km: 6,  freqPerHr: 12, loadPct: 0.88, carDep: 0.50 },
+    // M90 (one of two remaining Metrobus) — Liverpool → Burwood
+    m90:          { name: 'M90 — Liverpool → Burwood',                type: 'bus', transit: 'M90', line: 'Metrobus',             km: 23, freqPerHr: 6,  loadPct: 0.62, carDep: 0.84 },
+    // M91 — Parramatta → Hurstville
+    m91:          { name: 'M91 — Parramatta → Hurstville',            type: 'bus', transit: 'M91', line: 'Metrobus',             km: 27, freqPerHr: 4,  loadPct: 0.58, carDep: 0.86 },
+    // T80 — Liverpool ↔ Parramatta T-Way (only remaining T-route)
+    t80:          { name: 'T80 — Liverpool ↔ Parramatta (T-Way)',     type: 'bus', transit: 'T80', line: 'North-West T-Way',     km: 25, freqPerHr: 6,  loadPct: 0.60, carDep: 0.88 },
+    // 610X — Castle Hill → Wynyard express peak
+    r610x:        { name: '610X — Castle Hill → Wynyard (express)',   type: 'bus', transit: '610X', line: 'Hills Express',       km: 32, freqPerHr: 4,  loadPct: 0.72, carDep: 0.90 },
+    // 500 — Central → Sydney Olympic Park
+    r500:         { name: '500 — Central → Olympic Park',             type: 'bus', transit: '500', line: 'Inner West',           km: 15, freqPerHr: 4,  loadPct: 0.55, carDep: 0.68 },
+    // 545 — Chatswood → Parramatta cross-town
+    r545:         { name: '545 — Chatswood → Parramatta',             type: 'bus', transit: '545', line: 'Cross-Town',           km: 24, freqPerHr: 4,  loadPct: 0.52, carDep: 0.82 },
+    // L90 — Palm Beach → City limited stops, long Northern Beaches
+    rL90:         { name: 'L90 — Palm Beach → City (Limited)',        type: 'bus', transit: 'L90', line: 'Northern Beaches',     km: 36, freqPerHr: 2,  loadPct: 0.55, carDep: 0.94 },
+    // 400 — surviving Bondi Junction ↔ Eastgardens (airport precinct)
+    r400:         { name: '400 — Bondi Junction → Eastgardens',       type: 'bus', transit: '400', line: 'Eastern Suburbs',      km: 11, freqPerHr: 6,  loadPct: 0.70, carDep: 0.62 }
+};
+
+// Transport line colours (TfNSW official + bus livery)
+const LINE_COLOURS = {
+    // Sydney Trains T-lines + intercity
+    'T1': '#F99D1C', 'T2': '#0098CD', 'T3': '#F37021', 'T4': '#005AA3',
+    'T5': '#C4258F', 'T6': '#7C3E21', 'T7': '#6F818E', 'T8': '#00954C',
+    'T9': '#D11F2F',
+    // Sydney Metro
+    'M':  '#0098CD',
+    // Intercity
+    'CCN': '#D11F2F', 'SCO': '#005AA3', 'BMT': '#F99D1C', 'CWC': '#6F818E',
+    // B-Line (distinctive yellow/blue livery — use B-Line yellow)
+    'B1': '#FFD100',
+    // Buses — standard TfNSW bus blue
+    '350': '#00B5EF', '380': '#00B5EF', '333': '#00B5EF', '370': '#00B5EF',
+    '891': '#00B5EF', 'M90': '#00B5EF', 'M91': '#00B5EF', 'T80': '#00B5EF',
+    '610X': '#00B5EF', '500': '#00B5EF', '545': '#00B5EF', 'L90': '#00B5EF',
+    '400': '#00B5EF',
+    'MUL': '#002664'
+};
+
+// ==========================================================
+// CONSTANTS
+// ==========================================================
+const PETROL_KWH_L = 9.5;         // kWh per L (HHV)
+const PETROL_L_100 = 8.0;         // L/100km typical passenger car
+const PETROL_PRICE = 2.13;        // AUD/L Sydney avg, NRMA 18 Apr 2026 (post half-excise relief)
+const DIESEL_PRICE = 3.18;        // AUD/L Sydney avg, NRMA 18 Apr 2026
+const TRAIN_KWH_PKM = 0.15;       // kWh per passenger-km (electric train, Sydney)
+const BUS_KWH_PKM   = 0.40;       // kWh/pkm (diesel bus, moderate occupancy)
+const METRO_KWH_PKM = 0.12;       // kWh/pkm (Metro, high load)
+
+// ==========================================================
+// STATE DOM
+// ==========================================================
+const S = {
+    mode: 'car',
+    corridor: 'blacktown',
+    km: 40,
+    freq: 5,
+    occ: 1
+};
+
+// ==========================================================
+// GAUGE RENDER — needle + arc positioning
+// ==========================================================
+function valueToAngle(v) {
+    // 0..100 maps to -90..+90 degrees (rotated from 12 o'clock)
+    return (v / 100) * 180 - 90;
+}
+
+function renderGauge(value) {
+    const angle = valueToAngle(value);
+    // Needle rotates around centre (220, 215)
+    document.getElementById('gauge-needle').setAttribute('transform', `rotate(${angle} 220 215)`);
+    // Score readout (span)
+    document.getElementById('gauge-num').textContent = Math.round(value);
+
+    // Thin "pointer track" arc on inner radius 140 (sits inside the coloured bands)
+    // 0% at (80, 215), 100% at (360, 215), top at (220, 75)
+    const cx = 220, cy = 215, r = 140;
+    const startX = cx - r, startY = cy; // (80, 215)
+    const theta = Math.PI * (value / 100); // 0..π
+    const endAngle = Math.PI - theta;
+    const endX = cx + r * Math.cos(endAngle);
+    const endY = cy - r * Math.sin(endAngle);
+    const largeArc = theta > Math.PI ? 1 : 0;
+    const arc = `M ${startX} ${startY} A ${r} ${r} 0 ${largeArc} 1 ${endX} ${endY}`;
+    document.getElementById('gauge-arc').setAttribute('d', arc);
+
+    // Caption & needle colour by band
+    let caption = 'Moderate · holding steady';
+    let color = '#002664';
+    if (value < 40)      { caption = 'Stressed · every shift helps';   color = '#D7153A'; }
+    else if (value < 60) { caption = 'Watch · reserves thinning';       color = '#dc5800'; }
+    else if (value < 75) { caption = 'Moderate · holding steady';       color = '#002664'; }
+    else                 { caption = 'Healthy · network has headroom';  color = '#00a908'; }
+    document.getElementById('gauge-caption').textContent = caption;
+
+    // Needle colour match (r=11 is the outer pivot disc)
+    const needle = document.getElementById('gauge-needle');
+    needle.querySelectorAll('line, circle').forEach(el => {
+        if (el.tagName === 'line') el.setAttribute('stroke', color);
+        if (el.tagName === 'circle' && el.getAttribute('r') === '11') el.setAttribute('fill', color);
+    });
+}
+
+renderGauge(STATE.fsi);
+
+// ==========================================================
+// TRIP CALCULATION
+// ==========================================================
+function calcModeImpact(mode, corridor, km, freq, occ) {
+    const c = CORRIDORS[corridor];
+    const weekKm = km * freq;
+
+    let kwhPerTrip, litresPerTrip, co2PerTrip, cost, travelTime;
+
+    if (mode === 'car') {
+        litresPerTrip = (km * PETROL_L_100 / 100);
+        kwhPerTrip    = litresPerTrip * PETROL_KWH_L / Math.max(occ, 1);
+        litresPerTrip = litresPerTrip / Math.max(occ, 1);
+        cost          = litresPerTrip * PETROL_PRICE * freq;
+        travelTime    = km / 55 * 60; // ~55 km/h avg mixed roads
+    } else if (mode === 'train') {
+        litresPerTrip = 0;
+        kwhPerTrip    = km * TRAIN_KWH_PKM;
+        cost          = Math.min(km * 0.20, 9.50) * freq; // Opal capped
+        travelTime    = km / 50 * 60 + 10;
+    } else if (mode === 'bus') {
+        litresPerTrip = km * BUS_KWH_PKM / 10.6;
+        kwhPerTrip    = km * BUS_KWH_PKM;
+        cost          = Math.min(km * 0.18, 5.25) * freq;
+        travelTime    = km / 35 * 60 + 8;
+    } else { // active
+        litresPerTrip = 0;
+        kwhPerTrip    = 0;
+        cost          = 0;
+        travelTime    = km / 15 * 60; // cycle
+    }
+
+    return {
+        litresPerTrip: litresPerTrip,
+        kwhPerTrip: kwhPerTrip,
+        kwhPerWeek: kwhPerTrip * freq,
+        litresPerWeek: litresPerTrip * freq,
+        cost: cost,
+        travelTime: travelTime,
+        walkTime: km / 5 * 60  // walking at ~5 km/h
+    };
+}
+
+function calcJouleScore(mode, corridor, km, freq, occ) {
+    const impact = calcModeImpact(mode, corridor, km, freq, occ);
+    const car = calcModeImpact('car', corridor, km, freq, 1);
+    const c = CORRIDORS[corridor];
+
+    // Fuel impact score (0-100): 100 = zero fuel, 0 = solo car at 8 L/100 * 100km
+    const fuelRelative = 1 - Math.min(impact.litresPerWeek / Math.max(car.litresPerWeek, 0.01), 1);
+    const fuelScore = fuelRelative * 100;
+
+    // Corridor load score: transit is better if the corridor has spare capacity
+    let corridorScore;
+    if (mode === 'car') {
+        // car penalised in high-car-dependence corridors where shift would help most
+        corridorScore = (1 - c.carDep) * 100;
+    } else if (mode === 'active') {
+        corridorScore = 100;
+    } else {
+        // transit rewarded for spare seats
+        corridorScore = (1 - c.loadPct) * 100 + 40;
+        corridorScore = Math.min(corridorScore, 100);
+    }
+
+    // Time cost score — penalise if alternative is dramatically slower than driving
+    const carTime = km / 55 * 60;
+    const timeRatio = impact.travelTime / carTime;
+    let timeScore;
+
+    if (mode === 'active') {
+        // Active transport is scored by absolute practicality, not relative to car time.
+        // Cycling a round-trip of 10 km or less is a real commute for most people; beyond
+        // that the suggestion to "just cycle" stops being honest advice.
+        if (km <= 6)        timeScore = 100;  // very practical (≈12 min cycle each way)
+        else if (km <= 12)  timeScore = 95;   // practical (≈24 min each way)
+        else if (km <= 20)  timeScore = 75;   // e-bike or keen cyclist
+        else if (km <= 30)  timeScore = 40;   // serious commute only
+        else if (km <= 60)  timeScore = 15;   // rare dedicated cyclist
+        else                timeScore = 0;    // not a real recommendation
+    } else {
+        if (timeRatio <= 1.15)      timeScore = 100;
+        else if (timeRatio <= 1.5)  timeScore = 85;
+        else if (timeRatio <= 2.0)  timeScore = 65;
+        else if (timeRatio <= 3.0)  timeScore = 45;
+        else                        timeScore = 25;
+    }
+
+    let score = Math.round(fuelScore * 0.60 + corridorScore * 0.25 + timeScore * 0.15);
+
+    // Active transport gets a small fuel-security bonus when it's genuinely practical.
+    // At longer distances, the corridor score is also dampened to reflect that
+    // "active on a 100 km corridor" is not a real network contribution.
+    if (mode === 'active') {
+        if (timeScore >= 75) {
+            score = Math.min(100, score + 4);
+        } else if (timeScore <= 15) {
+            // At truly impractical distances, also soften the corridor-score credit —
+            // nobody is "absorbing spare capacity on the network" by cycling to Bathurst.
+            score = Math.round(score - 15);
+        }
+    }
+
+    return { score, impact, fuelScore, corridorScore, timeScore };
+}
+
+function verdictFor(score, mode) {
+    if (score >= 85) return {
+        pillClass: 'good', pillText: 'Excellent',
+        verdict: mode === 'active' ? 'This trip strengthens NSW fuel security.' : 'This trip strengthens the network.',
+        explain: 'You\'re using the spare capacity that\'s already there. No new infrastructure, no extra fuel — just the network doing its job.'
+    };
+    if (score >= 70) return {
+        pillClass: 'good', pillText: 'Good',
+        verdict: 'This trip holds the line.',
+        explain: 'Your choice keeps pressure off the state\'s liquid-fuel reserve this week. Small, consistent trips like this add up at state scale.'
+    };
+    if (score >= 50) return {
+        pillClass: 'ok', pillText: 'OK',
+        verdict: 'This trip is fine, but there\'s a better option.',
+        explain: 'You can keep going as you are, but see the alternatives below — the top-ranked option would save fuel without a material time cost.'
+    };
+    return {
+        pillClass: 'poor', pillText: 'High impact',
+        verdict: 'This trip puts real pressure on the reserve.',
+        explain: 'Solo long-distance driving on a well-served corridor is the hardest case for the state. The train or coach on this line has spare seats right now — see alternatives below.'
+    };
+}
+
+function suggestionFor(mode, corridor, km, freq, score) {
+    const c = CORRIDORS[corridor];
+
+    if (mode === 'car' && c.loadPct < 0.75 && score < 85) {
+        // Fuel saved by swapping ONE car trip a week for transit.
+        // One round-trip = km × L/100km litres.
+        const litresPerTrip = km * PETROL_L_100 / 100;
+        // Annual: 1 swap × 52 weeks. Round to whole litres.
+        const annualLitres = Math.round(litresPerTrip * 52);
+        const annualDollars = Math.round(annualLitres * PETROL_PRICE);
+        // Tank equivalency: avg passenger car tank ~55 L.
+        const tanks = Math.round(annualLitres / 55 * 10) / 10;
+        const tankText = tanks < 1.3 ? 'about a full tank'
+                       : tanks < 2.3 ? `about ${Math.round(tanks * 10) / 10} tanks of petrol`
+                       : `about ${Math.round(tanks)} tanks of petrol`;
+
+        return {
+            head: 'Joule suggestion',
+            body: `<strong>Swap one car commute a week for the ${c.line} ${c.transit === 'M' ? 'Metro' : c.transit === 'CCN' ? 'Central Coast line' : c.type === 'bus' ? 'bus' : 'train'}.</strong>
+                   The service on this corridor has about ${Math.round((1 - c.loadPct) * 100)}% spare capacity at peak,
+                   so you'll have a seat. That single weekly swap returns about <strong>${litresPerTrip.toFixed(1)} L of petrol</strong> to the reserve each week —
+                   roughly <strong>${annualLitres} L</strong> over a year, or ${tankText}, saving you about <strong>$${annualDollars}</strong> at the pump.`
+        };
+    }
+    if (mode === 'train' || mode === 'bus') {
+        return {
+            head: 'You\'re already helping',
+            body: `<strong>You're using the network the way it's designed.</strong>
+                   This corridor's transit has room for more passengers like you — every trip on it is one less litre imported.
+                   Thanks for taking the ${c.line}.`
+        };
+    }
+    if (mode === 'active') {
+        if (km <= 6) {
+            return {
+                head: 'You\'re on the leaderboard',
+                body: `<strong>A short active trip is the highest-scoring option Joule can record.</strong>
+                       Zero fuel, zero grid draw, full credit. If this is a regular trip, you're a silent contributor to NSW's fuel cover.`
+            };
+        }
+        if (km <= 12) {
+            return {
+                head: 'Practical and powerful',
+                body: `<strong>Active transport at this distance is a genuine commute for most people.</strong>
+                       No fuel, no fare, no grid draw — every trip is pure contribution to the state's fuel reserve.
+                       Consider an e-bike if the hills are a problem.`
+            };
+        }
+        if (km <= 20) {
+            return {
+                head: 'Ambitious but doable',
+                body: `<strong>An e-bike makes this distance realistic; pure cycling is for the committed.</strong>
+                       The fuel impact is still zero, but for most commuters a transit option would score higher because it's actually sustainable week after week.
+                       If you can do this, Joule salutes you.`
+            };
+        }
+        return {
+            head: 'Honest suggestion',
+            body: `<strong>At this distance, cycling or walking isn't a practical everyday choice for most people.</strong>
+                   A train or bus on this corridor will score higher because Joule rewards options people can actually sustain.
+                   Consider the alternatives below.`
+        };
+    }
+    return {
+        head: 'Joule suggestion',
+        body: 'Consider one of the alternatives below — they each offer different trade-offs between time and fuel impact.'
+    };
+}
+
+// ==========================================================
+// RENDER RESULTS
+// ==========================================================
+function render() {
+    const { mode, corridor, km, freq, occ } = S;
+    const result = calcJouleScore(mode, corridor, km, freq, occ);
+    const verdict = verdictFor(result.score, mode);
+
+    // Update slider visual fills
+    const kmSlider = document.getElementById('m-km');
+    const kmPct = ((+kmSlider.value - +kmSlider.min) / (+kmSlider.max - +kmSlider.min)) * 100;
+    kmSlider.style.setProperty('--pct', kmPct + '%');
+    const freqSlider = document.getElementById('m-freq');
+    const freqPct = ((+freqSlider.value - +freqSlider.min) / (+freqSlider.max - +freqSlider.min)) * 100;
+    freqSlider.style.setProperty('--pct', freqPct + '%');
+    const occSlider = document.getElementById('m-occ');
+    const occPct = ((+occSlider.value - +occSlider.min) / (+occSlider.max - +occSlider.min)) * 100;
+    occSlider.style.setProperty('--pct', occPct + '%');
+
+    // value readouts
+    document.getElementById('m-km-v').textContent = km;
+    document.getElementById('m-freq-v').textContent = freq;
+    document.getElementById('m-occ-v').textContent = occ;
+
+    // Hide/show occ field
+    document.getElementById('car-occ-field').style.display = mode === 'car' ? '' : 'none';
+
+    // Score card
+    document.getElementById('result-score-num').textContent = result.score;
+    document.getElementById('result-verdict').textContent = verdict.verdict;
+    document.getElementById('result-explain').textContent = verdict.explain;
+    const pill = document.getElementById('result-pill');
+    pill.className = 'score-pill ' + verdict.pillClass;
+    pill.textContent = verdict.pillText;
+
+    // Figures
+    const { impact } = result;
+    document.getElementById('r-fuel').textContent  = impact.litresPerTrip > 0 ? impact.litresPerTrip.toFixed(1) : '0';
+    document.getElementById('r-weekly').textContent = impact.litresPerWeek > 0 ? impact.litresPerWeek.toFixed(1) : '0';
+    document.getElementById('r-kwh').textContent  = Math.round(impact.kwhPerWeek);
+    document.getElementById('r-cost').textContent  = impact.cost.toFixed(2);
+
+    // Suggestion
+    const sug = suggestionFor(mode, corridor, km, freq, result.score);
+    document.getElementById('suggest-body').innerHTML = sug.body;
+
+    // Compare strip
+    renderCompare(corridor, km, freq, mode);
+}
+
+function renderCompare(corridor, km, freq, currentMode) {
+    const c = CORRIDORS[corridor];
+
+    // Pick the primary transit mode for this corridor based on its type.
+    // For rail corridors, compare { rail, car, active }.
+    // For bus routes, compare { bus, car, active }.
+    // We always include the active mode so users can see what it would score here.
+    let options;
+    if (c.type === 'bus') {
+        options = [
+            { mode: 'bus',    label: c.name.split(' — ')[0] || c.line, desc: `${c.line} — typical seated or standing trip` },
+            { mode: 'car',    label: 'Car (solo)',                      desc: 'Private vehicle, one occupant' },
+            { mode: 'active', label: 'Walk or cycle',                   desc: 'Zero fuel, zero grid draw' }
+        ];
+    } else {
+        // rail / intercity / inner Sydney
+        options = [
+            { mode: 'train',  label: c.line,              desc: `${c.line} — seated ride, pre-booked on long distance` },
+            { mode: 'car',    label: 'Car (solo)',        desc: 'Private vehicle, one occupant' },
+            { mode: 'active', label: 'Walk or cycle',     desc: 'Zero fuel, zero grid draw' }
+        ];
+    }
+
+    const rows = options.map(o => {
+        const r = calcJouleScore(o.mode, corridor, km, freq, o.mode === 'car' ? 1 : 0);
+        return { ...o, ...r };
+    });
+
+    rows.sort((a, b) => b.score - a.score);
+
+    const html = rows.map((r, idx) => {
+        const best = idx === 0 ? 'best' : '';
+
+        // Chip colour and text depend on the mode.
+        let chipBg, chipText, chipColour;
+        if (r.mode === 'train') {
+            chipBg = LINE_COLOURS[c.transit] || '#002664';
+            chipText = c.transit;
+            chipColour = readableTextOn(chipBg);
+        } else if (r.mode === 'bus') {
+            // If the corridor IS a bus route, use its own route code + colour (B-Line yellow etc).
+            chipBg = LINE_COLOURS[c.transit] || '#00B5EF';
+            chipText = c.transit;
+            chipColour = readableTextOn(chipBg);
+        } else if (r.mode === 'active') {
+            chipBg = '#00a908';
+            chipText = '⬢';  // geometric token — avoids emoji inconsistency
+            chipColour = '#ffffff';
+        } else { // car
+            chipBg = '#6D7079';
+            chipText = 'CAR';
+            chipColour = '#ffffff';
+        }
+
+        const kindLabel = r.mode === 'car' ? 'Private' :
+                          r.mode === 'active' ? 'Active' : 'Public';
+
+        const fuelDisplay = r.impact.litresPerWeek > 0
+            ? r.impact.litresPerWeek.toFixed(1) : '0';
+        const costDisplay = r.impact.cost > 0
+            ? '$' + r.impact.cost.toFixed(0) : 'Free';
+
+        return `<div class="alt ${best}">
+            <div class="alt-head">${kindLabel}</div>
+            <div class="alt-mode">
+                <span class="line-chip" style="background:${chipBg}; color:${chipColour}">${chipText}</span>
+                ${r.label}
+            </div>
+            <div class="alt-detail">${r.desc}</div>
+            <div class="alt-stats">
+                <div>
+                    <div class="alt-stat-label">Joule score</div>
+                    <div class="alt-stat-val">${r.score}<span class="u">/100</span></div>
+                </div>
+                <div>
+                    <div class="alt-stat-label">Fuel / week</div>
+                    <div class="alt-stat-val">${fuelDisplay}<span class="u">L</span></div>
+                </div>
+                <div>
+                    <div class="alt-stat-label">Cost / week</div>
+                    <div class="alt-stat-val">${costDisplay}</div>
+                </div>
+                <div>
+                    <div class="alt-stat-label">Time / trip</div>
+                    ${r.mode === 'active'
+                        ? `<div class="alt-stat-val">${Math.round(r.impact.travelTime)}<span class="u">min cycle</span></div>
+                           <div class="alt-stat-val" style="font-size:14px;opacity:0.7">${Math.round(r.impact.walkTime)}<span class="u">min walk</span></div>`
+                        : `<div class="alt-stat-val">${Math.round(r.impact.travelTime)}<span class="u">min</span></div>`
+                    }
+                </div>
+            </div>
+        </div>`;
+    }).join('');
+    document.getElementById('compare-grid').innerHTML = html;
+}
+
+// Utility: given a background hex, return black or white text for WCAG-ish contrast.
+// Used so B-Line yellow (#FFD100) gets dark navy text, not white.
+function readableTextOn(hex) {
+    const h = hex.replace('#', '');
+    const r = parseInt(h.substr(0, 2), 16);
+    const g = parseInt(h.substr(2, 2), 16);
+    const b = parseInt(h.substr(4, 2), 16);
+    // relative luminance — simplified WCAG
+    const lum = (0.299 * r + 0.587 * g + 0.114 * b) / 255;
+    return lum > 0.6 ? '#002664' : '#ffffff';
+}
+
+// ==========================================================
+// BINDINGS
+// ==========================================================
+document.querySelectorAll('.mode-btn').forEach(btn => {
+    btn.addEventListener('click', () => {
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        S.mode = btn.dataset.mode;
+        render();
+    });
+});
+
+document.getElementById('m-corridor').addEventListener('change', e => {
+    S.corridor = e.target.value;
+    // Auto-align the planner mode with the corridor type, so users don't pick
+    // "train" on a bus-only route (which would compute meaningless numbers).
+    const c = CORRIDORS[S.corridor];
+    if (c.type === 'bus' && S.mode === 'train') {
+        S.mode = 'bus';
+        document.querySelectorAll('.mode-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.mode === 'bus');
+        });
+    } else if (c.type === 'rail' && S.mode === 'bus' && c.transit !== 'MUL') {
+        // user picked a rail corridor with "bus" selected — swap to train
+        S.mode = 'train';
+        document.querySelectorAll('.mode-btn').forEach(b => {
+            b.classList.toggle('active', b.dataset.mode === 'train');
+        });
+    }
+    render();
+});
+
+document.getElementById('m-km').addEventListener('input', e => {
+    S.km = +e.target.value;
+    render();
+});
+
+document.getElementById('m-freq').addEventListener('input', e => {
+    S.freq = +e.target.value;
+    render();
+});
+
+document.getElementById('m-occ').addEventListener('input', e => {
+    S.occ = +e.target.value;
+    render();
+});
+
+// ==========================================================
+// LIVE TICKER updates — simulate fluctuation every ~12s
+// ==========================================================
+function tickLiveUpdate() {
+    // small random walk around baseline (58 = watch band)
+    STATE.fsi += (Math.random() - 0.5) * 1.5;
+    STATE.fsi = Math.max(45, Math.min(72, STATE.fsi));
+    STATE.tripsShifted += Math.floor(Math.random() * 12);
+    renderGauge(STATE.fsi);
+
+    document.getElementById('tk-fsi').textContent = Math.round(STATE.fsi) + ' / 100';
+    document.getElementById('tk-fsi-2').textContent = Math.round(STATE.fsi) + ' / 100';
+    const now = new Date();
+    const hh = String(now.getHours()).padStart(2, '0');
+    const mm = String(now.getMinutes()).padStart(2, '0');
+    document.getElementById('tk-ts').textContent = `${hh}:${mm}`;
+    document.getElementById('tk-ts-2').textContent = `${hh}:${mm}`;
+}
+
+// ==========================================================
+// LIVE FUEL DATA
+// Diesel cover and Brent are refreshed every 6 hours by the diesel import
+// reduction framework (github.com/ajcbWIPs/energy-policy). If the fetch
+// fails, the April 2026 values above stay on screen.
+// ==========================================================
+const LIVE_DATA_URL = '../diesel-framework/data/live.json';
+
+async function loadLiveFuelData() {
+    try {
+        const res = await fetch(LIVE_DATA_URL, { cache: 'no-store' });
+        if (!res.ok) return;
+        const ind = (await res.json()).indicators || {};
+        const stock = ind.diesel_stock;
+        if (stock && stock.diesel_days) {
+            const days = Math.round(stock.diesel_days);
+            STATE.fuelDaysDiesel = days;
+            document.querySelectorAll('[data-live="diesel-days"]').forEach(el => { el.textContent = days + ' days'; });
+            document.querySelectorAll('[data-live="diesel-days-num"]').forEach(el => { el.textContent = days; });
+        }
+        const brent = ind.brent_usd_bbl;
+        if (brent && brent.value) {
+            STATE.brent = brent.value;
+            document.querySelectorAll('[data-live="brent-usd"]').forEach(el => { el.textContent = 'US$' + brent.value.toFixed(2); });
+            document.querySelectorAll('[data-live="brent-num"]').forEach(el => { el.textContent = brent.value.toFixed(2); });
+        }
+    } catch (e) {
+        // Network or parse failure: keep the built-in April 2026 values.
+    }
+}
+
+loadLiveFuelData();
+tickLiveUpdate();
+setInterval(tickLiveUpdate, 12000);
+
+// first render
+render();
+
+// ==========================================================
+// SEAMLESS TICKER — JS-driven, measures exact set width
+// ==========================================================
+(function () {
+    const inner = document.querySelector('.ticker-inner');
+    const set1  = document.querySelectorAll('.ticker-set')[0];
+    const PX_PER_SEC = 45;
+    let x = 0;
+    let lastT = null;
+
+    function step(ts) {
+        if (!lastT) lastT = ts;
+        const dt = ts - lastT;
+        lastT = ts;
+
+        const setW = set1.offsetWidth;
+        x -= PX_PER_SEC * (dt / 1000);
+        if (x <= -setW) x += setW;
+
+        inner.style.transform = `translateX(${x}px)`;
+        requestAnimationFrame(step);
+    }
+
+    requestAnimationFrame(step);
+})();
+</script>
+
+</body>
+</html>
