@@ -1,0 +1,211 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Diesel Import Reduction Framework</title>
+<meta name="description" content="A framework for cutting Australia's diesel imports towards zero, with live fuel security indicators.">
+<style>
+  :root {
+    --bg: #fbfaf7; --surface: #ffffff; --ink: #1d1f21; --muted: #5d636a; --rule: #e3e1db;
+    --accent: #1f6feb; --good: #2f8f4e; --warn: #b86e00; --bad: #c0392b; --bar: #c4c2b8;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --bg: #141516; --surface: #1d1f21; --ink: #ecebe7; --muted: #a3a8ae; --rule: #33363a;
+      --accent: #6ea8ff; --good: #5cc47e; --warn: #f0a640; --bad: #ff7b6b; --bar: #55585c;
+    }
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--ink);
+         font: 16px/1.55 system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+  main { max-width: 920px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1 { font-size: 30px; line-height: 1.2; margin: 0 0 8px; }
+  h2 { font-size: 20px; margin: 40px 0 12px; }
+  p { margin: 0 0 12px; }
+  a { color: var(--accent); }
+  .lead { font-size: 18px; color: var(--ink); max-width: 720px; }
+  .meta { color: var(--muted); font-size: 14px; }
+  .tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 12px; margin-top: 16px; }
+  .tile { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 14px 16px; }
+  .tile .label { font-size: 13px; color: var(--muted); }
+  .tile .value { font-size: 28px; font-weight: 650; margin: 2px 0; font-variant-numeric: tabular-nums; }
+  .tile .note { font-size: 12.5px; color: var(--muted); }
+  .stale { color: var(--warn); }
+  .meter { height: 8px; background: var(--rule); border-radius: 4px; margin-top: 8px; position: relative; }
+  .meter span { position: absolute; left: 0; top: 0; bottom: 0; border-radius: 4px; background: var(--bad); }
+  .card { background: var(--surface); border: 1px solid var(--rule); border-radius: 10px; padding: 16px; margin-top: 12px; overflow-x: auto; }
+  svg text { fill: var(--ink); }
+  .card svg { min-width: 600px; }
+  .links { display: flex; flex-wrap: wrap; gap: 8px 16px; margin-top: 12px; }
+  ul { padding-left: 20px; }
+  li { margin-bottom: 6px; }
+  footer { margin-top: 48px; color: var(--muted); font-size: 13px; border-top: 1px solid var(--rule); padding-top: 16px; }
+</style>
+</head>
+<body>
+<main>
+  <p class="meta">Andrew Baker · Framework of 4 October 2026 · live indicators refresh every 6 hours</p>
+  <h1>Diesel Import Reduction Framework</h1>
+  <p class="lead">Australia can roughly halve net diesel imports by 2035, from about 29 GL to 15.5 GL a year, and approach zero by about 2045, by electrifying mining, heavy trucks and remote power first, with domestic renewable diesel as a supplement.</p>
+  <div class="links">
+    <a href="FRAMEWORK.md">Read the full framework</a>
+    <a href="../joule/">Joule fuel security gauge</a>
+    <a href="data/live.json">Live data (JSON)</a>
+  </div>
+
+  <h2>Fuel security now</h2>
+  <p class="meta" id="updated">Loading live data…</p>
+  <div class="tiles" id="tiles"></div>
+
+  <h2>Where the diesel goes</h2>
+  <p>Mining and trucks burn half of Australia's diesel, so those two uses decide whether imports can approach zero.</p>
+  <div class="card"><svg id="demand" role="img" aria-label="Diesel use by sector" viewBox="0 0 760 360" width="100%"></svg></div>
+  <p class="meta">Estimated use by sector, 33.5 GL in 2025. Source: <a href="https://reneweconomy.com.au/diesel-replacement-australias-billion-dollar-opportunity-to-electrify-cut-global-fossil-ties/">RenewEconomy</a>, on-road splits from the ABS 2020 survey.</p>
+
+  <h2>How the plan gets there</h2>
+  <p>Each lever's estimated cut to net imports by 2035.</p>
+  <div class="card"><svg id="bridge" role="img" aria-label="Import reduction by lever to 2035" viewBox="0 0 760 340" width="100%"></svg></div>
+  <p class="meta">Lever sizes are the framework's estimates. Baseline: 33.5 GL demand, about 87% imported.</p>
+
+  <h2>Roadmap</h2>
+  <ul>
+    <li><strong>Emergency, Oct 2026 to Sep 2027.</strong> Ring-fence farm and food diesel, revive the fuel task force, demand cuts before rationing, add urea to strategic stocks, fast-track truck conversions and solar pumps, keep canola for domestic crush. Gate: 40+ days of stock, 10 hubs open.</li>
+    <li><strong>Build, 2027 to 2030.</strong> About 30 swap and charging hubs beside solar and wind farms on the Hume, Newell, Pacific and Bruce corridors; truck rebates and fuel tax credit conversion; remote towns to 70% renewable; a mining electrification compact; the first renewable diesel plant; halophyte and AgSwap pilots. Gate: imports down 20%.</li>
+    <li><strong>Scale, 2030 to 2035.</strong> Half of truck diesel electrified, remote corridors, credits that fund the transition, about 2 GL a year of renewable diesel. Gate: imports down about 47%.</li>
+  </ul>
+
+  <h2>How this links to Joule</h2>
+  <p><a href="../joule/">Joule</a> shows travellers how each trip affects New South Wales' fuel reserve. It reads the same <a href="data/live.json">live data file</a> this page uses, so its diesel cover and price figures stay current instead of fixed at April 2026.</p>
+
+  <footer>
+    Live sources: <a href="https://fred.stlouisfed.org/series/DCOILBRENTEU">Brent (FRED)</a>, <a href="https://fred.stlouisfed.org/series/DDFUELUSGULF">US Gulf Coast diesel (FRED)</a>, <a href="https://fred.stlouisfed.org/series/DEXUSAL">AUD exchange rate (FRED)</a>, <a href="https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem">AEMO NEM dashboard</a>, <a href="https://fuelplan.gov.au/fuel-statistics">DCCEEW diesel stocks via fuelplan.gov.au</a>. Figures marked stale could not be refreshed on the last run.
+  </footer>
+</main>
+<script>
+const IEA_DAYS = 90;
+
+const DEMAND = [
+  {use: 'Mining', gl: 9.6, focus: true},
+  {use: 'Articulated trucks', gl: 4.0, focus: true},
+  {use: 'Utes', gl: 3.2},
+  {use: 'Rigid trucks', gl: 3.1, focus: true},
+  {use: 'Passenger cars', gl: 3.1},
+  {use: 'Agriculture, forestry, fishing', gl: 2.5},
+  {use: 'Construction', gl: 2.5},
+  {use: 'Vans', gl: 1.8},
+  {use: 'Buses', gl: 0.5},
+  {use: 'Other (rail, power, marine)', gl: 3.2},
+];
+
+const LEVERS = [
+  {label: 'Mining electrification', gl: 3.5},
+  {label: 'Electric trucks and swapping', gl: 3.5},
+  {label: 'Utes, cars and vans', gl: 3.0},
+  {label: 'Domestic renewable diesel', gl: 2.2},
+  {label: 'Remote power hybrids', gl: 0.5},
+  {label: 'Farm pumps and practice', gl: 0.5},
+  {label: 'Electric buses', gl: 0.4},
+];
+const IMPORTS_TODAY = 29.1;
+
+const NS = 'http://www.w3.org/2000/svg';
+function el(name, attrs, text) {
+  const e = document.createElementNS(NS, name);
+  for (const [k, v] of Object.entries(attrs || {})) e.setAttribute(k, v);
+  if (text !== undefined) e.textContent = text;
+  return e;
+}
+const css = v => getComputedStyle(document.documentElement).getPropertyValue(v).trim();
+
+function drawDemand() {
+  const svg = document.getElementById('demand');
+  const total = DEMAND.reduce((s, r) => s + r.gl, 0);
+  const peak = Math.max(...DEMAND.map(r => r.gl));
+  const x0 = 250, w = 330, rh = 33;
+  DEMAND.forEach((r, i) => {
+    const y = 16 + i * rh, len = r.gl / peak * w;
+    svg.append(el('text', {x: x0 - 12, y: y + 14, 'text-anchor': 'end', 'font-size': 13,
+      'font-weight': r.focus ? 600 : 400}, r.use));
+    const bar = el('rect', {x: x0, y, width: len, height: 18, rx: 3,
+      fill: r.focus ? css('--accent') : css('--bar')});
+    bar.append(el('title', {}, `${r.use}: ${r.gl} GL`));
+    svg.append(bar);
+    svg.append(el('text', {x: x0 + len + 8, y: y + 14, 'font-size': 13},
+      `${r.gl.toFixed(1)} GL · ${Math.round(r.gl / total * 100)}%`));
+  });
+}
+
+function drawBridge() {
+  const svg = document.getElementById('bridge');
+  const x0 = 250, w = 420, rh = 34, X = v => x0 + v / IMPORTS_TODAY * w;
+  let run = IMPORTS_TODAY;
+  const rows = [{label: 'Net diesel imports today', total: true, lo: 0, hi: run}];
+  LEVERS.forEach(l => { rows.push({label: l.label, lo: run - l.gl, hi: run, gl: l.gl}); run -= l.gl; });
+  rows.push({label: 'Net diesel imports, 2035', total: true, lo: 0, hi: run});
+  rows.forEach((r, i) => {
+    const y = 12 + i * rh;
+    svg.append(el('text', {x: x0 - 12, y: y + 15, 'text-anchor': 'end', 'font-size': 13,
+      'font-weight': r.total ? 600 : 400}, r.label));
+    svg.append(el('rect', {x: X(r.lo), y, width: Math.max(2, X(r.hi) - X(r.lo)), height: 22, rx: 3,
+      fill: r.total ? css('--bar') : css('--good'), 'fill-opacity': r.total ? 1 : 0.6}));
+    svg.append(el('text', {x: X(r.hi) + 8, y: y + 15, 'font-size': 13, 'font-weight': r.total ? 600 : 400},
+      r.total ? `${r.hi.toFixed(1)} GL` : `−${r.gl.toFixed(1)}`));
+  });
+}
+
+function tile(label, value, note, opts = {}) {
+  const d = document.createElement('div');
+  d.className = 'tile';
+  d.innerHTML = `<div class="label"></div><div class="value"></div><div class="note"></div>`;
+  d.querySelector('.label').textContent = label;
+  d.querySelector('.value').textContent = value;
+  const n = d.querySelector('.note');
+  n.textContent = note;
+  if (opts.stale) { n.classList.add('stale'); n.textContent = note + ' · not refreshed on last run'; }
+  if (opts.meter !== undefined) {
+    const m = document.createElement('div');
+    m.className = 'meter';
+    m.innerHTML = '<span></span>';
+    m.firstChild.style.width = Math.min(100, opts.meter) + '%';
+    d.append(m);
+  }
+  return d;
+}
+
+async function loadLive() {
+  const tiles = document.getElementById('tiles');
+  const updated = document.getElementById('updated');
+  try {
+    const res = await fetch('data/live.json', {cache: 'no-store'});
+    const live = await res.json();
+    const ind = live.indicators || {}, der = live.derived || {};
+    updated.textContent = 'Last refresh: ' + new Date(live.updated).toLocaleString('en-AU');
+    const st = ind.diesel_stock;
+    if (st) tiles.append(tile('Diesel stock cover', `${st.diesel_days} days`,
+      `${Number(st.diesel_ml).toLocaleString('en-AU')} ML${st.as_of ? ', ' + st.as_of : ''} · IEA target ${IEA_DAYS} days`,
+      {stale: st.stale, meter: st.diesel_days / IEA_DAYS * 100}));
+    const r = ind.retail_fuel;
+    if (r) tiles.append(tile('Retail diesel', `$${r.retail_diesel_aud_l.toFixed(2)}/L`,
+      `5 largest cities, ${r.retail_diesel_change_7d_pct >= 0 ? '+' : ''}${r.retail_diesel_change_7d_pct}% in 7 days · ${r.as_of}`, {stale: r.stale}));
+    const b = ind.brent_usd_bbl;
+    if (b) tiles.append(tile('Brent crude', `US$${b.value.toFixed(2)}/bbl`,
+      `${der.brent_aud_c_per_l ? der.brent_aud_c_per_l + ' AU c/L · ' : ''}${b.as_of}`, {stale: b.stale}));
+    const u = ind.us_gulf_ulsd_usd_gal;
+    if (u) tiles.append(tile('Wholesale diesel benchmark', der.us_gulf_ulsd_aud_c_per_l ? `${der.us_gulf_ulsd_aud_c_per_l} c/L` : `US$${u.value}/gal`,
+      `US Gulf Coast ultra-low sulfur diesel in AUD · ${u.as_of}`, {stale: u.stale}));
+    const nsw = ind.nem && ind.nem.regions && ind.nem.regions.NSW1;
+    if (nsw) tiles.append(tile('NSW wholesale power', `$${Math.round(nsw.price_aud_mwh)}/MWh`,
+      `${Math.round(nsw.demand_mw).toLocaleString('en-AU')} MW demand · AEMO`, {stale: ind.nem.stale}));
+    if (!tiles.children.length) updated.textContent = 'Live data has not been fetched yet.';
+  } catch (e) {
+    updated.textContent = 'Live data is unavailable right now.';
+  }
+}
+
+drawDemand();
+drawBridge();
+loadLive();
+</script>
+</body>
+</html>
