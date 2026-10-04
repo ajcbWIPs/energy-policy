@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-04T05:57:00+00:00",
+  "updated": "2026-10-04T05:58:10+00:00",
   "framework_doc": "https://claude.ai/code/artifact/4ef286f2-95fd-42d2-a0f1-b4cce22dff7a",
   "indicators": {
     "diesel_stock": {
@@ -14,21 +14,21 @@
       "value": 113.96,
       "as_of": "2026-09-29",
       "source": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
-      "fetched": "2026-10-04T05:56:27+00:00",
+      "fetched": "2026-10-04T05:57:37+00:00",
       "stale": false
     },
     "us_gulf_ulsd_usd_gal": {
       "value": 4.866,
       "as_of": "2026-09-29",
       "source": "https://fred.stlouisfed.org/series/DDFUELUSGULF",
-      "fetched": "2026-10-04T05:56:27+00:00",
+      "fetched": "2026-10-04T05:57:37+00:00",
       "stale": false
     },
     "usd_per_aud": {
       "value": 0.7033,
       "as_of": "2026-09-25",
       "source": "https://fred.stlouisfed.org/series/DEXUSAL",
-      "fetched": "2026-10-04T05:56:27+00:00",
+      "fetched": "2026-10-04T05:57:37+00:00",
       "stale": false
     },
     "nem": {
@@ -60,7 +60,7 @@
         }
       },
       "source": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
-      "fetched": "2026-10-04T05:56:28+00:00",
+      "fetched": "2026-10-04T05:57:38+00:00",
       "stale": false
     }
   },
