@@ -144,14 +144,13 @@ def parse_fuelplan(text):
     cities = {}
     table = text[m.start(): m.start() + 1500]
     for code, petrol, pchg, dsl, dchg in re.findall(
-            r"\b([A-Z]{3})\*?\s+\$(\d+\.\d{2})\s*\(([+-]?\d+)%\)\s+\$(\d+\.\d{2})\s*\(([+-]?\d+)%\)", table):
+            r"\b([A-Z]{3,4})\*?\s+\$(\d+\.\d{2})\s*\(([+-]?\d+)%\)\s+\$(\d+\.\d{2})\s*\(([+-]?\d+)%\)", table):
         if 1.0 <= float(dsl) <= 6.0 and 1.0 <= float(petrol) <= 6.0:
             cities.setdefault(code, {
                 "petrol_aud_l": float(petrol), "petrol_change_7d_pct": int(pchg),
                 "diesel_aud_l": float(dsl), "diesel_change_7d_pct": int(dchg),
             })
     out["cities"] = cities
-    print(f"retail price table on fuelplan: {table[:700]!r}")
     outlook = re.search(r"([^.]*\bdiesel\b[^.]*stocks?[^.]*\.|[^.]*stocks?[^.]*\bdiesel\b[^.]*\.)", text, re.I)
     if outlook:
         out["stock_outlook"] = outlook.group(1).strip()
