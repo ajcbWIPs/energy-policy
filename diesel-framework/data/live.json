@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-04T06:07:03+00:00",
+  "updated": "2026-10-04T06:17:38+00:00",
   "framework_doc": "https://claude.ai/code/artifact/4ef286f2-95fd-42d2-a0f1-b4cce22dff7a",
   "indicators": {
     "diesel_stock": {
@@ -14,53 +14,53 @@
       "value": 113.96,
       "as_of": "2026-09-29",
       "source": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
-      "fetched": "2026-10-04T06:06:28+00:00",
+      "fetched": "2026-10-04T06:17:04+00:00",
       "stale": false
     },
     "us_gulf_ulsd_usd_gal": {
       "value": 4.866,
       "as_of": "2026-09-29",
       "source": "https://fred.stlouisfed.org/series/DDFUELUSGULF",
-      "fetched": "2026-10-04T06:06:29+00:00",
+      "fetched": "2026-10-04T06:17:04+00:00",
       "stale": false
     },
     "usd_per_aud": {
       "value": 0.7033,
       "as_of": "2026-09-25",
       "source": "https://fred.stlouisfed.org/series/DEXUSAL",
-      "fetched": "2026-10-04T06:06:29+00:00",
+      "fetched": "2026-10-04T06:17:04+00:00",
       "stale": false
     },
     "nem": {
       "regions": {
         "NSW1": {
-          "price_aud_mwh": 42.94,
-          "demand_mw": 6489.63,
-          "as_of": "2026-10-04T16:10:00"
+          "price_aud_mwh": 64.89,
+          "demand_mw": 6500.79,
+          "as_of": "2026-10-04T16:20:00"
         },
         "QLD1": {
-          "price_aud_mwh": 20.19381,
-          "demand_mw": 6028.93,
-          "as_of": "2026-10-04T16:10:00"
+          "price_aud_mwh": 56.14812,
+          "demand_mw": 5808.79,
+          "as_of": "2026-10-04T16:20:00"
         },
         "SA1": {
           "price_aud_mwh": 147.0,
-          "demand_mw": 1399.91,
-          "as_of": "2026-10-04T16:10:00"
+          "demand_mw": 1433.12,
+          "as_of": "2026-10-04T16:20:00"
         },
         "TAS1": {
-          "price_aud_mwh": 43.24988,
-          "demand_mw": 1006.21,
-          "as_of": "2026-10-04T16:10:00"
+          "price_aud_mwh": 65.21191,
+          "demand_mw": 1023.01,
+          "as_of": "2026-10-04T16:20:00"
         },
         "VIC1": {
-          "price_aud_mwh": 40.86735,
-          "demand_mw": 3909.16,
-          "as_of": "2026-10-04T16:10:00"
+          "price_aud_mwh": 61.81861,
+          "demand_mw": 4030.18,
+          "as_of": "2026-10-04T16:20:00"
         }
       },
       "source": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
-      "fetched": "2026-10-04T06:06:30+00:00",
+      "fetched": "2026-10-04T06:17:05+00:00",
       "stale": false
     },
     "retail_fuel": {
@@ -69,8 +69,46 @@
       "retail_petrol_aud_l": 2.37,
       "as_of": "2026-09-23",
       "source": "https://fuelplan.gov.au/fuel-statistics",
+      "cities": {
+        "SYD": {
+          "petrol_aud_l": 2.39,
+          "petrol_change_7d_pct": 6,
+          "diesel_aud_l": 2.85,
+          "diesel_change_7d_pct": 6
+        },
+        "MEL": {
+          "petrol_aud_l": 2.35,
+          "petrol_change_7d_pct": 5,
+          "diesel_aud_l": 2.89,
+          "diesel_change_7d_pct": 7
+        },
+        "PER": {
+          "petrol_aud_l": 2.4,
+          "petrol_change_7d_pct": 4,
+          "diesel_aud_l": 2.81,
+          "diesel_change_7d_pct": 7
+        },
+        "CBR": {
+          "petrol_aud_l": 2.49,
+          "petrol_change_7d_pct": 6,
+          "diesel_aud_l": 2.99,
+          "diesel_change_7d_pct": 4
+        },
+        "HOB": {
+          "petrol_aud_l": 2.44,
+          "petrol_change_7d_pct": 7,
+          "diesel_aud_l": 2.92,
+          "diesel_change_7d_pct": 7
+        },
+        "DAR": {
+          "petrol_aud_l": 2.45,
+          "petrol_change_7d_pct": 7,
+          "diesel_aud_l": 2.92,
+          "diesel_change_7d_pct": 7
+        }
+      },
       "stock_outlook": "Stocks of fuel remain healthy, with petrol stocks above average and diesel and jet fuel stocks similar to pre-conflict, long term averages, offering some buffer if future challenges emerge.",
-      "fetched": "2026-10-04T06:06:31+00:00",
+      "fetched": "2026-10-04T06:17:07+00:00",
       "stale": false
     }
   },
