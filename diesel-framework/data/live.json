@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-04T06:17:38+00:00",
+  "updated": "2026-10-04T06:19:37+00:00",
   "framework_doc": "https://claude.ai/code/artifact/4ef286f2-95fd-42d2-a0f1-b4cce22dff7a",
   "indicators": {
     "diesel_stock": {
@@ -14,21 +14,21 @@
       "value": 113.96,
       "as_of": "2026-09-29",
       "source": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
-      "fetched": "2026-10-04T06:17:04+00:00",
+      "fetched": "2026-10-04T06:19:04+00:00",
       "stale": false
     },
     "us_gulf_ulsd_usd_gal": {
       "value": 4.866,
       "as_of": "2026-09-29",
       "source": "https://fred.stlouisfed.org/series/DDFUELUSGULF",
-      "fetched": "2026-10-04T06:17:04+00:00",
+      "fetched": "2026-10-04T06:19:04+00:00",
       "stale": false
     },
     "usd_per_aud": {
       "value": 0.7033,
       "as_of": "2026-09-25",
       "source": "https://fred.stlouisfed.org/series/DEXUSAL",
-      "fetched": "2026-10-04T06:17:04+00:00",
+      "fetched": "2026-10-04T06:19:04+00:00",
       "stale": false
     },
     "nem": {
@@ -60,7 +60,7 @@
         }
       },
       "source": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
-      "fetched": "2026-10-04T06:17:05+00:00",
+      "fetched": "2026-10-04T06:19:05+00:00",
       "stale": false
     },
     "retail_fuel": {
@@ -81,6 +81,18 @@
           "petrol_change_7d_pct": 5,
           "diesel_aud_l": 2.89,
           "diesel_change_7d_pct": 7
+        },
+        "BRIS": {
+          "petrol_aud_l": 2.38,
+          "petrol_change_7d_pct": 6,
+          "diesel_aud_l": 2.9,
+          "diesel_change_7d_pct": 7
+        },
+        "ADEL": {
+          "petrol_aud_l": 2.34,
+          "petrol_change_7d_pct": 7,
+          "diesel_aud_l": 2.9,
+          "diesel_change_7d_pct": 8
         },
         "PER": {
           "petrol_aud_l": 2.4,
@@ -108,7 +120,7 @@
         }
       },
       "stock_outlook": "Stocks of fuel remain healthy, with petrol stocks above average and diesel and jet fuel stocks similar to pre-conflict, long term averages, offering some buffer if future challenges emerge.",
-      "fetched": "2026-10-04T06:17:07+00:00",
+      "fetched": "2026-10-04T06:19:06+00:00",
       "stale": false
     }
   },
