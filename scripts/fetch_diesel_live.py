@@ -119,11 +119,22 @@ def parse_diesel_stock(text):
 def fetch_stock():
     errors = []
     for url in STOCK_PAGES:
+        html = ""
         try:
-            ml, days = parse_diesel_stock(html_to_text(get(url)))
+            html = get(url)
+            ml, days = parse_diesel_stock(html_to_text(html))
             return {"diesel_ml": ml, "diesel_days": days, "source": url}
         except Exception as e:  # keep trying the next page
             errors.append(f"{url}: {e}")
+            # Pages that render figures in the browser load them from a data file;
+            # list candidates in the run log so the parser can be pointed at one.
+            hints = sorted(set(re.findall(r"""["'(]([^"'()\s]*(?:\.json|\.csv|\.xlsx|/api/)[^"'()\s]*)""", html)))
+            if hints:
+                print(f"data file candidates on {url}: {hints[:20]}")
+            m = re.search(r"(?i)diesel", html_to_text(html))
+            if m:
+                text = html_to_text(html)
+                print(f"text near 'diesel' on {url}: {text[max(0, m.start() - 100): m.start() + 300]!r}")
     raise RuntimeError("; ".join(errors))
 
 
