@@ -9,8 +9,10 @@ Joule always have something to show.
 Sources (no API keys needed):
   - Brent crude, US Gulf Coast ultra-low sulfur diesel, USD per AUD: FRED CSV
   - NEM wholesale price and demand by region: AEMO data dashboard API
-  - Australian diesel stock (ML and days): DCCEEW weekly figures as shown on
-    fuelplan.gov.au (best-effort parse of the page text)
+  - Retail diesel price and stock outlook: fuelplan.gov.au
+  - Australian diesel stock (ML and days): best-effort parse of fuelplan.gov.au
+    and DCCEEW pages; currently published in words only, so the last known
+    figure is kept and marked stale
 
 Standard library only, so the GitHub Action needs no installs.
 Author: Andrew Baker
@@ -116,6 +118,38 @@ def parse_diesel_stock(text):
     raise ValueError("diesel stock figures not found")
 
 
+def parse_fuelplan(text):
+    """Read retail diesel prices and the stock outlook from fuelplan.gov.au.
+
+    The page gives stock levels in words (no ML or days figures), plus a retail
+    price table: 'Retail prices <date> ... Petrol Diesel 5 largest cities* $P (+x%) $D (+y%)'.
+    """
+    m = re.search(
+        r"Retail prices\s+(\d{1,2} \w+ \d{4}).*?5 largest cities\*?\s+\$(\d+\.\d{2})\s*\(([+-]?\d+)%\)\s+\$(\d+\.\d{2})\s*\(([+-]?\d+)%\)",
+        text, re.I | re.S)
+    if not m:
+        raise ValueError("retail price table not found")
+    date = datetime.strptime(m.group(1), "%d %B %Y").date().isoformat()
+    diesel = float(m.group(4))
+    if not 1.0 <= diesel <= 6.0:
+        raise ValueError(f"implausible diesel price {diesel}")
+    out = {
+        "retail_diesel_aud_l": diesel,
+        "retail_diesel_change_7d_pct": int(m.group(5)),
+        "retail_petrol_aud_l": float(m.group(2)),
+        "as_of": date,
+        "source": STOCK_PAGES[0],
+    }
+    outlook = re.search(r"([^.]*\bdiesel\b[^.]*stocks?[^.]*\.|[^.]*stocks?[^.]*\bdiesel\b[^.]*\.)", text, re.I)
+    if outlook:
+        out["stock_outlook"] = outlook.group(1).strip()
+    return out
+
+
+def fetch_fuelplan():
+    return parse_fuelplan(html_to_text(get(STOCK_PAGES[0])))
+
+
 def fetch_stock():
     errors = []
     for url in STOCK_PAGES:
@@ -169,6 +203,7 @@ def refresh(previous):
     for key, series in FRED_SERIES.items():
         run(key, lambda s=series: fetch_fred(s))
     run("nem", fetch_aemo)
+    run("retail_fuel", fetch_fuelplan)
     run("diesel_stock", fetch_stock)
 
     return {

@@ -185,6 +185,9 @@ async function loadLive() {
     if (st) tiles.append(tile('Diesel stock cover', `${st.diesel_days} days`,
       `${Number(st.diesel_ml).toLocaleString('en-AU')} ML${st.as_of ? ', ' + st.as_of : ''} · IEA target ${IEA_DAYS} days`,
       {stale: st.stale, meter: st.diesel_days / IEA_DAYS * 100}));
+    const r = ind.retail_fuel;
+    if (r) tiles.append(tile('Retail diesel', `$${r.retail_diesel_aud_l.toFixed(2)}/L`,
+      `5 largest cities, ${r.retail_diesel_change_7d_pct >= 0 ? '+' : ''}${r.retail_diesel_change_7d_pct}% in 7 days · ${r.as_of}`, {stale: r.stale}));
     const b = ind.brent_usd_bbl;
     if (b) tiles.append(tile('Brent crude', `US$${b.value.toFixed(2)}/bbl`,
       `${der.brent_aud_c_per_l ? der.brent_aud_c_per_l + ' AU c/L · ' : ''}${b.as_of}`, {stale: b.stale}));
