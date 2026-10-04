@@ -1,6 +1,6 @@
 # Joule
 
-> Copied from [Rexcat1/DataHack2026](https://github.com/Rexcat1/DataHack2026) (April 2026) and extended nationwide in October 2026. Pick any state or territory to get its routes, fares, capital-city fuel prices and NEM wholesale power. The gauge, diesel cover, Brent and prices come from [`../diesel-framework/data/live.json`](../diesel-framework/data/live.json), refreshed every 6 hours, with the April 2026 values as a fallback. Routes outside NSW and all fares are indicative estimates.
+> Copied from [Rexcat1/DataHack2026](https://github.com/Rexcat1/DataHack2026) (April 2026) and extended nationwide in October 2026. Pick any state or territory to get its real train, metro, light rail, tram, ferry, bus and coach lines for the capital and main regional centres, plus fares, capital-city fuel prices and NEM wholesale power. The gauge, diesel cover, Brent and prices come from [`../diesel-framework/data/live.json`](../diesel-framework/data/live.json), refreshed every 6 hours, with the April 2026 values as a fallback. Line names are real; trip distances, loads and fares are indicative estimates. Diesel trains, ferries and electric buses are scored by their actual fuel.
 
 **A real-time fuel security gauge for New South Wales.**
 

@@ -1149,7 +1149,7 @@ footer {
                         </button>
                         <button class="mode-btn" data-mode="train" type="button">
                             <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="3" width="14" height="14" rx="2"/><path d="M5 11h14M9 17l-2 3M15 17l2 3"/></svg></span>
-                            Train
+                            Rail / ferry
                         </button>
                         <button class="mode-btn" data-mode="bus" type="button">
                             <span class="ico"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="4" y="4" width="16" height="12" rx="2"/><path d="M4 10h16M8 16l-1 3M16 16l1 3"/></svg></span>
@@ -1171,7 +1171,7 @@ footer {
                 <div class="field">
                     <label>Distance (return)</label>
                     <div class="slider-row">
-                        <input type="range" id="m-km" min="2" max="200" value="40" step="2">
+                        <input type="range" id="m-km" min="2" max="800" value="40" step="2">
                         <span class="val"><span id="m-km-v">40</span> km</span>
                     </div>
                     <div class="hint" id="km-hint">Typical Blacktown → Parramatta → Blacktown return is ~36 km.</div>
@@ -1381,63 +1381,6 @@ const STATE = {
     live: null            // contents of live.json once loaded
 };
 
-// ==========================================================
-// CORRIDOR / ROUTE DEFINITIONS
-// Real and close-estimate attributes for NSW services.
-// type:      'rail' (train / metro / light rail) or 'bus'
-// transit:   line/route code for the colour chip
-// km:        typical full-corridor end-to-end distance (km)
-// freqPerHr: peak-hour service frequency
-// loadPct:   typical peak load factor (fraction of seated capacity used)
-// carDep:    car-dependence score for the residential catchment (0..1)
-// sources:   TfNSW timetables; NRMA/BusNSW route histories; rome2rio trip data;
-//            ABS 2021 Census journey-to-work mode share by LGA.
-// ==========================================================
-const NSW_CORRIDORS = {
-    // === Sydney Trains / Metro / Intercity (rail) ===
-    blacktown:    { name: 'Blacktown / Mount Druitt',       type: 'rail', transit: 'T1',  line: 'T1 Western',           km: 36,  freqPerHr: 12, loadPct: 0.62, carDep: 0.92 },
-    penrith:      { name: 'Penrith / St Marys',             type: 'rail', transit: 'T1',  line: 'T1 Western',           km: 58,  freqPerHr: 10, loadPct: 0.58, carDep: 0.94 },
-    parramatta:   { name: 'Parramatta',                     type: 'rail', transit: 'T1',  line: 'T1 / T5',              km: 22,  freqPerHr: 18, loadPct: 0.72, carDep: 0.78 },
-    campbelltown: { name: 'Campbelltown',                   type: 'rail', transit: 'T8',  line: 'T8 Airport & South',   km: 52,  freqPerHr: 8,  loadPct: 0.55, carDep: 0.94 },
-    liverpool:    { name: 'Liverpool',                      type: 'rail', transit: 'T2',  line: 'T2 Inner West & Leppington', km: 32, freqPerHr: 10, loadPct: 0.64, carDep: 0.88 },
-    bankstown:    { name: 'Bankstown',                      type: 'rail', transit: 'T3',  line: 'T3 Liverpool/Inner West',    km: 20, freqPerHr: 8,  loadPct: 0.58, carDep: 0.82 },
-    gosford:      { name: 'Gosford / Wyong',                type: 'rail', transit: 'CCN', line: 'Central Coast & Newcastle',  km: 76, freqPerHr: 4,  loadPct: 0.45, carDep: 0.96 },
-    chatswood:    { name: 'Chatswood',                      type: 'rail', transit: 'M',   line: 'Metro North West & Bankstown', km: 12, freqPerHr: 15, loadPct: 0.70, carDep: 0.65 },
-    wollongong:   { name: 'Wollongong',                     type: 'rail', transit: 'SCO', line: 'South Coast',          km: 86,  freqPerHr: 3,  loadPct: 0.50, carDep: 0.86 },
-    lithgow:      { name: 'Lithgow',                        type: 'rail', transit: 'BMT', line: 'Blue Mountains',       km: 140, freqPerHr: 2,  loadPct: 0.42, carDep: 0.96 },
-    bathurst:     { name: 'Bathurst',                       type: 'rail', transit: 'CWC', line: 'Central West Coach',   km: 200, freqPerHr: 0.5, loadPct: 0.35, carDep: 0.98 },
-    inner:        { name: 'Inner Sydney / CBD',             type: 'rail', transit: 'MUL', line: 'Multiple',             km: 8,   freqPerHr: 25, loadPct: 0.80, carDep: 0.48 },
-
-    // === Major Sydney bus routes ===
-    // B1 B-Line Northern Beaches express — 27 km, 5-min peak, double-deckers
-    b1:           { name: 'B1 B-Line — Mona Vale → Wynyard',          type: 'bus', transit: 'B1',  line: 'B-Line',               km: 27, freqPerHr: 12, loadPct: 0.85, carDep: 0.90 },
-    // 350 (ex-part of route 400) — Bondi Jct → Airport, ~13km, airport traffic
-    r350:         { name: '350 — Bondi Junction → Airport',           type: 'bus', transit: '350', line: 'Eastern Suburbs',      km: 13, freqPerHr: 6,  loadPct: 0.78, carDep: 0.68 },
-    // 380 — Circular Quay → Bondi Beach via Oxford St
-    r380:         { name: '380 — Bondi Beach → Circular Quay',        type: 'bus', transit: '380', line: 'Oxford St',            km: 10, freqPerHr: 12, loadPct: 0.80, carDep: 0.52 },
-    // 333 — prepay, Circular Quay → Watsons Bay / Bondi
-    r333:         { name: '333 — Bondi Beach → Circular Quay (PrePay)', type: 'bus', transit: '333', line: 'Eastern Express',    km: 9,  freqPerHr: 10, loadPct: 0.75, carDep: 0.55 },
-    // 370 — Coogee → Leichhardt, UNSW/Newtown spine
-    r370:         { name: '370 — Coogee → Leichhardt (UNSW)',         type: 'bus', transit: '370', line: 'Cross-Town',           km: 13, freqPerHr: 6,  loadPct: 0.72, carDep: 0.60 },
-    // 891 — Central → UNSW shuttle
-    r891:         { name: '891 — Central → UNSW',                     type: 'bus', transit: '891', line: 'University Shuttle',   km: 6,  freqPerHr: 12, loadPct: 0.88, carDep: 0.50 },
-    // M90 (one of two remaining Metrobus) — Liverpool → Burwood
-    m90:          { name: 'M90 — Liverpool → Burwood',                type: 'bus', transit: 'M90', line: 'Metrobus',             km: 23, freqPerHr: 6,  loadPct: 0.62, carDep: 0.84 },
-    // M91 — Parramatta → Hurstville
-    m91:          { name: 'M91 — Parramatta → Hurstville',            type: 'bus', transit: 'M91', line: 'Metrobus',             km: 27, freqPerHr: 4,  loadPct: 0.58, carDep: 0.86 },
-    // T80 — Liverpool ↔ Parramatta T-Way (only remaining T-route)
-    t80:          { name: 'T80 — Liverpool ↔ Parramatta (T-Way)',     type: 'bus', transit: 'T80', line: 'North-West T-Way',     km: 25, freqPerHr: 6,  loadPct: 0.60, carDep: 0.88 },
-    // 610X — Castle Hill → Wynyard express peak
-    r610x:        { name: '610X — Castle Hill → Wynyard (express)',   type: 'bus', transit: '610X', line: 'Hills Express',       km: 32, freqPerHr: 4,  loadPct: 0.72, carDep: 0.90 },
-    // 500 — Central → Sydney Olympic Park
-    r500:         { name: '500 — Central → Olympic Park',             type: 'bus', transit: '500', line: 'Inner West',           km: 15, freqPerHr: 4,  loadPct: 0.55, carDep: 0.68 },
-    // 545 — Chatswood → Parramatta cross-town
-    r545:         { name: '545 — Chatswood → Parramatta',             type: 'bus', transit: '545', line: 'Cross-Town',           km: 24, freqPerHr: 4,  loadPct: 0.52, carDep: 0.82 },
-    // L90 — Palm Beach → City limited stops, long Northern Beaches
-    rL90:         { name: 'L90 — Palm Beach → City (Limited)',        type: 'bus', transit: 'L90', line: 'Northern Beaches',     km: 36, freqPerHr: 2,  loadPct: 0.55, carDep: 0.94 },
-    // 400 — surviving Bondi Junction ↔ Eastgardens (airport precinct)
-    r400:         { name: '400 — Bondi Junction → Eastgardens',       type: 'bus', transit: '400', line: 'Eastern Suburbs',      km: 11, freqPerHr: 6,  loadPct: 0.70, carDep: 0.62 }
-};
 
 // Transport line colours (TfNSW official + bus livery)
 const LINE_COLOURS = {
@@ -1460,34 +1403,107 @@ const LINE_COLOURS = {
 };
 
 // ==========================================================
-// STATES AND TERRITORIES
-// Corridor attributes outside NSW are indicative estimates from operator
-// timetables and ABS 2021 journey-to-work data, in the same form as the
-// NSW set above. Fares are indicative adult return fares (perKm up to a cap,
-// or a flat fare); check the local operator for current prices.
+// STATES, TERRITORIES AND ROUTES
+// Real lines and services for each capital and the main regional centres,
+// grouped by mode. Each route lists:
+//   [key, chip, name, line, km, freqPerHr, overrides]
+// km:        typical return trip in km (not the full line length)
+// freqPerHr: typical peak services per hour
+// loadPct:   typical peak load factor; carDep: car dependence of the catchment
+// fuel:      'diesel-rail' (diesel trains), 'ferry' (diesel ferries) or
+//            'electric-bus'; anything else is an electric train/tram or a
+//            diesel bus
+// Distances, frequencies, loads and car dependence are indicative estimates
+// from operator timetables and ABS 2021 journey-to-work data. Fares are
+// indicative adult return fares (perKm up to a cap, or a flat fare); check
+// the local operator for current prices.
 // nem:      AEMO region for live wholesale power, or null off the NEM
-// cityCode: fuelplan.gov.au city code for live retail prices; states without
-//           one fall back to the 5-capital average
+// cityCode: fuelplan.gov.au city code for live retail prices
 // ==========================================================
-NSW_CORRIDORS.gosford.vehicle = 'line';
-NSW_CORRIDORS.chatswood.vehicle = 'Metro';
-NSW_CORRIDORS.inner.line = 'CBD trains, Metro and light rail';
-NSW_CORRIDORS.inner.vehicle = '';
+const TRAIN = { type: 'rail', vehicle: 'train' };
+const RAIL_DIESEL = { type: 'rail', vehicle: 'train', fuel: 'diesel-rail' };
+const TRAM = { type: 'rail', vehicle: 'tram' };
+const LIGHT_RAIL = { type: 'rail', vehicle: 'light rail' };
+const METRO = { type: 'rail', vehicle: '' };
+const FERRY = { type: 'rail', vehicle: 'ferry', fuel: 'ferry' };
+const BUS = { type: 'bus', vehicle: 'bus' };
+const COACH = { type: 'bus', vehicle: 'coach' };
 
-const STATES = {
+const STATE_DEFS = {
     NSW: {
         name: 'New South Wales', short: 'NSW', city: 'Sydney', cityCode: 'SYD', nem: 'NSW1',
         tz: ['Australia/Sydney', 'Australia/Broken_Hill', 'Australia/Lord_Howe'],
         planner: { label: 'Trip Planner', url: 'https://transportnsw.info/trip' },
         price: { label: 'NSW FuelCheck', url: 'https://www.fuelcheck.nsw.gov.au/' },
         fare: { train: { perKm: 0.20, cap: 9.50 }, bus: { perKm: 0.18, cap: 5.25 } },
-        corridors: NSW_CORRIDORS,
         groups: [
-            ['🚆 Train corridors — Greater Sydney', ['blacktown', 'penrith', 'parramatta', 'campbelltown', 'liverpool', 'bankstown', 'chatswood']],
-            ['🚆 Train corridors — Intercity', ['gosford', 'wollongong', 'lithgow', 'bathurst']],
-            ['🚍 Bus routes — Eastern / Inner Sydney', ['b1', 'r350', 'r380', 'r333', 'r400', 'r370', 'r891']],
-            ['🚍 Bus routes — Cross-town / Western', ['m90', 'm91', 't80', 'r545', 'r500', 'r610x', 'rL90']],
-            ['🏙 Inner Sydney', ['inner']]
+            ['🚆 Sydney Trains', { ...TRAIN, loadPct: 0.62, carDep: 0.85 }, [
+                ['t1', 'T1', 'Emu Plains / Richmond / Berowra → City', 'T1 North Shore & Western Line', 60, 16, { colour: '#F99D1C', loadPct: 0.70, carDep: 0.90 }],
+                ['t2', 'T2', 'Leppington / Parramatta → City', 'T2 Leppington & Inner West Line', 50, 10, { colour: '#0098CD' }],
+                ['t3', 'T3', 'Liverpool / Lidcombe → City', 'T3 Liverpool & Inner West Line', 50, 6, { colour: '#F37021' }],
+                ['t4', 'T4', 'Cronulla / Waterfall / Bondi Junction → City', 'T4 Eastern Suburbs & Illawarra Line', 50, 16, { colour: '#005AA3', loadPct: 0.70 }],
+                ['t5', 'T5', 'Richmond / Schofields → Leppington', 'T5 Cumberland Line', 50, 2, { colour: '#C4258F', loadPct: 0.40, carDep: 0.93 }],
+                ['t6', 'T6', 'Lidcombe → Bankstown', 'T6 Lidcombe & Bankstown Line', 20, 4, { colour: '#7C3E21', loadPct: 0.40 }],
+                ['t7', 'T7', 'Lidcombe → Olympic Park', 'T7 Olympic Park Line', 10, 4, { colour: '#6F818E', loadPct: 0.35, carDep: 0.70 }],
+                ['t8', 'T8', 'Macarthur / Revesby → City via Airport', 'T8 Airport & South Line', 70, 12, { colour: '#00954C', carDep: 0.92 }],
+                ['t9', 'T9', 'Hornsby → Gordon via Strathfield and City', 'T9 Northern Line', 50, 8, { colour: '#D11F2F' }]
+            ]],
+            ['🚇 Sydney Metro', { ...METRO, colour: '#168388' }, [
+                ['m1', 'M1', 'Tallawong → Sydenham / Bankstown', 'Metro North West & Bankstown Line', 60, 15, { loadPct: 0.60, carDep: 0.88 }]
+            ]],
+            ['🚊 Sydney Light Rail', { ...LIGHT_RAIL, loadPct: 0.65, carDep: 0.55 }, [
+                ['l1', 'L1', 'Dulwich Hill → Central', 'L1 Dulwich Hill Line', 24, 8, { colour: '#BE1622' }],
+                ['l2', 'L2', 'Randwick → Circular Quay', 'L2 Randwick Line', 20, 10, { colour: '#DD1E25', loadPct: 0.75 }],
+                ['l3', 'L3', 'Juniors Kingsford → Circular Quay', 'L3 Kingsford Line', 22, 10, { colour: '#781140', loadPct: 0.75 }],
+                ['l4', 'L4', 'Westmead → Carlingford via Parramatta', 'L4 Westmead & Carlingford Line', 24, 8, { colour: '#BB2043', carDep: 0.82 }]
+            ]],
+            ['⛴ Sydney Ferries', { ...FERRY, colour: '#5AB031', loadPct: 0.60, carDep: 0.60 }, [
+                ['f1', 'F1', 'Manly → Circular Quay', 'F1 Manly', 22, 4, { loadPct: 0.75 }],
+                ['f2', 'F2', 'Taronga Zoo → Circular Quay', 'F2 Taronga Zoo', 8, 4],
+                ['f3', 'F3', 'Parramatta → Circular Quay', 'F3 Parramatta River', 50, 4, { loadPct: 0.50, carDep: 0.75 }],
+                ['f4', 'F4', 'Pyrmont Bay → Circular Quay', 'F4 Pyrmont Bay', 8, 2],
+                ['f5', 'F5', 'Neutral Bay → Circular Quay', 'F5 Neutral Bay', 6, 3],
+                ['f6', 'F6', 'Mosman Bay → Circular Quay', 'F6 Mosman Bay', 8, 2],
+                ['f7', 'F7', 'Double Bay → Circular Quay', 'F7 Double Bay', 8, 2],
+                ['f8', 'F8', 'Cockatoo Island → Circular Quay', 'F8 Cockatoo Island', 14, 2],
+                ['f9', 'F9', 'Watsons Bay → Circular Quay', 'F9 Watsons Bay', 18, 2],
+                ['f10', 'F10', 'Blackwattle Bay → Circular Quay', 'F10 Blackwattle Bay', 10, 2]
+            ]],
+            ['🚍 Sydney buses', { ...BUS, colour: '#00B5EF' }, [
+                ['b1', 'B1', 'B1 — Mona Vale → Wynyard', 'B-Line', 54, 12, { colour: '#FFD100', loadPct: 0.85, carDep: 0.90 }],
+                ['t80', 'T80', 'T80 — Liverpool → Parramatta (T-way)', 'T80 T-way', 50, 6, { loadPct: 0.60, carDep: 0.88 }],
+                ['m90', 'M90', 'M90 — Liverpool → Burwood', 'M90', 46, 6, { loadPct: 0.62, carDep: 0.84 }],
+                ['m91', 'M91', 'M91 — Parramatta → Hurstville', 'M91', 54, 4, { loadPct: 0.58, carDep: 0.86 }],
+                ['r333', '333', '333 — Bondi Beach → Circular Quay', '333', 18, 10, { loadPct: 0.75, carDep: 0.55 }],
+                ['r380', '380', '380 — Bondi Beach → Circular Quay', '380', 20, 12, { loadPct: 0.80, carDep: 0.52 }],
+                ['r370', '370', '370 — Coogee → Leichhardt', '370', 26, 6, { loadPct: 0.72, carDep: 0.60 }],
+                ['r400', '400', '400 — Bondi Junction → Eastgardens', '400', 22, 6, { loadPct: 0.70, carDep: 0.62 }],
+                ['r500', '500', '500 — Central → Olympic Park', '500', 30, 4, { loadPct: 0.55, carDep: 0.68 }],
+                ['r545', '545', '545 — Chatswood → Parramatta', '545', 48, 4, { loadPct: 0.52, carDep: 0.82 }],
+                ['r610x', '610X', '610X — Castle Hill → Wynyard', '610X', 64, 4, { loadPct: 0.72, carDep: 0.90 }],
+                ['rL90', 'L90', 'L90 — Palm Beach → Wynyard', 'L90', 72, 2, { loadPct: 0.55, carDep: 0.94 }]
+            ]],
+            ['🚆 Intercity and regional trains', { ...TRAIN, loadPct: 0.50, carDep: 0.95 }, [
+                ['ccn', 'CCN', 'Gosford / Newcastle → Sydney', 'Central Coast & Newcastle Line', 160, 4, { colour: '#D11F2F', vehicle: 'line' }],
+                ['bmt', 'BMT', 'Katoomba / Lithgow → Sydney', 'Blue Mountains Line', 200, 2, { colour: '#F99D1C', vehicle: 'line' }],
+                ['sco', 'SCO', 'Wollongong / Kiama → Sydney', 'South Coast Line', 170, 3, { colour: '#005AA3', vehicle: 'line' }],
+                ['shl', 'SHL', 'Moss Vale / Goulburn → Campbelltown', 'Southern Highlands Line', 160, 1, { ...RAIL_DIESEL, colour: '#00954C', vehicle: 'line' }],
+                ['hun', 'HUN', 'Maitland / Scone → Newcastle', 'Hunter Line', 80, 2, { ...RAIL_DIESEL, colour: '#833134', vehicle: 'line' }],
+                ['bathurst', 'BB', 'Bathurst → Lithgow (Bathurst Bullet)', 'Bathurst Bullet', 120, 0.2, { ...RAIL_DIESEL, colour: '#6F818E', vehicle: '' }],
+                ['cbrx', 'XPL', 'Canberra → Sydney', 'NSW TrainLink Canberra Xplorer', 600, 0.2, { ...RAIL_DIESEL, colour: '#F37021', vehicle: '' }],
+                ['dubbo', 'XPT', 'Dubbo → Sydney', 'NSW TrainLink Central West XPT', 800, 0.1, { ...RAIL_DIESEL, colour: '#F37021', vehicle: '' }],
+                ['wagga', 'XPT', 'Wagga Wagga / Albury → Sydney', 'NSW TrainLink Southern XPT', 800, 0.1, { ...RAIL_DIESEL, colour: '#F37021', vehicle: '' }],
+                ['coffs', 'XPT', 'Coffs Harbour / Grafton → Sydney', 'NSW TrainLink North Coast XPT', 800, 0.1, { ...RAIL_DIESEL, colour: '#F37021', vehicle: '' }]
+            ]],
+            ['🏙 Newcastle, Wollongong and regional towns', { ...BUS, colour: '#00B5EF', loadPct: 0.50, carDep: 0.90 }, [
+                ['nlr', 'NLR', 'Newcastle Interchange → Newcastle Beach', 'Newcastle Light Rail', 6, 8, { ...LIGHT_RAIL, colour: '#EE343F', carDep: 0.70 }],
+                ['stockton', 'STK', 'Stockton → Queens Wharf', 'Stockton ferry', 2, 4, { ...FERRY, colour: '#5AB031', carDep: 0.80 }],
+                ['gong', '55', 'Gong Shuttle — Wollongong station → University', 'Gong Shuttle', 12, 6, { loadPct: 0.70, carDep: 0.75 }],
+                ['nswtowns', 'BUS', 'Regional town buses (Albury, Wagga, Dubbo, Tamworth, Orange)', 'regional town', 16, 1, { loadPct: 0.30, carDep: 0.96 }]
+            ]],
+            ['🏙 Inner Sydney', { ...METRO, colour: '#002664' }, [
+                ['inner', 'MUL', 'Inner Sydney / CBD — multiple options', 'CBD trains, Metro and light rail', 8, 25, { loadPct: 0.80, carDep: 0.48 }]
+            ]]
         ]
     },
     VIC: {
@@ -1496,28 +1512,74 @@ const STATES = {
         planner: { label: 'Journey planner', url: 'https://transport.vic.gov.au/' },
         price: { label: 'ACCC fuel monitoring', url: 'https://www.accc.gov.au/consumers/petrol-and-fuel' },
         fare: { train: { perKm: 0.25, cap: 11.00 }, bus: { perKm: 0.25, cap: 11.00 } },
-        corridors: {
-            frankston:   { name: 'Frankston',              type: 'rail', transit: 'FKN', line: 'Frankston line',      km: 84,  freqPerHr: 6,  loadPct: 0.55, carDep: 0.88, colour: '#0072CE' },
-            dandenong:   { name: 'Dandenong / Pakenham',   type: 'rail', transit: 'MTN', line: 'Metro Tunnel (Pakenham & Cranbourne)', km: 62, freqPerHr: 10, loadPct: 0.68, carDep: 0.90, colour: '#0072CE' },
-            craigieburn: { name: 'Craigieburn',            type: 'rail', transit: 'CGB', line: 'Craigieburn line',    km: 50,  freqPerHr: 6,  loadPct: 0.60, carDep: 0.90, colour: '#0072CE' },
-            werribee:    { name: 'Werribee',               type: 'rail', transit: 'WER', line: 'Werribee line',       km: 64,  freqPerHr: 6,  loadPct: 0.62, carDep: 0.90, colour: '#0072CE' },
-            lilydale:    { name: 'Ringwood / Lilydale',    type: 'rail', transit: 'LIL', line: 'Lilydale line',       km: 50,  freqPerHr: 8,  loadPct: 0.58, carDep: 0.88, colour: '#0072CE' },
-            sunbury:     { name: 'Sunbury',                type: 'rail', transit: 'SUY', line: 'Sunbury line',        km: 80,  freqPerHr: 6,  loadPct: 0.55, carDep: 0.93, colour: '#0072CE' },
-            geelong:     { name: 'Geelong',                type: 'rail', transit: 'GEL', line: 'V/Line Geelong',      km: 150, freqPerHr: 3,  loadPct: 0.70, carDep: 0.95, colour: '#8F1A95' },
-            ballarat:    { name: 'Ballarat',               type: 'rail', transit: 'BAL', line: 'V/Line Ballarat',     km: 200, freqPerHr: 2,  loadPct: 0.60, carDep: 0.96, colour: '#8F1A95' },
-            tram96:      { name: '96 — Brunswick East → St Kilda Beach', type: 'rail', transit: '96', line: 'Route 96', vehicle: 'tram', km: 26, freqPerHr: 10, loadPct: 0.80, carDep: 0.45, colour: '#78BE20' },
-            tram86:      { name: '86 — Bundoora → Waterfront City',       type: 'rail', transit: '86', line: 'Route 86', vehicle: 'tram', km: 30, freqPerHr: 8,  loadPct: 0.70, carDep: 0.62, colour: '#78BE20' },
-            tram109:     { name: '109 — Box Hill → Port Melbourne',       type: 'rail', transit: '109', line: 'Route 109', vehicle: 'tram', km: 36, freqPerHr: 8, loadPct: 0.72, carDep: 0.60, colour: '#78BE20' },
-            sb901:       { name: '901 — Frankston → Melbourne Airport',   type: 'bus', transit: '901', line: 'SmartBus 901', km: 30, freqPerHr: 4, loadPct: 0.50, carDep: 0.90, colour: '#FF8200' },
-            sb903:       { name: '903 — Altona → Mordialloc',             type: 'bus', transit: '903', line: 'SmartBus 903', km: 30, freqPerHr: 4, loadPct: 0.52, carDep: 0.88, colour: '#FF8200' },
-            innermel:    { name: 'Inner Melbourne / CBD',  type: 'rail', transit: 'MUL', line: 'City Loop and Free Tram Zone', vehicle: '', km: 8, freqPerHr: 30, loadPct: 0.78, carDep: 0.45, colour: '#002664' }
-        },
         groups: [
-            ['🚆 Metro trains — Melbourne', ['frankston', 'dandenong', 'craigieburn', 'werribee', 'lilydale', 'sunbury']],
-            ['🚆 V/Line regional', ['geelong', 'ballarat']],
-            ['🚋 Trams', ['tram96', 'tram86', 'tram109']],
-            ['🚍 SmartBus', ['sb901', 'sb903']],
-            ['🏙 Inner Melbourne', ['innermel']]
+            ['🚆 Metro trains — Melbourne', { ...TRAIN, loadPct: 0.58, carDep: 0.88 }, [
+                ['alamein', 'ALM', 'Alamein → City', 'Alamein line', 30, 4, { colour: '#152C6B', loadPct: 0.45, carDep: 0.75 }],
+                ['belgrave', 'BEG', 'Belgrave → City', 'Belgrave line', 80, 6, { colour: '#152C6B' }],
+                ['glenwaverley', 'GWY', 'Glen Waverley → City', 'Glen Waverley line', 40, 6, { colour: '#152C6B', carDep: 0.82 }],
+                ['lilydale', 'LIL', 'Lilydale / Ringwood → City', 'Lilydale line', 70, 6, { colour: '#152C6B' }],
+                ['cranbourne', 'CBE', 'Cranbourne → City (Metro Tunnel)', 'Cranbourne line', 90, 6, { colour: '#279FD5', carDep: 0.92 }],
+                ['pakenham', 'PKM', 'Pakenham / Dandenong → City (Metro Tunnel)', 'Pakenham line', 100, 10, { colour: '#279FD5', loadPct: 0.68, carDep: 0.92 }],
+                ['sunbury', 'SUY', 'Sunbury / Sunshine → City (Metro Tunnel)', 'Sunbury line', 80, 10, { colour: '#279FD5', loadPct: 0.62, carDep: 0.92 }],
+                ['hurstbridge', 'HBE', 'Hurstbridge → City', 'Hurstbridge line', 66, 4, { colour: '#BE1014' }],
+                ['mernda', 'MDD', 'Mernda → City', 'Mernda line', 70, 6, { colour: '#BE1014', carDep: 0.92 }],
+                ['craigieburn', 'CGB', 'Craigieburn → City', 'Craigieburn line', 60, 6, { colour: '#FFBE00' }],
+                ['upfield', 'UFD', 'Upfield → City', 'Upfield line', 34, 4, { colour: '#FFBE00', carDep: 0.75 }],
+                ['frankston', 'FKN', 'Frankston → City', 'Frankston line', 84, 6, { colour: '#028430', loadPct: 0.55 }],
+                ['werribee', 'WER', 'Werribee → City', 'Werribee line', 64, 6, { colour: '#028430', loadPct: 0.62, carDep: 0.90 }],
+                ['williamstown', 'WIL', 'Williamstown → City', 'Williamstown line', 32, 3, { colour: '#028430', loadPct: 0.45, carDep: 0.75 }],
+                ['sandringham', 'SHM', 'Sandringham → City', 'Sandringham line', 36, 6, { colour: '#F178AF', carDep: 0.72 }],
+                ['stonypoint', 'STY', 'Stony Point → Frankston', 'Stony Point line', 60, 1, { ...RAIL_DIESEL, colour: '#028430', loadPct: 0.30, carDep: 0.96 }]
+            ]],
+            ['🚋 Melbourne trams', { ...TRAM, colour: '#78BE20', loadPct: 0.70, carDep: 0.55 }, [
+                ['tr1', '1', 'East Coburg → South Melbourne Beach', 'Route 1', 26, 6],
+                ['tr3', '3', 'Melbourne University → East Malvern', 'Route 3', 30, 6],
+                ['tr5', '5', 'Melbourne University → Malvern', 'Route 5', 26, 6],
+                ['tr6', '6', 'Moreland → Glen Iris', 'Route 6', 34, 6],
+                ['tr11', '11', 'West Preston → Victoria Harbour Docklands', 'Route 11', 26, 8],
+                ['tr12', '12', 'Victoria Gardens → St Kilda', 'Route 12', 22, 6],
+                ['tr16', '16', 'Melbourne University → Kew via St Kilda Beach', 'Route 16', 40, 6],
+                ['tr19', '19', 'North Coburg → Flinders Street Station', 'Route 19', 22, 8],
+                ['tr30', '30', 'St Vincent\'s Plaza → Central Pier Docklands', 'Route 30', 8, 6],
+                ['tr35', '35', 'City Circle (free)', 'Route 35 City Circle', 6, 6, { carDep: 0.30 }],
+                ['tr48', '48', 'North Balwyn → Victoria Harbour Docklands', 'Route 48', 30, 6],
+                ['tr57', '57', 'West Maribyrnong → Flinders Street Station', 'Route 57', 26, 6],
+                ['tr58', '58', 'West Coburg → Toorak', 'Route 58', 30, 6],
+                ['tr59', '59', 'Airport West → Flinders Street Station', 'Route 59', 34, 8, { carDep: 0.70 }],
+                ['tr64', '64', 'Melbourne University → East Brighton', 'Route 64', 34, 6],
+                ['tr67', '67', 'Melbourne University → Carnegie', 'Route 67', 26, 6],
+                ['tr70', '70', 'Wattle Park → Waterfront City Docklands', 'Route 70', 30, 6],
+                ['tr72', '72', 'Melbourne University → Camberwell', 'Route 72', 30, 6],
+                ['tr75', '75', 'Vermont South → Central Pier Docklands', 'Route 75', 44, 6, { carDep: 0.75 }],
+                ['tr78', '78', 'North Richmond → Balaclava', 'Route 78', 14, 4],
+                ['tr82', '82', 'Moonee Ponds → Footscray', 'Route 82', 16, 4],
+                ['tr86', '86', 'Bundoora RMIT → Waterfront City Docklands', 'Route 86', 44, 8, { carDep: 0.65 }],
+                ['tr96', '96', 'East Brunswick → St Kilda Beach', 'Route 96', 26, 10, { loadPct: 0.80, carDep: 0.45 }],
+                ['tr109', '109', 'Box Hill → Port Melbourne', 'Route 109', 40, 8, { carDep: 0.62 }]
+            ]],
+            ['🚍 Melbourne buses', { ...BUS, colour: '#FF8200', loadPct: 0.50, carDep: 0.88 }, [
+                ['sb901', '901', '901 SmartBus — Frankston → Melbourne Airport', 'SmartBus 901', 40, 4],
+                ['sb902', '902', '902 SmartBus — Chelsea → Airport West', 'SmartBus 902', 40, 4],
+                ['sb903', '903', '903 SmartBus — Altona → Mordialloc', 'SmartBus 903', 40, 4],
+                ['b906', '906', '906 — Warrandyte → City', 'Route 906', 56, 4, { loadPct: 0.65 }],
+                ['b907', '907', '907 — Mitcham → City', 'Route 907', 50, 6, { loadPct: 0.70 }],
+                ['b401', '401', '401 — North Melbourne station → Melbourne University', 'Route 401', 6, 15, { loadPct: 0.85, carDep: 0.30 }]
+            ]],
+            ['🚆 V/Line regional trains', { ...RAIL_DIESEL, colour: '#8F1A95', loadPct: 0.60, carDep: 0.95 }, [
+                ['geelong', 'GEL', 'Geelong → Southern Cross', 'V/Line Geelong', 150, 3, { loadPct: 0.70 }],
+                ['warrnambool', 'WBL', 'Warrnambool → Southern Cross', 'V/Line Warrnambool', 520, 0.2],
+                ['ballarat', 'BAL', 'Ballarat → Southern Cross', 'V/Line Ballarat', 230, 2],
+                ['bendigo', 'BDG', 'Bendigo → Southern Cross', 'V/Line Bendigo', 300, 2],
+                ['seymour', 'SEY', 'Seymour / Shepparton → Southern Cross', 'V/Line Seymour', 200, 1],
+                ['traralgon', 'TRN', 'Traralgon / Bairnsdale → Southern Cross', 'V/Line Traralgon', 320, 1],
+                ['albury', 'ABY', 'Albury–Wodonga → Southern Cross', 'V/Line Albury', 600, 0.2]
+            ]],
+            ['⛴ Ferries', { ...FERRY, colour: '#5AB031', loadPct: 0.50, carDep: 0.90 }, [
+                ['ppf', 'PPF', 'Geelong / Portarlington → Docklands', 'Port Phillip Ferries', 140, 0.5]
+            ]],
+            ['🏙 Inner Melbourne', { ...METRO, colour: '#002664' }, [
+                ['innermel', 'MUL', 'Inner Melbourne / CBD — multiple options', 'City Loop and Free Tram Zone', 8, 30, { loadPct: 0.78, carDep: 0.45 }]
+            ]]
         ]
     },
     QLD: {
@@ -1526,25 +1588,51 @@ const STATES = {
         planner: { label: 'Journey planner', url: 'https://translink.com.au/' },
         price: { label: 'ACCC fuel monitoring', url: 'https://www.accc.gov.au/consumers/petrol-and-fuel' },
         fare: { train: { flat: 1.00 }, bus: { flat: 1.00 } },   // 50c Translink fares
-        corridors: {
-            ipswich:     { name: 'Ipswich / Rosewood',     type: 'rail', transit: 'IPS', line: 'Ipswich line',        km: 80,  freqPerHr: 4,  loadPct: 0.55, carDep: 0.92, colour: '#00539F' },
-            caboolture:  { name: 'Caboolture',             type: 'rail', transit: 'CAB', line: 'Caboolture line',     km: 90,  freqPerHr: 4,  loadPct: 0.55, carDep: 0.93, colour: '#00539F' },
-            redcliffe:   { name: 'Redcliffe Peninsula',    type: 'rail', transit: 'RDP', line: 'Redcliffe Peninsula line', km: 70, freqPerHr: 4, loadPct: 0.50, carDep: 0.93, colour: '#00539F' },
-            springfield: { name: 'Springfield',            type: 'rail', transit: 'SFD', line: 'Springfield line',    km: 70,  freqPerHr: 4,  loadPct: 0.52, carDep: 0.94, colour: '#00539F' },
-            cleveland:   { name: 'Cleveland',              type: 'rail', transit: 'CLV', line: 'Cleveland line',      km: 70,  freqPerHr: 3,  loadPct: 0.50, carDep: 0.90, colour: '#00539F' },
-            goldcoast:   { name: 'Gold Coast',             type: 'rail', transit: 'GCL', line: 'Gold Coast line',     km: 160, freqPerHr: 4,  loadPct: 0.60, carDep: 0.95, colour: '#00539F' },
-            sunshine:    { name: 'Sunshine Coast (Nambour)', type: 'rail', transit: 'SHC', line: 'Sunshine Coast line', km: 200, freqPerHr: 1, loadPct: 0.45, carDep: 0.97, colour: '#00539F' },
-            glink:       { name: 'G:link — Helensvale → Broadbeach', type: 'rail', transit: 'G', line: 'G:link', vehicle: 'light rail', km: 40, freqPerHr: 8, loadPct: 0.60, carDep: 0.85, colour: '#FFC72C' },
-            m1:          { name: 'M1 — Eight Mile Plains → RBWH',     type: 'bus', transit: 'M1', line: 'Brisbane Metro M1', vehicle: '', km: 36, freqPerHr: 12, loadPct: 0.70, carDep: 0.75, colour: '#C8102E' },
-            m2:          { name: 'M2 — UQ Lakes → RBWH',              type: 'bus', transit: 'M2', line: 'Brisbane Metro M2', vehicle: '', km: 24, freqPerHr: 12, loadPct: 0.78, carDep: 0.60, colour: '#C8102E' },
-            innerbne:    { name: 'Inner Brisbane / CBD',   type: 'rail', transit: 'MUL', line: 'CBD trains, Metro and buses', vehicle: '', km: 8, freqPerHr: 20, loadPct: 0.70, carDep: 0.55, colour: '#002664' }
-        },
         groups: [
-            ['🚆 Queensland Rail — Brisbane', ['ipswich', 'caboolture', 'redcliffe', 'springfield', 'cleveland']],
-            ['🚆 South East Queensland intercity', ['goldcoast', 'sunshine']],
-            ['🚍 Brisbane Metro', ['m1', 'm2']],
-            ['🚋 Gold Coast light rail', ['glink']],
-            ['🏙 Inner Brisbane', ['innerbne']]
+            ['🚆 Queensland Rail — Brisbane', { ...TRAIN, colour: '#00539F', loadPct: 0.52, carDep: 0.92 }, [
+                ['airport', 'AIR', 'Brisbane Airport → City', 'Airport line', 30, 4, { loadPct: 0.45 }],
+                ['beenleigh', 'BNH', 'Beenleigh → City', 'Beenleigh line', 80, 4],
+                ['caboolture', 'CAB', 'Caboolture → City', 'Caboolture line', 90, 4, { loadPct: 0.55, carDep: 0.93 }],
+                ['cleveland', 'CLV', 'Cleveland → City', 'Cleveland line', 70, 3, { loadPct: 0.50, carDep: 0.90 }],
+                ['doomben', 'DBN', 'Doomben → City', 'Doomben line', 20, 2, { loadPct: 0.40, carDep: 0.80 }],
+                ['fernygrove', 'FYG', 'Ferny Grove → City', 'Ferny Grove line', 32, 4, { carDep: 0.85 }],
+                ['ipswich', 'IPS', 'Ipswich / Rosewood → City', 'Ipswich/Rosewood line', 80, 4, { loadPct: 0.55 }],
+                ['redcliffe', 'RDP', 'Kippa-Ring → City', 'Redcliffe Peninsula line', 76, 4, { loadPct: 0.50, carDep: 0.93 }],
+                ['shorncliffe', 'SHC', 'Shorncliffe → City', 'Shorncliffe line', 36, 4, { carDep: 0.82 }],
+                ['springfield', 'SFD', 'Springfield Central → City', 'Springfield line', 70, 4, { carDep: 0.94 }]
+            ]],
+            ['🚆 South East Queensland intercity', { ...TRAIN, colour: '#00539F', loadPct: 0.55, carDep: 0.95 }, [
+                ['goldcoast', 'GCL', 'Varsity Lakes / Helensvale → City', 'Gold Coast line', 170, 4, { loadPct: 0.60 }],
+                ['sunshinecoast', 'SUN', 'Nambour / Gympie North → City', 'Sunshine Coast line', 200, 1, { loadPct: 0.45, carDep: 0.97 }],
+                ['tilt', 'TLT', 'Rockhampton / Bundaberg → Brisbane', 'Queensland Rail Tilt Train', 700, 0.1, { loadPct: 0.60, vehicle: '' }]
+            ]],
+            ['🚇 Brisbane Metro and busways', { ...BUS, colour: '#C8102E', loadPct: 0.70, carDep: 0.75 }, [
+                ['m1', 'M1', 'M1 — Eight Mile Plains → RBWH', 'Brisbane Metro M1', 40, 12, { vehicle: '', fuel: 'electric-bus' }],
+                ['m2', 'M2', 'M2 — UQ Lakes → RBWH', 'Brisbane Metro M2', 24, 12, { vehicle: '', fuel: 'electric-bus', loadPct: 0.78, carDep: 0.60 }],
+                ['b60', '60', '60 CityGlider — Teneriffe → West End', 'Blue CityGlider', 14, 8, { colour: '#0072CE', carDep: 0.50 }],
+                ['b61', '61', '61 CityGlider — Ashgrove → Stones Corner', 'Maroon CityGlider', 22, 8, { colour: '#7A2048', carDep: 0.60 }],
+                ['b100', '100', '100 — Forest Lake → City', 'Route 100', 50, 6, { colour: '#00A3AD', carDep: 0.88 }],
+                ['b330', '330', '330 — Bracken Ridge → City (Northern Busway)', 'Route 330', 40, 6, { colour: '#00A3AD', carDep: 0.85 }],
+                ['b555', '555', '555 — Loganholme → City', 'Route 555', 60, 6, { colour: '#00A3AD', carDep: 0.90 }]
+            ]],
+            ['⛴ Brisbane ferries', { ...FERRY, colour: '#0098CD', loadPct: 0.50, carDep: 0.65 }, [
+                ['citycat', 'CAT', 'Northshore Hamilton → UQ St Lucia', 'CityCat', 30, 4],
+                ['cityhopper', 'HOP', 'North Quay → Sydney Street (free)', 'CityHopper', 8, 3],
+                ['crossriver', 'XR', 'Kangaroo Point → Eagle Street', 'cross-river', 2, 6]
+            ]],
+            ['🏙 Gold Coast, Sunshine Coast and regional cities', { ...BUS, colour: '#00A3AD', loadPct: 0.45, carDep: 0.92 }, [
+                ['glink', 'G', 'Helensvale → Burleigh Heads', 'G:link', 50, 8, { ...LIGHT_RAIL, colour: '#FFC72C', loadPct: 0.60, carDep: 0.85 }],
+                ['b700', '700', '700 — Broadbeach → Tweed Heads', 'Route 700', 60, 6, { loadPct: 0.55 }],
+                ['sunbus', 'SUN', 'Sunshine Coast buses (Maroochydore, Caloundra)', 'Sunshine Coast', 30, 2],
+                ['toowoomba', 'TWB', 'Toowoomba city buses', 'Toowoomba', 16, 2, { loadPct: 0.30, carDep: 0.95 }],
+                ['townsville', 'TSV', 'Townsville Sunbus city routes', 'Townsville Sunbus', 20, 2, { loadPct: 0.30, carDep: 0.95 }],
+                ['maggie', 'MI', 'Magnetic Island → Townsville', 'Magnetic Island ferry', 16, 1, { ...FERRY, colour: '#0098CD', carDep: 0.70 }],
+                ['cairns', 'CNS', 'Cairns Sunbus city routes', 'Cairns Sunbus', 20, 2, { loadPct: 0.35, carDep: 0.94 }],
+                ['mackay', 'MKY', 'Mackay and Rockhampton city buses', 'regional city', 20, 1, { loadPct: 0.25, carDep: 0.97 }]
+            ]],
+            ['🏙 Inner Brisbane', { ...METRO, colour: '#002664' }, [
+                ['innerbne', 'MUL', 'Inner Brisbane / CBD — multiple options', 'CBD trains, Metro, buses and ferries', 8, 20, { loadPct: 0.70, carDep: 0.55 }]
+            ]]
         ]
     },
     SA: {
@@ -1553,21 +1641,32 @@ const STATES = {
         planner: { label: 'Adelaide Metro', url: 'https://www.adelaidemetro.com.au/' },
         price: { label: 'ACCC fuel monitoring', url: 'https://www.accc.gov.au/consumers/petrol-and-fuel' },
         fare: { train: { perKm: 0.25, cap: 8.80 }, bus: { perKm: 0.25, cap: 8.80 } },
-        corridors: {
-            gawler:      { name: 'Gawler',                 type: 'rail', transit: 'GAW', line: 'Gawler line',         km: 84,  freqPerHr: 4,  loadPct: 0.50, carDep: 0.92, colour: '#005DAA' },
-            seaford:     { name: 'Seaford',                type: 'rail', transit: 'SEA', line: 'Seaford line',        km: 70,  freqPerHr: 4,  loadPct: 0.52, carDep: 0.90, colour: '#005DAA' },
-            outerharbor: { name: 'Outer Harbor',           type: 'rail', transit: 'OH',  line: 'Outer Harbor line',   km: 44,  freqPerHr: 4,  loadPct: 0.50, carDep: 0.86, colour: '#005DAA' },
-            flinders:    { name: 'Flinders',               type: 'rail', transit: 'FLI', line: 'Flinders line',       km: 40,  freqPerHr: 4,  loadPct: 0.50, carDep: 0.85, colour: '#005DAA' },
-            belair:      { name: 'Belair',                 type: 'rail', transit: 'BEL', line: 'Belair line',         km: 40,  freqPerHr: 2,  loadPct: 0.45, carDep: 0.88, colour: '#005DAA' },
-            obahn:       { name: 'O-Bahn — Tea Tree Plaza → City', type: 'bus', transit: 'O-B', line: 'O-Bahn', km: 26, freqPerHr: 12, loadPct: 0.72, carDep: 0.88, colour: '#ED1C24' },
-            glenelg:     { name: 'Glenelg → Entertainment Centre', type: 'rail', transit: 'GLN', line: 'Glenelg', vehicle: 'tram', km: 30, freqPerHr: 8, loadPct: 0.65, carDep: 0.70, colour: '#00A651' },
-            inneradl:    { name: 'Inner Adelaide / CBD',   type: 'rail', transit: 'MUL', line: 'CBD trams and buses', vehicle: '', km: 6, freqPerHr: 15, loadPct: 0.60, carDep: 0.55, colour: '#002664' }
-        },
         groups: [
-            ['🚆 Adelaide Metro trains', ['gawler', 'seaford', 'outerharbor', 'flinders', 'belair']],
-            ['🚍 O-Bahn busway', ['obahn']],
-            ['🚋 Tram', ['glenelg']],
-            ['🏙 Inner Adelaide', ['inneradl']]
+            ['🚆 Adelaide Metro trains', { ...TRAIN, colour: '#005DAA', loadPct: 0.50, carDep: 0.88 }, [
+                ['gawler', 'GAW', 'Gawler Central → Adelaide', 'Gawler line', 84, 4, { carDep: 0.92 }],
+                ['seaford', 'SEA', 'Seaford → Adelaide', 'Seaford line', 72, 4, { loadPct: 0.52, carDep: 0.90 }],
+                ['flinders', 'FLI', 'Flinders → Adelaide', 'Flinders line', 40, 4, { carDep: 0.85 }],
+                ['outerharbor', 'OH', 'Outer Harbor → Adelaide', 'Outer Harbor line', 44, 4, { ...RAIL_DIESEL, colour: '#005DAA', carDep: 0.86 }],
+                ['grange', 'GRG', 'Grange → Adelaide', 'Grange line', 26, 2, { ...RAIL_DIESEL, colour: '#005DAA', loadPct: 0.40, carDep: 0.82 }],
+                ['belair', 'BEL', 'Belair → Adelaide', 'Belair line', 40, 2, { ...RAIL_DIESEL, colour: '#005DAA', loadPct: 0.45 }]
+            ]],
+            ['🚊 Adelaide trams', { ...TRAM, colour: '#00A651', loadPct: 0.65, carDep: 0.70 }, [
+                ['glenelg', 'GLN', 'Glenelg → Entertainment Centre', 'Glenelg tram', 30, 8],
+                ['botanic', 'BTN', 'Botanic Gardens → Entertainment Centre', 'Botanic Gardens tram', 10, 6, { carDep: 0.50 }]
+            ]],
+            ['🚍 Adelaide buses', { ...BUS, colour: '#ED1C24', loadPct: 0.60, carDep: 0.85 }, [
+                ['obahn', 'O-B', 'O-Bahn — Tea Tree Plaza → City', 'O-Bahn', 26, 12, { loadPct: 0.72, carDep: 0.88 }],
+                ['cityconnector', '99', 'City Connector (free) — 98A/C, 99A/C', 'City Connector', 6, 4, { colour: '#00A3AD', carDep: 0.40 }]
+            ]],
+            ['🏙 Regional South Australia', { ...COACH, colour: '#6F818E', loadPct: 0.35, carDep: 0.96 }, [
+                ['victorharbor', 'LSA', 'Victor Harbor → Adelaide', 'LinkSA', 170, 0.2],
+                ['mtgambier', 'MTG', 'Mount Gambier town buses', 'Mount Gambier', 14, 1, { ...BUS, colour: '#6F818E' }],
+                ['whyalla', 'WYA', 'Whyalla and Port Augusta town buses', 'regional town', 14, 1, { ...BUS, colour: '#6F818E' }],
+                ['kiferry', 'KI', 'Penneshaw → Cape Jervis', 'Kangaroo Island ferry', 90, 0.2, { ...FERRY, colour: '#0098CD' }]
+            ]],
+            ['🏙 Inner Adelaide', { ...METRO, colour: '#002664' }, [
+                ['inneradl', 'MUL', 'Inner Adelaide / CBD — multiple options', 'CBD trams and buses', 6, 15, { loadPct: 0.60, carDep: 0.55 }]
+            ]]
         ]
     },
     WA: {
@@ -1577,22 +1676,35 @@ const STATES = {
         planner: { label: 'Transperth', url: 'https://www.transperth.wa.gov.au/' },
         price: { label: 'FuelWatch', url: 'https://www.fuelwatch.wa.gov.au/' },
         fare: { train: { perKm: 0.20, cap: 10.20 }, bus: { perKm: 0.20, cap: 10.20 } },
-        corridors: {
-            joondalup:   { name: 'Joondalup / Yanchep',    type: 'rail', transit: 'YAN', line: 'Yanchep line',        km: 60,  freqPerHr: 8,  loadPct: 0.62, carDep: 0.92, colour: '#0072BC' },
-            mandurah:    { name: 'Mandurah',               type: 'rail', transit: 'MAN', line: 'Mandurah line',       km: 140, freqPerHr: 6,  loadPct: 0.58, carDep: 0.94, colour: '#0072BC' },
-            armadale:    { name: 'Armadale',               type: 'rail', transit: 'ARM', line: 'Armadale line',       km: 60,  freqPerHr: 4,  loadPct: 0.50, carDep: 0.90, colour: '#0072BC' },
-            midland:     { name: 'Midland',                type: 'rail', transit: 'MID', line: 'Midland line',        km: 32,  freqPerHr: 4,  loadPct: 0.50, carDep: 0.88, colour: '#0072BC' },
-            fremantle:   { name: 'Fremantle',              type: 'rail', transit: 'FRE', line: 'Fremantle line',      km: 40,  freqPerHr: 4,  loadPct: 0.50, carDep: 0.82, colour: '#0072BC' },
-            ellenbrook:  { name: 'Ellenbrook',             type: 'rail', transit: 'ELL', line: 'Ellenbrook line',     km: 50,  freqPerHr: 4,  loadPct: 0.45, carDep: 0.95, colour: '#0072BC' },
-            airportwa:   { name: 'High Wycombe / Airport', type: 'rail', transit: 'AIR', line: 'Airport line',        km: 40,  freqPerHr: 4,  loadPct: 0.45, carDep: 0.90, colour: '#0072BC' },
-            b950:        { name: '950 — Morley → UWA / QEII', type: 'bus', transit: '950', line: 'Route 950', km: 30, freqPerHr: 8, loadPct: 0.70, carDep: 0.75, colour: '#00843D' },
-            cat:         { name: 'CAT — Perth CBD free bus', type: 'bus', transit: 'CAT', line: 'CAT', km: 4, freqPerHr: 12, loadPct: 0.60, carDep: 0.40, colour: '#00843D' },
-            innerper:    { name: 'Inner Perth / CBD',      type: 'rail', transit: 'MUL', line: 'CBD trains and buses', vehicle: '', km: 6, freqPerHr: 15, loadPct: 0.60, carDep: 0.55, colour: '#002664' }
-        },
         groups: [
-            ['🚆 Transperth trains', ['joondalup', 'mandurah', 'armadale', 'midland', 'fremantle', 'ellenbrook', 'airportwa']],
-            ['🚍 Buses', ['b950', 'cat']],
-            ['🏙 Inner Perth', ['innerper']]
+            ['🚆 Transperth trains', { ...TRAIN, colour: '#0072BC', loadPct: 0.52, carDep: 0.90 }, [
+                ['airportwa', 'AIR', 'High Wycombe → Claremont via Airport', 'Airport line', 40, 4, { loadPct: 0.45 }],
+                ['armadale', 'ARM', 'Byford / Armadale → Perth', 'Armadale line', 70, 4],
+                ['ellenbrook', 'ELL', 'Ellenbrook → Perth', 'Ellenbrook line', 50, 4, { loadPct: 0.45, carDep: 0.95 }],
+                ['fremantle', 'FRE', 'Fremantle → Perth', 'Fremantle line', 40, 4, { carDep: 0.82 }],
+                ['mandurah', 'MAN', 'Mandurah → Perth', 'Mandurah line', 140, 6, { loadPct: 0.58, carDep: 0.94 }],
+                ['midland', 'MID', 'Midland → Perth', 'Midland line', 32, 4, { carDep: 0.88 }],
+                ['thornlie', 'TCK', 'Cockburn Central → Perth via Thornlie', 'Thornlie–Cockburn line', 50, 4, { loadPct: 0.45 }],
+                ['yanchep', 'YAN', 'Yanchep / Joondalup → Perth', 'Yanchep line', 70, 8, { loadPct: 0.62, carDep: 0.92 }]
+            ]],
+            ['🚍 Perth buses', { ...BUS, colour: '#00843D', loadPct: 0.60, carDep: 0.80 }, [
+                ['cat', 'CAT', 'CAT — Perth CBD (free, Blue / Red / Yellow / Green)', 'CAT', 4, 12, { loadPct: 0.60, carDep: 0.40 }],
+                ['b950', '950', '950 — Morley → UWA / QEII', 'Route 950', 30, 8, { loadPct: 0.70, carDep: 0.75 }],
+                ['circle', '998', '998 / 999 — CircleRoute', 'CircleRoute', 40, 4, { carDep: 0.85 }]
+            ]],
+            ['⛴ Perth ferries', { ...FERRY, colour: '#0098CD', loadPct: 0.50, carDep: 0.60 }, [
+                ['southperth', 'FRY', 'Mends Street → Elizabeth Quay', 'South Perth ferry', 2, 4],
+                ['rottnest', 'ROT', 'Fremantle → Rottnest Island', 'Rottnest ferry', 50, 0.5, { carDep: 0.80 }]
+            ]],
+            ['🚆 Transwa and regional towns', { ...RAIL_DIESEL, colour: '#6F818E', loadPct: 0.45, carDep: 0.96 }, [
+                ['australind', 'AUS', 'Bunbury → Perth', 'Transwa Australind', 340, 0.1],
+                ['avonlink', 'AVL', 'Northam → Midland', 'Transwa AvonLink', 200, 0.1],
+                ['prospector', 'PRO', 'Kalgoorlie → East Perth', 'Transwa Prospector', 800, 0.1],
+                ['bunburybus', 'BUN', 'Bunbury, Geraldton and Albany town buses', 'regional town', 16, 1, { ...BUS, colour: '#6F818E' }]
+            ]],
+            ['🏙 Inner Perth', { ...METRO, colour: '#002664' }, [
+                ['innerper', 'MUL', 'Inner Perth / CBD — multiple options', 'CBD trains and buses', 6, 15, { loadPct: 0.60, carDep: 0.55 }]
+            ]]
         ]
     },
     TAS: {
@@ -1601,18 +1713,26 @@ const STATES = {
         planner: { label: 'Metro Tasmania', url: 'https://www.metrotas.com.au/' },
         price: { label: 'ACCC fuel monitoring', url: 'https://www.accc.gov.au/consumers/petrol-and-fuel' },
         fare: { train: { perKm: 0.20, cap: 6.00 }, bus: { perKm: 0.20, cap: 6.00 } },
-        corridors: {
-            kingston:    { name: 'Kingston → Hobart',      type: 'bus', transit: 'KGN', line: 'Kingston',    km: 30,  freqPerHr: 4,  loadPct: 0.55, carDep: 0.90, colour: '#00A3AD' },
-            glenorchy:   { name: 'Glenorchy → Hobart',     type: 'bus', transit: 'GLY', line: 'Main Road',   km: 22,  freqPerHr: 8,  loadPct: 0.60, carDep: 0.85, colour: '#00A3AD' },
-            eastern:     { name: 'Eastern Shore → Hobart', type: 'bus', transit: 'EAS', line: 'Eastern Shore', km: 16, freqPerHr: 6, loadPct: 0.55, carDep: 0.88, colour: '#00A3AD' },
-            launceston:  { name: 'Launceston city',        type: 'bus', transit: 'LST', line: 'Launceston city',  km: 14,  freqPerHr: 3,  loadPct: 0.45, carDep: 0.90, colour: '#00A3AD' },
-            northwest:   { name: 'Burnie → Devonport',     type: 'bus', transit: 'NWC', line: 'North West coach', vehicle: '', km: 100, freqPerHr: 1, loadPct: 0.40, carDep: 0.97, colour: '#00A3AD' },
-            innerhba:    { name: 'Inner Hobart / CBD',     type: 'bus', transit: 'MUL', line: 'CBD buses', vehicle: '', km: 6, freqPerHr: 10, loadPct: 0.50, carDep: 0.60, colour: '#002664' }
-        },
         groups: [
-            ['🚍 Hobart buses', ['kingston', 'glenorchy', 'eastern']],
-            ['🚍 North and North West', ['launceston', 'northwest']],
-            ['🏙 Inner Hobart', ['innerhba']]
+            ['🚍 Hobart buses', { ...BUS, colour: '#00A3AD', loadPct: 0.50, carDep: 0.88 }, [
+                ['kingston', 'KGN', 'Kingston / Blackmans Bay → Hobart', 'Kingston', 36, 4, { loadPct: 0.55, carDep: 0.90 }],
+                ['glenorchy', 'GLY', 'Bridgewater / Glenorchy → Hobart (Main Road)', 'Main Road', 40, 8, { loadPct: 0.60, carDep: 0.85 }],
+                ['eastern', 'EAS', 'Rosny / Lindisfarne → Hobart', 'Eastern Shore', 16, 6, { loadPct: 0.55 }],
+                ['sandybay', 'UNI', 'Sandy Bay / University → Hobart', 'Sandy Bay', 10, 6, { loadPct: 0.60, carDep: 0.65 }],
+                ['huon', 'HUO', 'Huonville → Hobart', 'Huon Valley', 70, 1, { loadPct: 0.40, carDep: 0.96 }]
+            ]],
+            ['⛴ Derwent ferry', { ...FERRY, colour: '#0098CD', loadPct: 0.45, carDep: 0.80 }, [
+                ['derwent', 'DFY', 'Bellerive → Hobart', 'Derwent ferry', 6, 2]
+            ]],
+            ['🚍 Launceston, the North West and intercity coaches', { ...BUS, colour: '#00A3AD', loadPct: 0.40, carDep: 0.94 }, [
+                ['launceston', 'LST', 'Launceston city buses', 'Launceston', 14, 3],
+                ['merseylink', 'NWC', 'Devonport / Burnie local buses', 'Merseylink', 16, 1],
+                ['hbalst', 'HBA', 'Launceston → Hobart', 'Hobart–Launceston', 400, 0.2, { ...COACH, colour: '#6F818E' }],
+                ['burniedev', 'BUR', 'Burnie → Devonport', 'North West coast', 100, 1, { ...COACH, colour: '#6F818E' }]
+            ]],
+            ['🏙 Inner Hobart', { ...BUS, colour: '#002664' }, [
+                ['innerhba', 'MUL', 'Inner Hobart / CBD — multiple options', 'CBD buses', 6, 10, { vehicle: '', loadPct: 0.50, carDep: 0.60 }]
+            ]]
         ]
     },
     ACT: {
@@ -1622,17 +1742,20 @@ const STATES = {
         planner: { label: 'Transport Canberra', url: 'https://www.transport.act.gov.au/' },
         price: { label: 'ACCC fuel monitoring', url: 'https://www.accc.gov.au/consumers/petrol-and-fuel' },
         fare: { train: { perKm: 0.20, cap: 6.70 }, bus: { perKm: 0.20, cap: 6.70 } },
-        corridors: {
-            r1:          { name: 'Gungahlin → City',       type: 'rail', transit: 'R1', line: 'Light rail R1', vehicle: '', km: 24, freqPerHr: 10, loadPct: 0.65, carDep: 0.80, colour: '#D7153A' },
-            belconnen:   { name: 'Belconnen → City',       type: 'bus', transit: 'BEL', line: 'Belconnen rapid', km: 20, freqPerHr: 8, loadPct: 0.60, carDep: 0.82, colour: '#00A3AD' },
-            woden:       { name: 'Woden → City',           type: 'bus', transit: 'WOD', line: 'Woden rapid',     km: 20, freqPerHr: 8, loadPct: 0.60, carDep: 0.80, colour: '#00A3AD' },
-            tuggeranong: { name: 'Tuggeranong → City',     type: 'bus', transit: 'TUG', line: 'Tuggeranong rapid', km: 50, freqPerHr: 6, loadPct: 0.55, carDep: 0.88, colour: '#00A3AD' },
-            innercbr:    { name: 'Inner Canberra / Civic', type: 'bus', transit: 'MUL', line: 'Civic buses and light rail', vehicle: '', km: 6, freqPerHr: 10, loadPct: 0.50, carDep: 0.70, colour: '#002664' }
-        },
         groups: [
-            ['🚋 Light rail', ['r1']],
-            ['🚍 Rapid buses', ['belconnen', 'woden', 'tuggeranong']],
-            ['🏙 Inner Canberra', ['innercbr']]
+            ['🚊 Canberra light rail', { ...LIGHT_RAIL, colour: '#D7153A', loadPct: 0.65, carDep: 0.80 }, [
+                ['lr', 'LR', 'Gungahlin → City (Alinga Street)', 'Canberra light rail', 24, 10, { vehicle: '' }]
+            ]],
+            ['🚍 Canberra rapid buses', { ...BUS, colour: '#00A3AD', loadPct: 0.58, carDep: 0.84 }, [
+                ['belconnen', 'R', 'Belconnen → City', 'Belconnen rapid', 20, 8],
+                ['woden', 'R', 'Woden → City', 'Woden rapid', 20, 8, { carDep: 0.80 }],
+                ['tuggeranong', 'R', 'Tuggeranong → City', 'Tuggeranong rapid', 50, 6, { carDep: 0.88 }],
+                ['molonglo', 'R', 'Molonglo Valley → City', 'Molonglo rapid', 30, 4, { carDep: 0.90 }],
+                ['queanbeyan', 'QBN', 'Queanbeyan → City', 'Queanbeyan', 30, 2, { colour: '#6F818E', carDep: 0.92 }]
+            ]],
+            ['🏙 Inner Canberra', { ...BUS, colour: '#002664' }, [
+                ['innercbr', 'MUL', 'Inner Canberra / Civic — multiple options', 'Civic buses and light rail', 6, 10, { vehicle: '', loadPct: 0.50, carDep: 0.70 }]
+            ]]
         ]
     },
     NT: {
@@ -1642,20 +1765,37 @@ const STATES = {
         planner: { label: 'NT public buses', url: 'https://nt.gov.au/driving/public-transport-cycling/public-buses' },
         price: { label: 'MyFuel NT', url: 'https://myfuelnt.nt.gov.au/' },
         fare: { train: { flat: 3.00 }, bus: { flat: 3.00 } },
-        corridors: {
-            casuarina:   { name: 'Casuarina → Darwin City',  type: 'bus', transit: 'CAS', line: 'Casuarina',  km: 30, freqPerHr: 4, loadPct: 0.40, carDep: 0.92, colour: '#F37021' },
-            palmerston:  { name: 'Palmerston → Darwin City', type: 'bus', transit: 'PAL', line: 'Palmerston', km: 44, freqPerHr: 2, loadPct: 0.40, carDep: 0.95, colour: '#F37021' },
-            cdu:         { name: 'Charles Darwin University → City', type: 'bus', transit: 'CDU', line: 'CDU', km: 26, freqPerHr: 3, loadPct: 0.45, carDep: 0.90, colour: '#F37021' },
-            alice:       { name: 'Alice Springs town',      type: 'bus', transit: 'ASP', line: 'Alice Springs town', km: 12, freqPerHr: 1, loadPct: 0.30, carDep: 0.95, colour: '#F37021' }
-        },
         groups: [
-            ['🚍 Darwin buses', ['casuarina', 'palmerston', 'cdu']],
-            ['🚍 Central Australia', ['alice']]
+            ['🚍 Darwin buses', { ...BUS, colour: '#F37021', loadPct: 0.40, carDep: 0.92 }, [
+                ['casuarina', 'CAS', 'Casuarina → Darwin City', 'Casuarina', 30, 4],
+                ['palmerston', 'PAL', 'Palmerston → Darwin City', 'Palmerston', 44, 2, { carDep: 0.95 }],
+                ['cdu', 'CDU', 'Charles Darwin University → City', 'CDU', 26, 3, { loadPct: 0.45, carDep: 0.90 }]
+            ]],
+            ['⛴ Darwin Harbour', { ...FERRY, colour: '#0098CD', loadPct: 0.40, carDep: 0.85 }, [
+                ['mandorah', 'MDH', 'Mandorah → Darwin Cullen Bay', 'Mandorah ferry', 16, 1]
+            ]],
+            ['🚍 Regional Northern Territory', { ...BUS, colour: '#F37021', loadPct: 0.30, carDep: 0.95 }, [
+                ['alice', 'ASP', 'Alice Springs town buses', 'Alice Springs', 12, 1],
+                ['katherine', 'KTH', 'Katherine → Darwin', 'Darwin–Katherine', 640, 0.1, { ...COACH, colour: '#6F818E' }]
+            ]]
         ]
     }
 };
 
-let CORRIDORS = NSW_CORRIDORS;
+// Expand the compact route lists into the corridor objects Joule scores.
+const STATES = {};
+for (const [code, def] of Object.entries(STATE_DEFS)) {
+    const corridors = {};
+    const groups = def.groups.map(([label, defaults, items]) => {
+        items.forEach(([key, transit, name, line, km, freqPerHr, extra]) => {
+            corridors[key] = { ...defaults, ...(extra || {}), name, transit, line, km, freqPerHr };
+        });
+        return [label, items.map(i => i[0])];
+    });
+    STATES[code] = { ...def, corridors, groups };
+}
+
+let CORRIDORS = STATES.NSW.corridors;
 
 // Return fare for one round trip on public transport in the selected state.
 function fareFor(kind, km) {
@@ -1666,7 +1806,10 @@ function fareFor(kind, km) {
 
 // Word that follows a line name in suggestions ("the Frankston line train").
 function vehicleWord(c) {
-    if (c.vehicle !== undefined) return c.vehicle ? ' ' + c.vehicle : '';
+    if (c.vehicle !== undefined) {
+        if (!c.vehicle || c.line.toLowerCase().endsWith(c.vehicle.toLowerCase())) return '';
+        return ' ' + c.vehicle;
+    }
     return c.type === 'bus' ? ' bus' : ' train';
 }
 
@@ -1677,6 +1820,10 @@ const PETROL_KWH_L = 9.5;         // kWh per L (HHV)
 const PETROL_L_100 = 8.0;         // L/100km typical passenger car
 let PETROL_PRICE = 2.13;          // AUD/L; replaced by the live capital-city price
 let DIESEL_PRICE = 3.18;          // AUD/L; replaced by the live capital-city price
+const DIESEL_KWH_L = 10.7;         // kWh per L diesel
+const DIESEL_RAIL_L_PKM = 0.035;  // L per passenger-km, diesel regional trains
+const FERRY_L_PKM = 0.05;         // L per passenger-km, diesel ferries at typical load
+const EBUS_KWH_PKM = 0.12;        // kWh per passenger-km, battery-electric buses
 const TRAIN_KWH_PKM = 0.15;       // kWh per passenger-km (electric train, Sydney)
 const BUS_KWH_PKM   = 0.40;       // kWh/pkm (diesel bus, moderate occupancy)
 const METRO_KWH_PKM = 0.12;       // kWh/pkm (Metro, high load)
@@ -1755,13 +1902,18 @@ function calcModeImpact(mode, corridor, km, freq, occ) {
         cost          = litresPerTrip * PETROL_PRICE * freq;
         travelTime    = km / 55 * 60; // ~55 km/h avg mixed roads
     } else if (mode === 'train') {
-        litresPerTrip = 0;
-        kwhPerTrip    = km * TRAIN_KWH_PKM;
+        if (c.fuel === 'diesel-rail' || c.fuel === 'ferry') {
+            litresPerTrip = km * (c.fuel === 'ferry' ? FERRY_L_PKM : DIESEL_RAIL_L_PKM);
+            kwhPerTrip    = litresPerTrip * DIESEL_KWH_L;
+        } else {
+            litresPerTrip = 0;
+            kwhPerTrip    = km * TRAIN_KWH_PKM;
+        }
         cost          = fareFor('train', km) * freq;
         travelTime    = km / 50 * 60 + 10;
     } else if (mode === 'bus') {
-        litresPerTrip = km * BUS_KWH_PKM / 10.6;
-        kwhPerTrip    = km * BUS_KWH_PKM;
+        litresPerTrip = c.fuel === 'electric-bus' ? 0 : km * BUS_KWH_PKM / 10.6;
+        kwhPerTrip    = km * (c.fuel === 'electric-bus' ? EBUS_KWH_PKM : BUS_KWH_PKM);
         cost          = fareFor('bus', km) * freq;
         travelTime    = km / 35 * 60 + 8;
     } else { // active
@@ -1958,7 +2110,7 @@ function render() {
 
     // value readouts
     document.getElementById('m-km-v').textContent = km;
-    document.getElementById('km-hint').textContent = `A typical return trip on this corridor is about ${Math.min(CORRIDORS[corridor].km, 200)} km.`;
+    document.getElementById('km-hint').textContent = `A typical return trip on this corridor is about ${Math.min(CORRIDORS[corridor].km, 800)} km.`;
     document.getElementById('m-freq-v').textContent = freq;
     document.getElementById('m-occ-v').textContent = occ;
 
@@ -1998,14 +2150,14 @@ function renderCompare(corridor, km, freq, currentMode) {
     let options;
     if (c.type === 'bus') {
         options = [
-            { mode: 'bus',    label: c.name.split(' — ')[0] || c.line, desc: `${c.line} — typical seated or standing trip` },
+            { mode: 'bus',    label: c.name.split(' — ')[0] || c.line, desc: `${c.line} — ${c.fuel === 'electric-bus' ? 'battery-electric bus' : 'diesel bus, fuel counted'}` },
             { mode: 'car',    label: 'Car (solo)',                      desc: 'Private vehicle, one occupant' },
             { mode: 'active', label: 'Walk or cycle',                   desc: 'Zero fuel, zero grid draw' }
         ];
     } else {
         // rail / intercity / inner Sydney
         options = [
-            { mode: 'train',  label: c.line,              desc: `${c.line} — seated ride, pre-booked on long distance` },
+            { mode: 'train',  label: c.line,              desc: `${c.line} — ${c.fuel === 'ferry' ? 'diesel ferry' : c.fuel === 'diesel-rail' ? 'diesel train, fuel counted' : 'electric, no liquid fuel'}` },
             { mode: 'car',    label: 'Car (solo)',        desc: 'Private vehicle, one occupant' },
             { mode: 'active', label: 'Walk or cycle',     desc: 'Zero fuel, zero grid draw' }
         ];
@@ -2181,7 +2333,7 @@ function buildCorridorSelect() {
 }
 
 function setKmForCorridor() {
-    const km = Math.max(2, Math.min(200, Math.round(CORRIDORS[S.corridor].km / 2) * 2));
+    const km = Math.max(2, Math.min(800, Math.round(CORRIDORS[S.corridor].km / 2) * 2));
     S.km = km;
     document.getElementById('m-km').value = km;
 }
