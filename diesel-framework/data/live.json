@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-09T13:23:45+00:00",
+  "updated": "2026-10-09T22:41:33+00:00",
   "framework_doc": "https://claude.ai/code/artifact/4ef286f2-95fd-42d2-a0f1-b4cce22dff7a",
   "indicators": {
     "diesel_stock": {
@@ -14,53 +14,53 @@
       "value": 125.44,
       "as_of": "2026-10-06",
       "source": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
-      "fetched": "2026-10-09T13:23:10+00:00",
+      "fetched": "2026-10-09T22:40:59+00:00",
       "stale": false
     },
     "us_gulf_ulsd_usd_gal": {
       "value": 4.565,
       "as_of": "2026-10-06",
       "source": "https://fred.stlouisfed.org/series/DDFUELUSGULF",
-      "fetched": "2026-10-09T13:23:11+00:00",
+      "fetched": "2026-10-09T22:40:59+00:00",
       "stale": false
     },
     "usd_per_aud": {
       "value": 0.6953,
       "as_of": "2026-10-02",
       "source": "https://fred.stlouisfed.org/series/DEXUSAL",
-      "fetched": "2026-10-09T13:23:11+00:00",
+      "fetched": "2026-10-09T22:41:00+00:00",
       "stale": false
     },
     "nem": {
       "regions": {
         "NSW1": {
-          "price_aud_mwh": 102.7259,
-          "demand_mw": 7229.91,
-          "as_of": "2026-10-09T23:25:00"
+          "price_aud_mwh": 90.65,
+          "demand_mw": 6938.52,
+          "as_of": "2026-10-10T08:45:00"
         },
         "QLD1": {
-          "price_aud_mwh": 91.5,
-          "demand_mw": 6343.43,
-          "as_of": "2026-10-09T23:25:00"
+          "price_aud_mwh": 30.95033,
+          "demand_mw": 4641.66,
+          "as_of": "2026-10-10T08:45:00"
         },
         "SA1": {
-          "price_aud_mwh": 27.95799,
-          "demand_mw": 1253.76,
-          "as_of": "2026-10-09T23:25:00"
+          "price_aud_mwh": -8.0,
+          "demand_mw": 674.32,
+          "as_of": "2026-10-10T08:45:00"
         },
         "TAS1": {
-          "price_aud_mwh": 0.14,
-          "demand_mw": 932.5,
-          "as_of": "2026-10-09T23:25:00"
+          "price_aud_mwh": -29.8,
+          "demand_mw": 952.94,
+          "as_of": "2026-10-10T08:45:00"
         },
         "VIC1": {
-          "price_aud_mwh": 3e-05,
-          "demand_mw": 4940.55,
-          "as_of": "2026-10-09T23:25:00"
+          "price_aud_mwh": -59.47,
+          "demand_mw": 4075.49,
+          "as_of": "2026-10-10T08:45:00"
         }
       },
       "source": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
-      "fetched": "2026-10-09T13:23:12+00:00",
+      "fetched": "2026-10-09T22:41:01+00:00",
       "stale": false
     },
     "retail_fuel": {
