@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-11T22:01:24+00:00",
+  "updated": "2026-10-12T06:03:03+00:00",
   "framework_doc": "https://claude.ai/code/artifact/4ef286f2-95fd-42d2-a0f1-b4cce22dff7a",
   "indicators": {
     "diesel_stock": {
@@ -14,114 +14,114 @@
       "value": 125.44,
       "as_of": "2026-10-06",
       "source": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
-      "fetched": "2026-10-11T22:00:50+00:00",
+      "fetched": "2026-10-12T06:02:28+00:00",
       "stale": false
     },
     "us_gulf_ulsd_usd_gal": {
       "value": 4.565,
       "as_of": "2026-10-06",
       "source": "https://fred.stlouisfed.org/series/DDFUELUSGULF",
-      "fetched": "2026-10-11T22:00:50+00:00",
+      "fetched": "2026-10-12T06:02:29+00:00",
       "stale": false
     },
     "usd_per_aud": {
       "value": 0.6953,
       "as_of": "2026-10-02",
       "source": "https://fred.stlouisfed.org/series/DEXUSAL",
-      "fetched": "2026-10-11T22:00:51+00:00",
+      "fetched": "2026-10-12T06:02:29+00:00",
       "stale": false
     },
     "nem": {
       "regions": {
         "NSW1": {
-          "price_aud_mwh": 88.48972,
-          "demand_mw": 6620.35,
-          "as_of": "2026-10-12T08:00:00"
+          "price_aud_mwh": 989.09,
+          "demand_mw": 9516.04,
+          "as_of": "2026-10-12T16:05:00"
         },
         "QLD1": {
-          "price_aud_mwh": 61.06,
-          "demand_mw": 6468.24,
-          "as_of": "2026-10-12T08:00:00"
+          "price_aud_mwh": 78.51,
+          "demand_mw": 7761.37,
+          "as_of": "2026-10-12T16:05:00"
         },
         "SA1": {
-          "price_aud_mwh": 46.33292,
-          "demand_mw": 1114.92,
-          "as_of": "2026-10-12T08:00:00"
+          "price_aud_mwh": -8.0,
+          "demand_mw": 1163.38,
+          "as_of": "2026-10-12T16:05:00"
         },
         "TAS1": {
-          "price_aud_mwh": 44.76455,
-          "demand_mw": 1007.81,
-          "as_of": "2026-10-12T08:00:00"
+          "price_aud_mwh": -9.4477,
+          "demand_mw": 943.35,
+          "as_of": "2026-10-12T16:05:00"
         },
         "VIC1": {
-          "price_aud_mwh": 18.18,
-          "demand_mw": 5697.43,
-          "as_of": "2026-10-12T08:00:00"
+          "price_aud_mwh": -9.05,
+          "demand_mw": 4680.3,
+          "as_of": "2026-10-12T16:05:00"
         }
       },
       "source": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
-      "fetched": "2026-10-11T22:00:51+00:00",
+      "fetched": "2026-10-12T06:02:30+00:00",
       "stale": false
     },
     "retail_fuel": {
-      "retail_diesel_aud_l": 2.87,
-      "retail_diesel_change_7d_pct": 7,
-      "retail_petrol_aud_l": 2.37,
-      "as_of": "2026-09-23",
+      "retail_diesel_aud_l": 2.81,
+      "retail_diesel_change_7d_pct": -1,
+      "retail_petrol_aud_l": 2.39,
+      "as_of": "2026-10-07",
       "source": "https://fuelplan.gov.au/fuel-statistics",
       "cities": {
         "SYD": {
           "petrol_aud_l": 2.39,
-          "petrol_change_7d_pct": 6,
-          "diesel_aud_l": 2.85,
-          "diesel_change_7d_pct": 6
+          "petrol_change_7d_pct": 1,
+          "diesel_aud_l": 2.8,
+          "diesel_change_7d_pct": 0
         },
         "MEL": {
-          "petrol_aud_l": 2.35,
-          "petrol_change_7d_pct": 5,
-          "diesel_aud_l": 2.89,
-          "diesel_change_7d_pct": 7
+          "petrol_aud_l": 2.4,
+          "petrol_change_7d_pct": 2,
+          "diesel_aud_l": 2.82,
+          "diesel_change_7d_pct": -1
         },
         "BRIS": {
           "petrol_aud_l": 2.38,
-          "petrol_change_7d_pct": 6,
-          "diesel_aud_l": 2.9,
-          "diesel_change_7d_pct": 7
+          "petrol_change_7d_pct": 0,
+          "diesel_aud_l": 2.85,
+          "diesel_change_7d_pct": -1
         },
         "ADEL": {
-          "petrol_aud_l": 2.34,
-          "petrol_change_7d_pct": 7,
-          "diesel_aud_l": 2.9,
-          "diesel_change_7d_pct": 8
+          "petrol_aud_l": 2.35,
+          "petrol_change_7d_pct": 1,
+          "diesel_aud_l": 2.85,
+          "diesel_change_7d_pct": -1
         },
         "PER": {
-          "petrol_aud_l": 2.4,
-          "petrol_change_7d_pct": 4,
-          "diesel_aud_l": 2.81,
-          "diesel_change_7d_pct": 7
+          "petrol_aud_l": 2.44,
+          "petrol_change_7d_pct": 2,
+          "diesel_aud_l": 2.73,
+          "diesel_change_7d_pct": -1
         },
         "CBR": {
-          "petrol_aud_l": 2.49,
-          "petrol_change_7d_pct": 6,
-          "diesel_aud_l": 2.99,
-          "diesel_change_7d_pct": 4
+          "petrol_aud_l": 2.44,
+          "petrol_change_7d_pct": -1,
+          "diesel_aud_l": 2.9,
+          "diesel_change_7d_pct": -2
         },
         "HOB": {
-          "petrol_aud_l": 2.44,
-          "petrol_change_7d_pct": 7,
-          "diesel_aud_l": 2.92,
-          "diesel_change_7d_pct": 7
+          "petrol_aud_l": 2.47,
+          "petrol_change_7d_pct": 2,
+          "diesel_aud_l": 2.86,
+          "diesel_change_7d_pct": -1
         },
         "DAR": {
           "petrol_aud_l": 2.45,
-          "petrol_change_7d_pct": 7,
-          "diesel_aud_l": 2.92,
-          "diesel_change_7d_pct": 7
+          "petrol_change_7d_pct": 0,
+          "diesel_aud_l": 2.89,
+          "diesel_change_7d_pct": -1
         }
       },
       "stock_outlook": "Stocks of fuel remain healthy, with petrol stocks above average and diesel and jet fuel stocks similar to pre-conflict, long term averages, offering some buffer if future challenges emerge.",
-      "fetched": "2026-10-06T00:05:30+00:00",
-      "stale": true
+      "fetched": "2026-10-12T06:02:31+00:00",
+      "stale": false
     }
   },
   "derived": {
@@ -133,7 +133,7 @@
     "us_gulf_ulsd_usd_gal": "ok",
     "usd_per_aud": "ok",
     "nem": "ok",
-    "retail_fuel": "failed: retail price table not found",
+    "retail_fuel": "ok",
     "diesel_stock": "failed: https://fuelplan.gov.au/fuel-statistics: diesel stock figures not found; https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics: The read operation timed out"
   }
 }
