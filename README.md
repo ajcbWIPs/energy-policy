@@ -22,6 +22,7 @@ principles, and strategic infrastructure development.
 ## Contents
 
 - ⛽ **Diesel Import Reduction Framework (Oct 2026):** [live page](https://ajcbwips.github.io/energy-policy/diesel-framework/) · `diesel-framework/`, with live fuel security data refreshed every 6 hours
+- ☀️ **US Rooftop Solar Adoption:** [live page](https://ajcbwips.github.io/energy-policy/us-solar/) · `us-solar/`, state-level residential solar and battery economics plus a rooftop solar vs data centre supply comparison
 - 🚆 **Joule:** [live page](https://ajcbwips.github.io/energy-policy/joule/) · `joule/`, the fuel security trip gauge from DataHack 2026, now nationwide and fed by the same live data
 - 📄 **LaTeX Submission:** `latex/main.tex`
 - 📊 **Dashboard:** `dashboard/app.py`
