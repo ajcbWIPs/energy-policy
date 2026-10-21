@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-21T11:54:58+00:00",
+  "updated": "2026-10-21T17:15:53+00:00",
   "framework_doc": "https://claude.ai/code/artifact/4ef286f2-95fd-42d2-a0f1-b4cce22dff7a",
   "indicators": {
     "diesel_stock": {
@@ -11,56 +11,56 @@
       "stale": true
     },
     "brent_usd_bbl": {
-      "value": 126.55,
-      "as_of": "2026-10-14",
+      "value": 400.0,
+      "as_of": "    <link href=\"https://fonts.googleapis.com/css?family=Open+Sans:300",
       "source": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
-      "fetched": "2026-10-21T11:53:56+00:00",
+      "fetched": "2026-10-21T17:15:19+00:00",
       "stale": false
     },
     "us_gulf_ulsd_usd_gal": {
-      "value": 4.844,
-      "as_of": "2026-10-14",
+      "value": 400.0,
+      "as_of": "    <link href=\"https://fonts.googleapis.com/css?family=Open+Sans:300",
       "source": "https://fred.stlouisfed.org/series/DDFUELUSGULF",
-      "fetched": "2026-10-21T11:53:56+00:00",
+      "fetched": "2026-10-21T17:15:19+00:00",
       "stale": false
     },
     "usd_per_aud": {
-      "value": 0.695,
-      "as_of": "2026-10-16",
+      "value": 400.0,
+      "as_of": "    <link href=\"https://fonts.googleapis.com/css?family=Open+Sans:300",
       "source": "https://fred.stlouisfed.org/series/DEXUSAL",
-      "fetched": "2026-10-21T11:53:56+00:00",
+      "fetched": "2026-10-21T17:15:19+00:00",
       "stale": false
     },
     "nem": {
       "regions": {
         "NSW1": {
-          "price_aud_mwh": 130.82911,
-          "demand_mw": 7536.5,
-          "as_of": "2026-10-21T21:55:00"
+          "price_aud_mwh": 130.23,
+          "demand_mw": 6873.05,
+          "as_of": "2026-10-22T03:15:00"
         },
         "QLD1": {
-          "price_aud_mwh": 136.60138,
-          "demand_mw": 6705.91,
-          "as_of": "2026-10-21T21:55:00"
+          "price_aud_mwh": 125.82945,
+          "demand_mw": 5938.45,
+          "as_of": "2026-10-22T03:15:00"
         },
         "SA1": {
-          "price_aud_mwh": 130.44,
-          "demand_mw": 1388.6,
-          "as_of": "2026-10-21T21:55:00"
+          "price_aud_mwh": 130.97083,
+          "demand_mw": 1372.7,
+          "as_of": "2026-10-22T03:15:00"
         },
         "TAS1": {
-          "price_aud_mwh": 100.18,
-          "demand_mw": 995.28,
-          "as_of": "2026-10-21T21:55:00"
+          "price_aud_mwh": 88.14,
+          "demand_mw": 940.98,
+          "as_of": "2026-10-22T03:15:00"
         },
         "VIC1": {
-          "price_aud_mwh": 125.69839,
-          "demand_mw": 5191.72,
-          "as_of": "2026-10-21T21:55:00"
+          "price_aud_mwh": 121.29177,
+          "demand_mw": 4544.55,
+          "as_of": "2026-10-22T03:15:00"
         }
       },
       "source": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
-      "fetched": "2026-10-21T11:53:57+00:00",
+      "fetched": "2026-10-21T17:15:20+00:00",
       "stale": false
     },
     "retail_fuel": {
@@ -120,20 +120,20 @@
         }
       },
       "stock_outlook": "Stocks of fuel remain healthy, with petrol stocks above average and diesel and jet fuel stocks similar to pre-conflict, long term averages, offering some buffer if future challenges emerge.",
-      "fetched": "2026-10-21T04:53:00+00:00",
-      "stale": true
+      "fetched": "2026-10-21T17:15:22+00:00",
+      "stale": false
     }
   },
   "derived": {
-    "brent_aud_c_per_l": 114.5,
-    "us_gulf_ulsd_aud_c_per_l": 184.1
+    "brent_aud_c_per_l": 0.6,
+    "us_gulf_ulsd_aud_c_per_l": 26.4
   },
   "status": {
     "brent_usd_bbl": "ok",
     "us_gulf_ulsd_usd_gal": "ok",
     "usd_per_aud": "ok",
     "nem": "ok",
-    "retail_fuel": "failed: HTTP Error 503: Service Unavailable",
-    "diesel_stock": "failed: https://fuelplan.gov.au/fuel-statistics: HTTP Error 503: Service Unavailable; https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics: The read operation timed out"
+    "retail_fuel": "ok",
+    "diesel_stock": "failed: https://fuelplan.gov.au/fuel-statistics: diesel stock figures not found; https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics: The read operation timed out"
   }
 }
