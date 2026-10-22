@@ -1,5 +1,5 @@
 {
-  "updated": "2026-10-22T04:53:26+00:00",
+  "updated": "2026-10-22T11:57:55+00:00",
   "framework_doc": "https://claude.ai/code/artifact/4ef286f2-95fd-42d2-a0f1-b4cce22dff7a",
   "indicators": {
     "diesel_stock": {
@@ -14,53 +14,53 @@
       "value": 115.22,
       "as_of": "2026-10-20",
       "source": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
-      "fetched": "2026-10-22T04:52:49+00:00",
+      "fetched": "2026-10-22T11:57:21+00:00",
       "stale": false
     },
     "us_gulf_ulsd_usd_gal": {
       "value": 4.962,
       "as_of": "2026-10-20",
       "source": "https://fred.stlouisfed.org/series/DDFUELUSGULF",
-      "fetched": "2026-10-22T04:52:49+00:00",
+      "fetched": "2026-10-22T11:57:21+00:00",
       "stale": false
     },
     "usd_per_aud": {
       "value": 0.695,
       "as_of": "2026-10-16",
       "source": "https://fred.stlouisfed.org/series/DEXUSAL",
-      "fetched": "2026-10-22T04:52:54+00:00",
+      "fetched": "2026-10-22T11:57:22+00:00",
       "stale": false
     },
     "nem": {
       "regions": {
         "NSW1": {
-          "price_aud_mwh": 97.63,
-          "demand_mw": 7053.72,
-          "as_of": "2026-10-22T14:55:00"
+          "price_aud_mwh": 93.38604,
+          "demand_mw": 7737.5,
+          "as_of": "2026-10-22T22:00:00"
         },
         "QLD1": {
-          "price_aud_mwh": 95.82558,
-          "demand_mw": 6530.75,
-          "as_of": "2026-10-22T14:55:00"
+          "price_aud_mwh": 85.25,
+          "demand_mw": 6770.95,
+          "as_of": "2026-10-22T22:00:00"
         },
         "SA1": {
-          "price_aud_mwh": 58.76,
-          "demand_mw": 1025.74,
-          "as_of": "2026-10-22T14:55:00"
+          "price_aud_mwh": 101.02,
+          "demand_mw": 1580.27,
+          "as_of": "2026-10-22T22:00:00"
         },
         "TAS1": {
-          "price_aud_mwh": 100.18,
-          "demand_mw": 911.28,
-          "as_of": "2026-10-22T14:55:00"
+          "price_aud_mwh": 100.2,
+          "demand_mw": 954.35,
+          "as_of": "2026-10-22T22:00:00"
         },
         "VIC1": {
-          "price_aud_mwh": 89.0,
-          "demand_mw": 5019.76,
-          "as_of": "2026-10-22T14:55:00"
+          "price_aud_mwh": 0.01006,
+          "demand_mw": 5437.31,
+          "as_of": "2026-10-22T22:00:00"
         }
       },
       "source": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
-      "fetched": "2026-10-22T04:52:55+00:00",
+      "fetched": "2026-10-22T11:57:22+00:00",
       "stale": false
     },
     "retail_fuel": {
@@ -120,7 +120,7 @@
         }
       },
       "stock_outlook": "Stocks of fuel remain healthy, with petrol stocks above average and diesel and jet fuel stocks similar to pre-conflict, long term averages, offering some buffer if future challenges emerge.",
-      "fetched": "2026-10-22T04:52:56+00:00",
+      "fetched": "2026-10-22T11:57:23+00:00",
       "stale": false
     }
   },
