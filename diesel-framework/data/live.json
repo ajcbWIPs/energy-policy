@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-05T19:59:42+00:00",
+  "updated": "2026-11-06T06:52:35+00:00",
   "framework_doc": "https://claude.ai/code/artifact/4ef286f2-95fd-42d2-a0f1-b4cce22dff7a",
   "indicators": {
     "diesel_stock": {
@@ -14,21 +14,21 @@
       "value": 107.03,
       "as_of": "2026-11-03",
       "source": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
-      "fetched": "2026-11-05T19:59:07+00:00",
+      "fetched": "2026-11-06T06:52:02+00:00",
       "stale": false
     },
     "us_gulf_ulsd_usd_gal": {
       "value": 4.525,
       "as_of": "2026-11-03",
       "source": "https://fred.stlouisfed.org/series/DDFUELUSGULF",
-      "fetched": "2026-11-05T19:59:07+00:00",
+      "fetched": "2026-11-06T06:52:02+00:00",
       "stale": false
     },
     "usd_per_aud": {
       "value": 0.7038,
       "as_of": "2026-10-30",
       "source": "https://fred.stlouisfed.org/series/DEXUSAL",
-      "fetched": "2026-11-05T19:59:07+00:00",
+      "fetched": "2026-11-06T06:52:02+00:00",
       "stale": false
     },
     "nem": {
@@ -61,7 +61,7 @@
       },
       "source": "https://aemo.com.au/energy-systems/electricity/national-electricity-market-nem/data-nem/data-dashboard-nem",
       "fetched": "2026-11-05T19:59:08+00:00",
-      "stale": false
+      "stale": true
     },
     "retail_fuel": {
       "retail_diesel_aud_l": 2.77,
@@ -120,7 +120,7 @@
         }
       },
       "stock_outlook": "Stocks of fuel remain healthy, with petrol stocks above average and diesel and jet fuel stocks similar to pre-conflict, long term averages, offering some buffer if future challenges emerge.",
-      "fetched": "2026-11-05T19:59:09+00:00",
+      "fetched": "2026-11-06T06:52:04+00:00",
       "stale": false
     }
   },
@@ -132,7 +132,7 @@
     "brent_usd_bbl": "ok",
     "us_gulf_ulsd_usd_gal": "ok",
     "usd_per_aud": "ok",
-    "nem": "ok",
+    "nem": "failed: HTTP Error 500: Internal Server Error",
     "retail_fuel": "ok",
     "diesel_stock": "failed: https://fuelplan.gov.au/fuel-statistics: diesel stock figures not found; https://www.dcceew.gov.au/energy/security/australias-fuel-security/minimum-stockholding-obligation/statistics: The read operation timed out"
   }
