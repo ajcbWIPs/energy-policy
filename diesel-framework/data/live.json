@@ -1,5 +1,5 @@
 {
-  "updated": "2026-11-11T06:29:29+00:00",
+  "updated": "2026-11-11T19:39:20+00:00",
   "framework_doc": "https://claude.ai/code/artifact/4ef286f2-95fd-42d2-a0f1-b4cce22dff7a",
   "indicators": {
     "diesel_stock": {
@@ -14,21 +14,21 @@
       "value": 107.03,
       "as_of": "2026-11-03",
       "source": "https://fred.stlouisfed.org/series/DCOILBRENTEU",
-      "fetched": "2026-11-11T06:28:54+00:00",
+      "fetched": "2026-11-11T19:38:47+00:00",
       "stale": false
     },
     "us_gulf_ulsd_usd_gal": {
       "value": 4.525,
       "as_of": "2026-11-03",
       "source": "https://fred.stlouisfed.org/series/DDFUELUSGULF",
-      "fetched": "2026-11-11T06:28:54+00:00",
+      "fetched": "2026-11-11T19:38:47+00:00",
       "stale": false
     },
     "usd_per_aud": {
       "value": 0.6875,
       "as_of": "2026-11-06",
       "source": "https://fred.stlouisfed.org/series/DEXUSAL",
-      "fetched": "2026-11-11T06:28:55+00:00",
+      "fetched": "2026-11-11T19:38:47+00:00",
       "stale": false
     },
     "nem": {
@@ -120,7 +120,7 @@
         }
       },
       "stock_outlook": "Stocks of fuel remain healthy, with petrol stocks above average and diesel and jet fuel stocks similar to pre-conflict, long term averages, offering some buffer if future challenges emerge.",
-      "fetched": "2026-11-11T06:28:57+00:00",
+      "fetched": "2026-11-11T19:38:49+00:00",
       "stale": false
     }
   },
